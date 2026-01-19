@@ -72,6 +72,9 @@ All commands are run from the root of the project, from a terminal:
 | `bun build`               | Build your production site to `./dist/`          |
 | `bun preview`             | Preview your build locally, before deploying     |
 | `bun check`               | Run Astro type checking and validation           |
+| `bun lint`                | Run Biome linter and formatter (check only)      |
+| `bun lint:fix`            | Run Biome linter and auto-fix issues             |
+| `bun format`              | Format code with Biome                           |
 | `bun astro ...`           | Run CLI commands like `astro add`, `astro check` |
 | `bun astro -- --help`     | Get help using the Astro CLI                     |
 
