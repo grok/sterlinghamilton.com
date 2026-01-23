@@ -61,6 +61,10 @@ These prompts help maintain consistency and enable AI assistants to follow proje
 
 @TODO: This is a work in progress.
 
+### Content authoring
+
+- Demo content has been removed; see `docs/demo-content.md` for what it used to demonstrate (MDX, KaTeX, embeds, drafts, translations), so you can replicate those patterns in real posts.
+
 ## 🧞 Commands
 
 All commands are run from the root of the project, from a terminal:

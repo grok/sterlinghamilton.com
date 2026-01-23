@@ -23,6 +23,14 @@ This folder contains reusable AI prompts that help maintain and develop this Ast
 - Commit changes with proper format
 - Verify everything still works
 
+### ✍️ [content-authoring.md](./content-authoring.md)
+**Purpose**: Create posts correctly (including drafts + translations)  
+**Use when**: Writing new content or setting up translated versions of the same post  
+**Key actions**:
+- New post frontmatter template
+- Draft workflow (underscore filenames + `bun run new`)
+- Translation pairing via `translationKey`
+
 ## How to Use These Prompts
 
 ### For Warp AI (Agent Mode)
