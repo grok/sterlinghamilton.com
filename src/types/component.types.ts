@@ -12,6 +12,15 @@ export interface PostLayoutProps {
   image?: string;
   readingTime?: ReadingTime;
   toc?: TOCItem[];
+  /** Override <html lang="..."> for localized routes. */
+  lang?: string;
+  translations?: Array<{
+    code: string;
+    label: string;
+    href: string;
+    active: boolean;
+    available: boolean;
+  }>;
 }
 
 // Transition props interface
@@ -24,6 +33,8 @@ export interface TransitionProps {
 export interface LayoutProps extends TransitionProps {
   title?: string;
   description?: string;
+  /** Override <html lang="..."> for localized routes. */
+  lang?: string;
 }
 
 // BaseHead component props interface

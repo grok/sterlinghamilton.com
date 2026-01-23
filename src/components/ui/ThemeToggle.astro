@@ -8,9 +8,11 @@ import { themeConfig } from '@/config';
       id="theme-toggle"
       class="theme-toggle"
       type="button"
+      tabindex="1"
       aria-label="Toggle theme"
       aria-pressed="false"
       title="Toggle theme"
+      data-tooltip="Toggle theme"
     >
       <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -39,12 +41,11 @@ import { themeConfig } from '@/config';
 
     const updateA11y = () => {
       const isDark = document.documentElement.classList.contains('dark')
+      const label = isDark ? 'Switch to light mode' : 'Switch to dark mode'
       themeToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false')
-      themeToggle.setAttribute(
-        'aria-label',
-        isDark ? 'Switch to light mode' : 'Switch to dark mode'
-      )
-      themeToggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode')
+      themeToggle.setAttribute('aria-label', label)
+      themeToggle.setAttribute('title', label)
+      themeToggle.setAttribute('data-tooltip', label)
     }
 
     updateA11y()
@@ -73,6 +74,35 @@ import { themeConfig } from '@/config';
     transition: opacity 0.2s ease;
     padding: 0;
     position: relative;
+  }
+
+  /* Visible tooltip on hover/focus (aria-label remains the accessible name) */
+  .theme-toggle::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(-2px);
+    padding: 0.35rem 0.5rem;
+    border-radius: 0.5rem;
+    background: var(--surface0);
+    border: 1px solid var(--surface1);
+    color: var(--text-primary);
+    font-family: var(--sans);
+    font-size: var(--font-size-s);
+    letter-spacing: var(--spacing-m);
+    line-height: 1.1;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms ease-out, transform 120ms ease-out;
+    z-index: 100;
+  }
+
+  .theme-toggle:hover::after,
+  .theme-toggle:focus-visible::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 
   .theme-icon {

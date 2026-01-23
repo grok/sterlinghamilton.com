@@ -1,0 +1,316 @@
+---
+import { themeConfig } from '@/config';
+
+type Props = {
+  /** Current locale code from the URL, e.g. "en" */
+  lang?: string;
+  /**
+   * Optional translation-aware links (used on post pages).
+   * When provided, language switching should go to the matching translated URL.
+   */
+  translations?: Array<{
+    code: string;
+    label: string;
+    href: string;
+    active: boolean;
+    available: boolean;
+  }>;
+};
+
+const { lang, translations } = Astro.props as Props;
+const currentLang = lang || themeConfig.site.defaultLocale;
+const locales = themeConfig.site.locales;
+
+const isTranslationAware = Array.isArray(translations);
+const availableTranslations = isTranslationAware
+  ? translations.filter((t) => t.available)
+  : [];
+const visibleTranslations = isTranslationAware
+  ? // Hide languages that don't have this article.
+    (availableTranslations.length ? availableTranslations : translations)
+  : locales.map((l) => ({
+      code: l.code,
+      label: l.label,
+      href: `/${l.code}/`,
+      active: l.code === currentLang,
+      available: true,
+    }));
+const hasLanguageMenu = !isTranslationAware || visibleTranslations.length > 1;
+---
+
+<div class="language-toggle" data-language-toggle>
+  <button
+    class="language-button"
+    type="button"
+    aria-haspopup="menu"
+    aria-expanded="false"
+    aria-label="Choose language"
+    title={hasLanguageMenu ? 'Choose language' : 'No translations available'}
+    aria-disabled={hasLanguageMenu ? 'false' : 'true'}
+    data-tooltip={hasLanguageMenu ? 'Choose language' : 'No translations available'}
+    tabindex="3"
+    data-language-button
+  >
+    <!-- noun-language-5135976.svg -->
+    <svg viewBox="0 0 40 50" aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M29.0162 16.2066L31.1249 22.0001H26.9076L29.0162 16.2066Z"
+      />
+      <path
+        fill="currentColor"
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M19 14C19 10.2288 19 8.34315 20.1716 7.17157C21.3431 6 23.2288 6 27 6H31.7092C35.6054 6 37.5534 6 38.7331 7.2225C39.9127 8.445 39.8432 10.3918 39.7041 14.2855L39.2756 26.2855C39.1454 29.9331 39.0802 31.7569 37.9179 32.8785C36.7556 34 34.9306 34 31.2807 34H27C23.2288 34 21.3431 34 20.1716 32.8284C19 31.6569 19 29.7712 19 26V14ZM24.7238 28H21.5313L27.3813 11.9272L30.3604 11.1284L36.5012 28H33.3087L32.2168 25.0001H25.8157L24.7238 28Z"
+      />
+      <path
+        fill="currentColor"
+        d="M0.5 12L7 12V10L10 9.2V12H16V15H13.9909C13.8759 18.1602 12.6746 21.0432 10.7493 23.2868C12.2709 24.2846 14.0673 24.8979 16.0005 24.9883L15.9999 25L15.216 27.9397C12.7163 27.704 10.415 26.7866 8.49982 25.3755C6.57251 26.7956 4.25411 27.7156 1.73604 27.9442L1 25L0.999469 24.9883C2.93248 24.8978 4.72882 24.2846 6.25034 23.2868C5.02453 21.8583 4.09221 20.1706 3.54687 18.3172L6.44643 17.54C6.86904 18.9394 7.57588 20.2156 8.49982 21.3013C9.95832 19.5874 10.8758 17.399 10.9883 15H1.25L0.5 12Z"
+      />
+    </svg>
+  </button>
+
+  <div class="language-menu" role="menu" data-language-menu hidden>
+    {visibleTranslations.map((l) => (
+      <button
+        type="button"
+        role="menuitem"
+        class={`language-item ${l.active ? 'active' : ''} ${!l.available ? 'disabled' : ''}`}
+        data-language-item
+        data-lang={l.code}
+        data-href={l.href}
+        aria-disabled={!l.available ? 'true' : 'false'}
+        disabled={!l.available}
+      >
+        {l.label}
+      </button>
+    ))}
+  </div>
+</div>
+
+<script is:inline define:vars={{ defaultLocale: themeConfig.site.defaultLocale, localeCodes: themeConfig.site.locales.map((l) => l.code) }}>
+  function bindLanguageToggle() {
+    const root = document.querySelector('[data-language-toggle]')
+    if (!(root instanceof HTMLElement)) return
+
+    const button = root.querySelector('[data-language-button]')
+    const menu = root.querySelector('[data-language-menu]')
+    if (!(button instanceof HTMLButtonElement) || !(menu instanceof HTMLElement)) return
+
+    // Skip if already bound
+    if (root.dataset.langBound) return
+    root.dataset.langBound = 'true'
+
+    const close = () => {
+      menu.hidden = true
+      button.setAttribute('aria-expanded', 'false')
+    }
+
+    const open = () => {
+      menu.hidden = false
+      button.setAttribute('aria-expanded', 'true')
+      const first = menu.querySelector('[data-language-item]')
+      if (first instanceof HTMLElement) first.focus()
+    }
+
+    button.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      if (button.getAttribute('aria-disabled') === 'true') return
+      if (menu.hidden) open()
+      else close()
+    })
+
+    document.addEventListener('click', () => close())
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close()
+    })
+
+    menu.addEventListener('click', (e) => {
+      const target = e.target
+      if (!(target instanceof HTMLElement)) return
+      const item = target.closest('[data-language-item]')
+      if (!(item instanceof HTMLElement)) return
+      const code = item.getAttribute('data-lang')
+      if (!code) return
+      const href = item.getAttribute('data-href')
+
+      try {
+        localStorage.setItem('preferredLang', code)
+      } catch {}
+
+      const url = new URL(window.location.href)
+
+      // If the server provided an explicit href (post translations), use it.
+      if (href) {
+        const nextUrl = new URL(href, url.origin)
+        nextUrl.search = url.search
+        nextUrl.hash = url.hash
+        window.location.assign(nextUrl.toString())
+        return
+      }
+
+      const parts = url.pathname.split('/').filter(Boolean)
+
+      // If current URL is /:lang/... replace first segment when it's a known locale; otherwise prefix.
+      if (parts.length > 0 && localeCodes.includes(parts[0])) {
+        parts[0] = code
+      } else {
+        parts.unshift(code)
+      }
+
+      url.pathname = '/' + parts.join('/') + '/'
+      // preserve search/hash
+      window.location.assign(url.toString())
+    })
+
+    // If we have a stored preference and we're on a different locale, navigate.
+    try {
+      const preferred = localStorage.getItem('preferredLang')
+      if (preferred && preferred !== defaultLocale) {
+        const parts = window.location.pathname.split('/').filter(Boolean)
+        // Only auto-redirect from root "/" to preferred locale to avoid surprising jumps.
+        if (parts.length === 0) {
+          window.location.replace(`/${preferred}/`)
+        }
+      }
+    } catch {}
+  }
+
+  document.addEventListener('astro:page-load', bindLanguageToggle)
+</script>
+
+<style>
+  .language-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .language-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    height: 1.75rem;
+    color: var(--text-primary);
+    padding: 0;
+    margin-left: 0.75rem;
+    position: relative;
+  }
+
+  .language-button svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    position: relative;
+    top: 2px;
+  }
+
+  .language-button[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  /* Visible tooltip on hover/focus */
+  .language-button::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(-2px);
+    padding: 0.35rem 0.5rem;
+    border-radius: 0.5rem;
+    background: var(--surface0);
+    border: 1px solid var(--surface1);
+    color: var(--text-primary);
+    font-family: var(--sans);
+    font-size: var(--font-size-s);
+    letter-spacing: var(--spacing-m);
+    line-height: 1.1;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms ease-out, transform 120ms ease-out;
+    z-index: 100;
+  }
+
+  .language-button:hover::after,
+  .language-button:focus-visible::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* When the menu is open, don't show the tooltip (it would overlap the popover). */
+  .language-button[aria-expanded="true"]::after,
+  .language-button[aria-expanded="true"]:hover::after,
+  .language-button[aria-expanded="true"]:focus-visible::after {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-2px);
+  }
+
+  .language-button:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text-primary), transparent 55%);
+    outline-offset: 6px;
+    border-radius: 0.5rem;
+  }
+
+  .language-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    min-width: 10rem;
+    padding: 0.35rem;
+    border-radius: 0.75rem;
+    /* Catppuccin-recommended contrast for popovers: surfaces + text */
+    border: 1px solid var(--surface1);
+    background: var(--surface0);
+    box-shadow:
+      0 16px 44px rgba(0, 0, 0, 0.35),
+      0 1px 0 rgba(255, 255, 255, 0.08) inset;
+    z-index: 50;
+    color: var(--text-primary);
+    display: none;
+  }
+
+  .language-menu:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  html:not(.dark) .language-menu {
+    box-shadow:
+      0 16px 44px rgba(0, 0, 0, 0.18),
+      0 1px 0 rgba(255, 255, 255, 0.55) inset;
+  }
+
+  .language-item {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: inherit;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 0.95rem;
+  }
+
+  .language-item:hover,
+  .language-item:focus-visible {
+    background: var(--surface1);
+    outline: none;
+  }
+
+  .language-item.active {
+    background: var(--surface2);
+  }
+
+  .language-item.disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+</style>
+
