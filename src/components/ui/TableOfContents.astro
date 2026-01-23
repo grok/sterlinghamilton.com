@@ -1,8 +1,11 @@
 ---
 import { themeConfig } from '@/config';
 import type { TOCProps } from '@/types';
+import { getUiLabels, localeFromPathname } from '@/utils/i18n';
 
 const { toc = [] }: TOCProps = Astro.props;
+const locale = localeFromPathname(Astro.url.pathname);
+const { top } = getUiLabels(locale);
 ---
 
 <div class="toc-container" id="toc">
@@ -10,7 +13,7 @@ const { toc = [] }: TOCProps = Astro.props;
     <ul class="toc-list" id="toc-list">
       <!-- Back to top link -->
       <li class="toc-item toc-level-0">
-        <a href="#" class="toc-link toc-title" title="Back to top" data-text="Back to top"> Back to top </a>
+        <a href="#" class="toc-link toc-title" title={top} data-text={top}> {top} </a>
       </li>
 
       <!-- TOC items -->
@@ -338,13 +341,10 @@ const { toc = [] }: TOCProps = Astro.props;
     left: -0.75rem;
   }
 
-  .toc-level-0 .toc-link:hover::after {
-    opacity: 0;
-  }
-
   .toc-level-1 .toc-link:hover::before,
   .toc-level-2 .toc-link:hover::before,
-  .toc-level-3 .toc-link:hover::before {
+  .toc-level-3 .toc-link:hover::before,
+  .toc-level-0 .toc-link:hover::before {
     width: 0.75rem;
     transition: width 0.1s ease-out;
   }

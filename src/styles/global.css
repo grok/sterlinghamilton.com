@@ -26,9 +26,13 @@
   --text-primary: #4c4f69; /* text */
   --text-secondary: #5c5f77; /* subtext1 */
   --text-tertiary: #6c6f85; /* subtext0 */
+  --surface0: #ccd0da; /* surface0 */
+  --surface1: #bcc0cc; /* surface1 */
+  --surface2: #acb0be; /* surface2 */
   --border: #ccd0da; /* surface0 */
   --selection: rgba(172, 176, 190, 0.45); /* surface2 @ 45% */
   --code-bg: #e6e9ef; /* mantle */
+  --overlay0: #9ca0b0; /* overlay0 */
   --mark: #df8e1d; /* yellow */
 
   /* Syntax Theme (Catppuccin Latte-ish) */
@@ -52,9 +56,13 @@ html.light {
   --text-primary: #4c4f69; /* text */
   --text-secondary: #5c5f77; /* subtext1 */
   --text-tertiary: #6c6f85; /* subtext0 */
+  --surface0: #ccd0da; /* surface0 */
+  --surface1: #bcc0cc; /* surface1 */
+  --surface2: #acb0be; /* surface2 */
   --border: #ccd0da; /* surface0 */
   --selection: rgba(172, 176, 190, 0.45); /* surface2 @ 45% */
   --code-bg: #e6e9ef; /* mantle */
+  --overlay0: #9ca0b0; /* overlay0 */
   --mark: #df8e1d; /* yellow */
 
   /* Syntax Theme (Catppuccin Latte-ish) */
@@ -78,9 +86,13 @@ html.dark {
   --text-primary: #cdd6f4; /* text */
   --text-secondary: #bac2de; /* subtext1 */
   --text-tertiary: #a6adc8; /* subtext0 */
+  --surface0: #313244; /* surface0 */
+  --surface1: #45475a; /* surface1 */
+  --surface2: #585b70; /* surface2 */
   --border: #313244; /* surface0 */
   --selection: rgba(88, 91, 112, 0.5); /* surface2 @ 50% */
   --code-bg: #181825; /* mantle */
+  --overlay0: #6c7086; /* overlay0 */
   --mark: #f9e2af; /* yellow */
 
   /* Syntax Theme (Catppuccin-ish) */
@@ -127,6 +139,29 @@ body {
   font-synthesis: none;
   word-wrap: break-word;
   overflow-wrap: break-word;
+}
+
+/* Shared "wordmark" title style (used for site title + post titles) */
+.wordmark-title {
+  font-family: "Fredoka", var(--sans);
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  text-wrap: balance;
+
+  /* Match Header title sizing */
+  font-size: clamp(1.8rem, 2.2vw, 2.6rem);
+
+  /* Theme-aware accent */
+  --title-green: #8839ef; /* Latte mauve */
+  color: var(--title-green);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+}
+
+html.dark .wordmark-title {
+  --title-green: #a6e3a1; /* Mocha green */
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
 }
 
 @media (max-width: 768px) {

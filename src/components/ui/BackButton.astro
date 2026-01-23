@@ -1,8 +1,12 @@
 ---
 import { themeConfig } from '@/config';
+import { getUiLabels, localeFromPathname } from '@/utils/i18n';
+
+const locale = localeFromPathname(Astro.url.pathname);
+const { index } = getUiLabels(locale);
 ---
 
-<a href="/" class="back-button">
+<a href={`/${locale}/`} class="back-button" title={index} aria-label={index}>
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M2.5 6.5H9.5C11.1569 6.5 12.5 7.84315 12.5 9.5V9.5C12.5 11.1569 11.1569 12.5 9.5 12.5H7.5M2.5 6.5L5.5 9.5M2.5 6.5L5.5 3.5"
@@ -11,7 +15,7 @@ import { themeConfig } from '@/config';
       stroke-linecap="round"
       stroke-linejoin="round"></path>
   </svg>
-  index
+  {index}
 </a>
 
 <script

@@ -1,12 +1,31 @@
 ---
 import ThemeToggle from '@/components/ui/ThemeToggle.astro';
+import LanguageToggle from '@/components/ui/LanguageToggle.astro';
 import { themeConfig } from '@/config';
+
+type Props = {
+  lang?: string;
+  translations?: Array<{
+    code: string;
+    label: string;
+    href: string;
+    active: boolean;
+    available: boolean;
+  }>;
+  /** Hide the big site title (useful on post pages). */
+  showTitle?: boolean;
+};
+
+const { lang, translations, showTitle = true } = Astro.props as Props;
 ---
 
-<header>
+<header data-show-title={showTitle}>
   <nav>
-    <ThemeToggle />
-    <span class="site-title">{themeConfig.site.headerTitle}</span>
+    {showTitle && <span class="site-title wordmark-title">{themeConfig.site.headerTitle}</span>}
+    <div class="controls">
+      <ThemeToggle />
+      <LanguageToggle lang={lang} translations={translations} />
+    </div>
   </nav>
 </header>
 <style>
@@ -18,43 +37,15 @@ import { themeConfig } from '@/config';
     justify-content: space-between;
     align-items: center;
   }
-
-  @media (min-width: 768px) {
-    .site-title {
-      font-size: 1.5rem;
-    }
+  .controls {
+    display: flex;
+    align-items: center;
   }
 
-  /* Catppuccin-ish wordmark vibe (but green) */
-  .site-title {
-    /* Match Catppuccin's chunky rounded wordmark feel */
-    font-family: "Fredoka", var(--sans);
-    font-style: normal;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 0.95;
-    text-wrap: balance;
-
-    /* Size similar to Catppuccin hero title (but restrained for a header) */
-    font-size: clamp(1.8rem, 2.2vw, 2.6rem);
-
-    /* Solid green fill (like the screenshot is solid mauve) */
-    --title-green: #8839ef; /* Latte mauve */
-    color: var(--title-green);
-
-    /* Subtle depth like the logo text on dark backgrounds */
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
-
-    /* Keep it visually on the left even though it comes after the toggle in DOM */
-    order: 0;
+  header[data-show-title="false"] nav {
+    justify-content: flex-end;
   }
 
-  html.dark .site-title {
-    --title-green: #a6e3a1; /* Mocha green */
-    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
-  }
+  /* Typography for the title is shared globally via .wordmark-title */
 
-  nav :global(.theme-toggle) {
-    order: 1;
-  }
 </style>
