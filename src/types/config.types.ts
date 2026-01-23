@@ -16,6 +16,15 @@ export interface SiteInfo {
   author: string;
   description: string;
   language: string;
+  /** Default locale used for URL routing, e.g. "en". */
+  defaultLocale: string;
+  /** Locales available in the language picker. */
+  locales: Array<{
+    code: string;
+    label: string;
+    /** BCP-47 tag used for <html lang="..."> (e.g. "en-US"). */
+    langTag: string;
+  }>;
 }
 
 // General settings configuration type

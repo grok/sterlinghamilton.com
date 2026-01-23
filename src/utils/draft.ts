@@ -13,9 +13,13 @@ export async function getFilteredPosts() {
 /**
  * Get all posts sorted by publication date, filtering out posts whose filenames start with _
  */
-export async function getSortedFilteredPosts() {
+export async function getSortedFilteredPosts(lang?: string) {
   const posts = await getFilteredPosts();
-  return posts.sort(
+  const filtered =
+    lang == null
+      ? posts
+      : posts.filter((post) => (post.data.lang || 'en') === lang);
+  return filtered.sort(
     (a: CollectionEntry<'posts'>, b: CollectionEntry<'posts'>) =>
       b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
   );

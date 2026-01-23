@@ -1,0 +1,27 @@
+---
+import About from '@/components/widgets/About.astro';
+import CatppuccinLaptop from '@/components/widgets/CatppuccinLaptop.astro';
+import PostList from '@/components/widgets/PostList.astro';
+import { themeConfig } from '@/config';
+import IndexLayout from '@/layouts/IndexLayout.astro';
+import { getSortedFilteredPosts } from '@/utils/draft';
+
+export async function getStaticPaths() {
+  return themeConfig.site.locales.map((l) => ({ params: { lang: l.code } }));
+}
+
+const lang = Astro.params.lang || themeConfig.site.defaultLocale;
+const locale = themeConfig.site.locales.find((l) => l.code === lang);
+const htmlLang = locale?.langTag || themeConfig.site.language;
+
+const posts = await getSortedFilteredPosts(lang);
+---
+
+<IndexLayout title={themeConfig.site.name} description={themeConfig.site.description} lang={htmlLang}>
+  <About />
+  <CatppuccinLaptop />
+  <main>
+    <PostList posts={posts} lang={lang} />
+  </main>
+</IndexLayout>
+

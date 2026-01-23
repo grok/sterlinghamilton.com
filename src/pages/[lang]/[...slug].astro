@@ -1,0 +1,57 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import PostLayout from '@/layouts/PostLayout.astro';
+import { themeConfig } from '@/config';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  const allowed = new Set(themeConfig.site.locales.map((l) => l.code));
+  return posts
+    .filter((post) => !post.id.startsWith('_'))
+    .filter((post) => allowed.has(post.data.lang || themeConfig.site.defaultLocale))
+    .map((post) => ({
+      params: { lang: post.data.lang || 'en', slug: post.id },
+      props: post,
+    }));
+}
+
+type Props = CollectionEntry<'posts'>;
+
+const lang = Astro.params.lang || themeConfig.site.defaultLocale;
+const locale = themeConfig.site.locales.find((l) => l.code === lang);
+const htmlLang = locale?.langTag || themeConfig.site.language;
+
+const post = Astro.props;
+const { Content, remarkPluginFrontmatter } = await render(post);
+
+const readingTime = remarkPluginFrontmatter.readingTime;
+const toc = remarkPluginFrontmatter.toc || [];
+
+const allPosts = await getCollection('posts');
+const key = post.data.translationKey || post.id;
+const translations = themeConfig.site.locales.map((l) => {
+  const match = allPosts.find(
+    (p) =>
+      (p.data.translationKey || p.id) === key &&
+      (p.data.lang || themeConfig.site.defaultLocale) === l.code,
+  );
+  return {
+    code: l.code,
+    label: l.label,
+    href: match ? `/${l.code}/${match.id}/` : `/${l.code}/`,
+    active: l.code === lang,
+    available: Boolean(match),
+  };
+});
+---
+
+<PostLayout
+  {...post.data}
+  readingTime={readingTime}
+  toc={toc}
+  lang={htmlLang}
+  translations={translations}
+>
+  <Content />
+</PostLayout>
+

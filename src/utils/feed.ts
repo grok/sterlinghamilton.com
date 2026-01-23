@@ -155,7 +155,11 @@ async function generateFeedInstance(context: APIContext) {
 
   for (const post of sortedPosts) {
     const postSlug = post.id.replace(/\.[^/.]+$/, '');
-    const postUrl = new URL(postSlug, siteUrl).toString();
+    const postLang = (post.data.lang || themeConfig.site.defaultLocale).replace(
+      /^\//,
+      '',
+    );
+    const postUrl = new URL(`${postLang}/${postSlug}`, siteUrl).toString();
     const rawHtml = markdownParser.render(post.body || '');
     const processedHtml = await fixRelativeImagePaths(
       rawHtml,

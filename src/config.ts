@@ -8,7 +8,12 @@ export const themeConfig: ThemeConfig = {
     headerTitle: "Hello, I'm Sterling!", // Header wordmark text
     author: 'Sterling Hamilton', // Author name
     description: "Sterling Hamilton's website", // Site description
-    language: 'en-US', // Default language
+    language: 'en-US', // Default language tag (BCP-47)
+    defaultLocale: 'en', // Default URL locale
+    locales: [
+      { code: 'en', label: 'English', langTag: 'en-US' },
+      { code: 'es', label: 'Español', langTag: 'es' },
+    ],
   },
 
   // GENERAL SETTINGS ////////////////////////////////////////////////////////////////////////////////////

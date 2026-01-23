@@ -4,7 +4,7 @@ import { themeConfig } from '@/config';
 import type { PostListProps } from '@/types';
 
 declare const Astro: any;
-const { posts } = Astro.props as PostListProps;
+const { posts, lang } = Astro.props as PostListProps;
 
 function getQuarter(date: Date) {
   const monthIndex = date.getMonth(); // 0-11
@@ -42,6 +42,7 @@ for (const post of posts) {
     placeholder="Search articles…"
     autocomplete="off"
     spellcheck="false"
+    tabindex="2"
   />
   <p class="post-search-meta" id="post-search-meta" aria-live="polite"></p>
 </div>
@@ -55,7 +56,7 @@ for (const post of posts) {
           {group.posts.map((post) => (
             <li data-post-item>
               <a
-                href={`/${post.id}/`}
+                href={`/${lang}/${post.id}/`}
                 data-post-title={post.data.title}
                 data-post-slug={post.id}
               >

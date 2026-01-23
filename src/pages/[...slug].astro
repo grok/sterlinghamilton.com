@@ -1,6 +1,6 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import PostLayout from '@/layouts/PostLayout.astro';
+import { getCollection } from 'astro:content';
+import { themeConfig } from '@/config';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -8,19 +8,35 @@ export async function getStaticPaths() {
     .filter((post) => !post.id.startsWith('_'))
     .map((post) => ({
       params: { slug: post.id },
-      props: post,
     }));
 }
-
-type Props = CollectionEntry<'posts'>;
-
-const post = Astro.props;
-const { Content, remarkPluginFrontmatter } = await render(post);
-
-const readingTime = remarkPluginFrontmatter.readingTime;
-const toc = remarkPluginFrontmatter.toc || [];
 ---
 
-<PostLayout {...post.data} readingTime={readingTime} toc={toc}>
-  <Content />
-</PostLayout>
+<!-- Legacy URL redirect: /:slug/ -> /:lang/:slug/ -->
+<html lang={themeConfig.site.language}>
+  <head>
+    <link rel="canonical" href={`/${themeConfig.site.defaultLocale}/${Astro.params.slug}/`} />
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <script is:inline define:vars={{ defaultLocale: themeConfig.site.defaultLocale, slug: Astro.params.slug }}>
+      try {
+        const url = new URL(window.location.href)
+        url.pathname = `/${defaultLocale}/${slug}/`
+        // preserve search/hash
+        window.location.replace(url.toString())
+      } catch {
+        window.location.replace(`/${defaultLocale}/${slug}/`)
+      }
+    </script>
+    <noscript>
+      <p>
+        Continue to{' '}
+        <a href={`/${themeConfig.site.defaultLocale}/${Astro.params.slug}/`}>
+          /{themeConfig.site.defaultLocale}/{Astro.params.slug}/
+        </a>
+        .
+      </p>
+    </noscript>
+  </body>
+</html>
