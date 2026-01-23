@@ -1,0 +1,60 @@
+---
+import ThemeToggle from '@/components/ui/ThemeToggle.astro';
+import { themeConfig } from '@/config';
+---
+
+<header>
+  <nav>
+    <ThemeToggle />
+    <span class="site-title">{themeConfig.site.headerTitle}</span>
+  </nav>
+</header>
+<style>
+  header {
+    margin: 0;
+  }
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .site-title {
+      font-size: 1.5rem;
+    }
+  }
+
+  /* Catppuccin-ish wordmark vibe (but green) */
+  .site-title {
+    /* Match Catppuccin's chunky rounded wordmark feel */
+    font-family: "Fredoka", var(--sans);
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+    text-wrap: balance;
+
+    /* Size similar to Catppuccin hero title (but restrained for a header) */
+    font-size: clamp(1.8rem, 2.2vw, 2.6rem);
+
+    /* Solid green fill (like the screenshot is solid mauve) */
+    --title-green: #8839ef; /* Latte mauve */
+    color: var(--title-green);
+
+    /* Subtle depth like the logo text on dark backgrounds */
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+
+    /* Keep it visually on the left even though it comes after the toggle in DOM */
+    order: 0;
+  }
+
+  html.dark .site-title {
+    --title-green: #a6e3a1; /* Mocha green */
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  nav :global(.theme-toggle) {
+    order: 1;
+  }
+</style>

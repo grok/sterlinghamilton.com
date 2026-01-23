@@ -1,0 +1,209 @@
+@import "./fonts.css";
+@import "./post.css";
+
+:root {
+  /* Min Content Width */
+  --content-width: 25rem;
+
+  /* Typography */
+  --sans: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+  --serif: Besley, Baskerville, Georgia, "Times New Roman", Times, serif;
+  --mono: "SF Mono", SFMono-Regular, monospace;
+
+  --font-size-s: 0.8125rem;
+  --font-size-m: 0.9375rem;
+  --font-size-l: 1.0625rem;
+
+  --font-weight-light: 350;
+  --font-weight-regular: 400;
+  --font-weight-bold: 500;
+
+  --spacing-s: -0.08em;
+  --spacing-m: -0.02em;
+
+  /* Light Mode Colors (Default): Catppuccin Latte */
+  --bg: #eff1f5; /* base */
+  --text-primary: #4c4f69; /* text */
+  --text-secondary: #5c5f77; /* subtext1 */
+  --text-tertiary: #6c6f85; /* subtext0 */
+  --border: #ccd0da; /* surface0 */
+  --selection: rgba(172, 176, 190, 0.45); /* surface2 @ 45% */
+  --code-bg: #e6e9ef; /* mantle */
+  --mark: #df8e1d; /* yellow */
+
+  /* Syntax Theme (Catppuccin Latte-ish) */
+  --astro-code-foreground: #4c4f69; /* text */
+  --astro-code-background: #e6e9ef; /* mantle */
+  --astro-code-token-constant: #fe640b; /* peach */
+  --astro-code-token-string: #40a02b; /* green */
+  --astro-code-token-comment: #9ca0b0; /* overlay0 */
+  --astro-code-token-keyword: #8839ef; /* mauve */
+  --astro-code-token-parameter: #ea76cb; /* pink */
+  --astro-code-token-function: #1e66f5; /* blue */
+  --astro-code-token-string-expression: #179299; /* teal */
+  --astro-code-token-punctuation: #6c6f85; /* subtext0 */
+  --astro-code-token-link: #209fb5; /* sapphire */
+}
+
+/* Light Mode (Explicit) */
+html.light {
+  /* Catppuccin Latte */
+  --bg: #eff1f5; /* base */
+  --text-primary: #4c4f69; /* text */
+  --text-secondary: #5c5f77; /* subtext1 */
+  --text-tertiary: #6c6f85; /* subtext0 */
+  --border: #ccd0da; /* surface0 */
+  --selection: rgba(172, 176, 190, 0.45); /* surface2 @ 45% */
+  --code-bg: #e6e9ef; /* mantle */
+  --mark: #df8e1d; /* yellow */
+
+  /* Syntax Theme (Catppuccin Latte-ish) */
+  --astro-code-foreground: #4c4f69; /* text */
+  --astro-code-background: #e6e9ef; /* mantle */
+  --astro-code-token-constant: #fe640b; /* peach */
+  --astro-code-token-string: #40a02b; /* green */
+  --astro-code-token-comment: #9ca0b0; /* overlay0 */
+  --astro-code-token-keyword: #8839ef; /* mauve */
+  --astro-code-token-parameter: #ea76cb; /* pink */
+  --astro-code-token-function: #1e66f5; /* blue */
+  --astro-code-token-string-expression: #179299; /* teal */
+  --astro-code-token-punctuation: #6c6f85; /* subtext0 */
+  --astro-code-token-link: #209fb5; /* sapphire */
+}
+
+/* Dark Mode (Explicit) */
+html.dark {
+  /* Catppuccin Mocha */
+  --bg: #1e1e2e; /* base */
+  --text-primary: #cdd6f4; /* text */
+  --text-secondary: #bac2de; /* subtext1 */
+  --text-tertiary: #a6adc8; /* subtext0 */
+  --border: #313244; /* surface0 */
+  --selection: rgba(88, 91, 112, 0.5); /* surface2 @ 50% */
+  --code-bg: #181825; /* mantle */
+  --mark: #f9e2af; /* yellow */
+
+  /* Syntax Theme (Catppuccin-ish) */
+  --astro-code-foreground: #cdd6f4; /* text */
+  --astro-code-background: #181825; /* mantle */
+  --astro-code-token-constant: #fab387; /* peach */
+  --astro-code-token-string: #a6e3a1; /* green */
+  --astro-code-token-comment: #6c7086; /* overlay0 */
+  --astro-code-token-keyword: #cba6f7; /* mauve */
+  --astro-code-token-parameter: #f5c2e7; /* pink */
+  --astro-code-token-function: #89b4fa; /* blue */
+  --astro-code-token-string-expression: #94e2d5; /* teal */
+  --astro-code-token-punctuation: #9399b2; /* overlay2 */
+  --astro-code-token-link: #74c7ec; /* sapphire */
+}
+
+html {
+  background-color: var(--bg);
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s ease-out;
+}
+
+body {
+  font-family: var(--sans);
+  font-feature-settings: "ss03" 1;
+  font-size: var(--font-size-m);
+  line-height: 1.75;
+  color: var(--text-primary);
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  letter-spacing: var(--spacing-m);
+  padding: 6rem 1.5rem 1.5rem 1.5rem;
+  overscroll-behavior-y: contain;
+  text-autospace: normal;
+  text-spacing-trim: space-first;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 4rem 1.35rem 1.35rem 1.35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::selection {
+  background-color: var(--selection);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 1.5px dashed var(--text-tertiary);
+  border-radius: 0.25rem;
+}
+
+body[data-width] {
+  max-width: var(--content-width);
+}
+
+body[data-centered="true"] {
+  margin: 0 auto;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.date {
+  margin: 0;
+  font-weight: var(--font-weight-light);
+  color: var(--text-secondary);
+  opacity: 0.75;
+  flex-shrink: 0;
+  letter-spacing: var(--spacing-s);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings:
+    "tnum" 1,
+    "zero" 0,
+    "cv01" 1,
+    "cv02" 1,
+    "calt" 1,
+    "ss03" 1,
+    "ordn" 1;
+}
+
+.date .month {
+  letter-spacing: var(--spacing-m);
+}
+
+.sr-only {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

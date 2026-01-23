@@ -1,35 +1,56 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true
-  },
-  "files": {
-    "ignoreUnknown": false
-  },
-  "formatter": {
-    "enabled": true,
+	"$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "**",
+      "!**/.astro",
+      "!**/dist",
+      "!**/node_modules",
+      "!**/.bun-cache",
+      "!**/.tmp",
+      "!**/.vscode",
+      "!**/public"
+    ]
+	},
+	"formatter": {
+		"enabled": true,
     "indentStyle": "space",
     "indentWidth": 2
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true
-    }
-  },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "double"
-    }
-  },
-  "assist": {
-    "enabled": true,
-    "actions": {
-      "source": {
-        "organizeImports": "on"
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+      "recommended": true,
+      "complexity": {
+        "noImportantStyles": "off"
+      },
+      "style": {
+        "useNodejsImportProtocol": "off",
+        "useTemplate": "off"
+      },
+      "suspicious": {
+        "noShadowRestrictedNames": "off"
+      }
+		}
+	},
+  "overrides": [
+    {
+      "includes": ["**/*.astro"],
+      "linter": {
+        "enabled": false
       }
     }
-  }
+  ],
+	"javascript": {
+		"formatter": {
+      "quoteStyle": "single"
+		}
+	},
+  "assist": { "enabled": false }
 }

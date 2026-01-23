@@ -1,0 +1,44 @@
+<script>
+  function bindFootnoteEvents() {
+    const footnoteLinks = document.querySelectorAll('[data-footnote-ref], [data-footnote-backref]')
+
+    footnoteLinks.forEach((link) => {
+      const el = link as HTMLElement
+      // Skip if already bound
+      if (el.dataset.footnoteBound) return
+      el.dataset.footnoteBound = 'true'
+
+      el.addEventListener('click', (e) => {
+        e.preventDefault()
+        const href = el.getAttribute('href')
+        if (!href) return
+
+        const target = document.querySelector(href)
+        if (!target) return
+
+        // Use fixed offset of 128px
+        const offset = 128
+
+        const targetPosition = target.getBoundingClientRect().top + window.scrollY - offset
+
+        window.scrollTo({
+          top: targetPosition
+        })
+
+        // Highlight effect
+        const highlightTarget = target.closest('cite') || target.closest('sup') || target
+        highlightTarget.classList.add('footnote-highlight')
+        highlightTarget.addEventListener(
+          'animationend',
+          () => {
+            highlightTarget.classList.remove('footnote-highlight')
+          },
+          { once: true }
+        )
+      })
+    })
+  }
+
+  // Use only astro:page-load as it fires on initial load and navigation
+  document.addEventListener('astro:page-load', bindFootnoteEvents)
+</script>

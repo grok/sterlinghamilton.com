@@ -1,0 +1,110 @@
+---
+import { themeConfig } from '@/config';
+---
+
+{
+  themeConfig.general.themeToggle && (
+    <button
+      id="theme-toggle"
+      class="theme-toggle"
+      type="button"
+      aria-label="Toggle theme"
+      aria-pressed="false"
+      title="Toggle theme"
+    >
+      <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          fill="currentColor"
+          d="M12 18a6 6 0 1 1 0-12a6 6 0 0 1 0 12Zm0-14a1 1 0 0 1 1-1h0a1 1 0 1 1-2 0a1 1 0 0 1 1 1Zm0 19a1 1 0 0 1 1-1h0a1 1 0 1 1-2 0a1 1 0 0 1 1 1ZM4 13a1 1 0 0 1-1-1h0a1 1 0 1 1 0 2a1 1 0 0 1 1-1Zm19 0a1 1 0 0 1-1-1h0a1 1 0 1 1 0 2a1 1 0 0 1 1-1ZM5.64 6.64a1 1 0 0 1-1.41 0h0a1 1 0 1 1 1.41-1.41a1 1 0 0 1 0 1.41Zm14.14 14.14a1 1 0 0 1-1.41 0h0a1 1 0 1 1 1.41-1.41a1 1 0 0 1 0 1.41ZM6.64 18.36a1 1 0 0 1 0 1.41h0a1 1 0 1 1-1.41-1.41a1 1 0 0 1 1.41 0Zm14.14-14.14a1 1 0 0 1 0 1.41h0a1 1 0 1 1-1.41-1.41a1 1 0 0 1 1.41 0Z"
+        />
+      </svg>
+      <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          fill="currentColor"
+          d="M21 14.5A7.5 7.5 0 0 1 9.5 3a8.5 8.5 0 1 0 11.5 11.5Z"
+        />
+      </svg>
+    </button>
+  )
+}
+
+<script is:inline>
+  function bindThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle')
+    if (!themeToggle || !window.ThemeManager) return
+
+    // Skip if already bound
+    if (themeToggle.dataset.themeBound) return
+    themeToggle.dataset.themeBound = 'true'
+
+    const updateA11y = () => {
+      const isDark = document.documentElement.classList.contains('dark')
+      themeToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false')
+      themeToggle.setAttribute(
+        'aria-label',
+        isDark ? 'Switch to light mode' : 'Switch to dark mode'
+      )
+      themeToggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode')
+    }
+
+    updateA11y()
+    document.addEventListener('themechange', updateA11y)
+
+    themeToggle.addEventListener('click', function (e) {
+      e.preventDefault()
+      e.stopPropagation()
+      window.ThemeManager.toggle()
+    })
+  }
+
+  // Use only astro:page-load as it fires on initial load and navigation
+  document.addEventListener('astro:page-load', bindThemeToggle)
+</script>
+
+<style>
+  .theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    height: 1.75rem;
+    color: var(--text-primary);
+    transition: opacity 0.2s ease;
+    padding: 0;
+    position: relative;
+  }
+
+  .theme-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .sun {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .moon {
+    opacity: 0;
+    transform: scale(0.92);
+    position: absolute;
+  }
+
+  html.dark .sun {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  html.dark .moon {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .theme-toggle:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text-primary), transparent 55%);
+    outline-offset: 6px;
+    border-radius: 0.5rem;
+  }
+</style>

@@ -1,0 +1,18 @@
+---
+import About from '@/components/widgets/About.astro';
+import CatppuccinLaptop from '@/components/widgets/CatppuccinLaptop.astro';
+import PostList from '@/components/widgets/PostList.astro';
+import { themeConfig } from '@/config';
+import IndexLayout from '@/layouts/IndexLayout.astro';
+import { getSortedFilteredPosts } from '@/utils/draft';
+
+const posts = await getSortedFilteredPosts();
+---
+
+<IndexLayout title={themeConfig.site.name} description={themeConfig.site.description}>
+  <About />
+  <CatppuccinLaptop />
+  <main>
+    <PostList posts={posts} />
+  </main>
+</IndexLayout>
