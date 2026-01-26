@@ -6,13 +6,15 @@
   --content-width: 25rem;
 
   /* Typography */
+  --font-scale: 1.2;
   --sans: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
   --serif: Besley, Baskerville, Georgia, "Times New Roman", Times, serif;
   --mono: "SF Mono", SFMono-Regular, monospace;
 
-  --font-size-s: 0.8125rem;
-  --font-size-m: 0.9375rem;
-  --font-size-l: 1.0625rem;
+  --font-size-s: calc(0.8125rem * var(--font-scale));
+  --font-size-m: calc(0.9375rem * var(--font-scale));
+  --font-size-l: calc(1.0625rem * var(--font-scale));
+  --font-size-xl: calc(1.25rem * var(--font-scale));
 
   --font-weight-light: 350;
   --font-weight-regular: 400;
@@ -154,7 +156,11 @@ body {
   text-wrap: balance;
 
   /* Match Header title sizing */
-  font-size: clamp(1.8rem, 2.2vw, 2.6rem);
+  font-size: clamp(
+    calc(1.8rem * var(--font-scale)),
+    calc(2.2vw * var(--font-scale)),
+    calc(2.6rem * var(--font-scale))
+  );
 
   /* Theme-aware accent */
   --title-green: #8839ef; /* Latte mauve */
