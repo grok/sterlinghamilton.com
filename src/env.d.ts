@@ -12,3 +12,12 @@ declare module 'astro:content' {
     }>;
   }
 }
+
+declare global {
+  interface Window {
+    __sterlingMermaidBound?: boolean;
+    __sterlingHeadingAnchorCopyBound?: boolean;
+  }
+}
+
+export {};

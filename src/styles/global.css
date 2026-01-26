@@ -1,5 +1,6 @@
 @import "./fonts.css";
 @import "./post.css";
+@import "./mermaid.css";
 
 :root {
   /* Min Content Width */

@@ -1,0 +1,154 @@
+.mermaid {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+
+.mermaid-block {
+  position: relative;
+  margin: 2rem 0 1.25rem 0;
+}
+
+.mermaid-block .mermaid {
+  margin: 0;
+}
+
+.mermaid-fullscreen {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-primary);
+  border-radius: 0.6rem;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-2px);
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  backdrop-filter: blur(48px);
+}
+
+/* If a Mermaid diagram is inside a code block wrapper that also has a copy button,
+   offset fullscreen to sit next to it (side-by-side) instead of overlapping. */
+.expressive-code .mermaid-fullscreen,
+.copy-code-wrapper .mermaid-fullscreen,
+.copy-code-block .mermaid-fullscreen {
+  right: 3rem;
+}
+
+.mermaid-fullscreen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--code-bg);
+  border-radius: 0.55rem;
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+  pointer-events: none;
+}
+
+/* Show fullscreen button only when hovering/focusing the diagram area (match copy button behavior) */
+.expressive-code:hover .mermaid-fullscreen,
+.expressive-code:focus-within .mermaid-fullscreen,
+.copy-code-wrapper:hover .mermaid-fullscreen,
+.copy-code-wrapper:focus-within .mermaid-fullscreen,
+.mermaid-block:hover .mermaid-fullscreen,
+.mermaid-block:focus-within .mermaid-fullscreen {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.mermaid-fullscreen svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  position: relative;
+  top: 1px;
+  z-index: 1;
+}
+
+.mermaid-fullscreen[aria-disabled='true'] {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.mermaid-fullscreen:hover::before,
+.mermaid-fullscreen:focus-visible::before {
+  opacity: 1;
+}
+
+.mermaid-fullscreen:hover,
+.mermaid-fullscreen:focus-visible {
+  color: #000;
+}
+
+html.dark .mermaid-fullscreen:hover,
+html.dark .mermaid-fullscreen:focus-visible {
+  color: #fff;
+}
+
+.expressive-code:hover .mermaid-fullscreen[aria-disabled='true'],
+.expressive-code:focus-within .mermaid-fullscreen[aria-disabled='true'],
+.copy-code-wrapper:hover .mermaid-fullscreen[aria-disabled='true'],
+.copy-code-wrapper:focus-within .mermaid-fullscreen[aria-disabled='true'],
+.mermaid-block:hover .mermaid-fullscreen[aria-disabled='true'],
+.mermaid-block:focus-within .mermaid-fullscreen[aria-disabled='true'] {
+  opacity: 0.45;
+  pointer-events: none;
+  transform: translateY(-2px);
+}
+
+.mermaid-dialog {
+  width: min(96vw, 1200px);
+  height: min(92vh, 900px);
+  padding: 0;
+  border: 1px solid var(--surface1);
+  border-radius: 1rem;
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
+.mermaid-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.mermaid-dialog__bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.75rem 0.75rem 0;
+}
+
+.mermaid-dialog__close {
+  border: 1px solid var(--surface1);
+  background: var(--surface0);
+  color: var(--text-primary);
+  border-radius: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: var(--font-size-s);
+}
+
+.mermaid-dialog__content {
+  height: calc(100% - 3rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow: auto;
+}
+
+.mermaid-dialog__content svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
