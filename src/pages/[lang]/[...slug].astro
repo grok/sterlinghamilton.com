@@ -25,6 +25,7 @@ const post = Astro.props;
 const { Content, remarkPluginFrontmatter } = await render(post);
 
 const readingTime = remarkPluginFrontmatter.readingTime;
+// TOC removed from post pages (kept only for backward-compat if other consumers use it)
 const toc = remarkPluginFrontmatter.toc || [];
 
 const allPosts = await getCollection('posts');

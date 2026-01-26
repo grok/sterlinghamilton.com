@@ -1,11 +1,8 @@
 ---
 import { themeConfig } from '@/config';
 import type { TOCProps } from '@/types';
-import { getUiLabels, localeFromPathname } from '@/utils/i18n';
 
 const { toc = [] }: TOCProps = Astro.props;
-const locale = localeFromPathname(Astro.url.pathname);
-const { top } = getUiLabels(locale);
 const pageRootHref = `${Astro.url.pathname}${Astro.url.search}`;
 ---
 
@@ -14,7 +11,7 @@ const pageRootHref = `${Astro.url.pathname}${Astro.url.search}`;
     <ul class="toc-list" id="toc-list">
       <!-- Back to top link -->
       <li class="toc-item toc-level-0">
-        <a href={pageRootHref} class="toc-link toc-title" title={top} data-text={top}> {top} </a>
+        <a href={pageRootHref} class="toc-link toc-title" title="Back to top" data-text="Back to top"> Back to top </a>
       </li>
 
       <!-- TOC items -->
@@ -115,7 +112,7 @@ const pageRootHref = `${Astro.url.pathname}${Astro.url.search}`;
       if (margin >= minSpace) {
         state.container.style.display = 'block'
         state.container.classList.add('fixed-position')
-        const leftPosition = toc ? margin - 176 - 40 : margin - 176
+        const leftPosition = toc ? margin - 100 - 40 : margin - 176
         state.container.style.left = `${leftPosition}px`
       } else {
         state.container.style.display = 'none'
@@ -343,10 +340,13 @@ const pageRootHref = `${Astro.url.pathname}${Astro.url.search}`;
     left: -0.75rem;
   }
 
+  .toc-level-0 .toc-link:hover::after {
+    opacity: 0;
+  }
+
   .toc-level-1 .toc-link:hover::before,
   .toc-level-2 .toc-link:hover::before,
-  .toc-level-3 .toc-link:hover::before,
-  .toc-level-0 .toc-link:hover::before {
+  .toc-level-3 .toc-link:hover::before {
     width: 0.75rem;
     transition: width 0.1s ease-out;
   }

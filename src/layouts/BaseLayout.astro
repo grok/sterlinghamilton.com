@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import TransitionWrapper from '@/components/layout/TransitionWrapper.astro';
 import FaviconThemeSwitcher from '@/components/ui/FaviconThemeSwitcher.astro';
 import ThemeManager from '@/components/ui/ThemeManager.astro';
+import Toasts from '@/components/ui/Toasts.astro';
 import { themeConfig } from '@/config';
 import type { LayoutProps } from '@/types';
 
@@ -31,6 +32,8 @@ const finalWidth = shouldUseCustomWidth ? `${widthValue}rem` : '25rem';
     `}
   >
     <FaviconThemeSwitcher />
+    <Toasts />
+    <div class="focus-escape" tabindex="-1" aria-hidden="true" data-focus-escape></div>
 
     {
       fadeAnimation ? (
@@ -57,5 +60,16 @@ const finalWidth = shouldUseCustomWidth ? `${widthValue}rem` : '25rem';
     .layout-wrapper {
       min-height: calc(100vh - 5.5rem);
     }
+  }
+
+  /* Used to safely move focus without scrolling the document */
+  .focus-escape {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
   }
 </style>

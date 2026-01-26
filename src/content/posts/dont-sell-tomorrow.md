@@ -82,6 +82,31 @@ When I am trying to get a technical idea approved, this is what I aim for:
 Stakeholders are not being difficult. They are carrying risk you do not see.
 The more you make the risk visible and manageable, the easier it is to get support.
 
+Here is a tiny example of what I mean by "sell the now":
+
+```ts
+type SpikeResult = {
+  latencyMsP95: number
+  errorRate: number
+  notes: string[]
+}
+
+export async function runSpike(): Promise<SpikeResult> {
+  const startedAt = performance.now()
+
+  // TODO: call the real system end-to-end, even if it is ugly
+  await new Promise((r) => setTimeout(r, 120))
+
+  const elapsed = performance.now() - startedAt
+
+  return {
+    latencyMsP95: Math.round(elapsed),
+    errorRate: 0,
+    notes: ['This is enough proof to start the conversation.'],
+  }
+}
+```
+
 ```mermaid
 flowchart TD
   A[Pitch] --> B[Claim]

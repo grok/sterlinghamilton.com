@@ -1,8 +1,29 @@
-/* Base styles for all elements */
-.prose .content * {
+/* Base styles for article content (avoid overriding embedded widgets like Mermaid blocks) */
+.prose .content {
+  font-size: var(--font-size-m);
+}
+
+.prose .content :where(
+    p,
+    blockquote,
+    pre,
+    figure,
+    table,
+    hr,
+    ul,
+    ol,
+    li,
+    dl,
+    dt,
+    dd,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5
+  ) {
   margin: 0;
   padding: 0;
-  font-size: var(--font-size-m);
 }
 
 /* Main content container */
@@ -71,6 +92,57 @@
   line-height: 1.4;
   margin: 1.5em 0 0.6em 0;
   text-transform: capitalize;
+}
+
+/* Heading anchor icon (shown on hover for headings with ids; click copies URL) */
+.prose .content [data-anchor-copy="true"] {
+  position: relative;
+  cursor: pointer;
+}
+
+.prose .content {
+  --heading-anchor-default-color: var(--text-tertiary);
+}
+
+.prose .content [data-anchor-copy="true"]::before {
+  content: "";
+  position: absolute;
+  left: -2.35rem;
+  top: 0em;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--heading-anchor-default-color);
+  opacity: 0;
+  transform: translateY(1px) scale(0.98);
+  transition:
+    opacity 0.12s ease-out,
+    transform 0.12s ease-out,
+    background-color 0.12s ease-out;
+
+  /* Use mask so the icon inherits our chosen background-color */
+  mask-image: url("/icons/url.svg");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+
+  -webkit-mask-image: url("/icons/url.svg");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .prose .content [data-anchor-copy="true"]:hover::before {
+    opacity: 0.9;
+    transform: translateY(0) scale(1);
+    background-color: var(--text-primary);
+  }
+}
+
+@media (max-width: 768px) {
+  .prose .content [data-anchor-copy="true"]::before {
+    display: none;
+  }
 }
 
 /* Bold text */
@@ -310,7 +382,7 @@
 }
 
 /* Inline code */
-.prose code {
+.prose :where(p, li, blockquote, td, th, dd, dt, figcaption) code {
   padding: 2.5px 3.5px;
   border-radius: 5px;
   background-color: var(--code-bg);
@@ -620,21 +692,28 @@
 }
 
 /* Code blocks */
-.prose pre {
+.prose .expressive-code {
+  /* Keep code blocks within the normal content width */
+  width: 100%;
+  margin: 2em 0;
+}
+
+.prose pre:not([data-language]) {
   background-color: var(--astro-code-background);
   border-radius: 8px;
-  padding: 1.25em 1.5em;
+  padding: 1.35em 1.65em;
   margin: 2em 0;
   overflow-x: auto;
+  border: 1px solid var(--border);
 }
 
 @media (max-width: 768px) {
-  .prose pre {
-    padding: 1em 1.25em;
+  .prose pre:not([data-language]) {
+    padding: 1.1em 1.25em;
   }
 }
 
-.prose pre > code {
+.prose pre:not([data-language]) > code {
   font-family: var(--mono);
   font-feature-settings:
     "liga" 0,
@@ -651,8 +730,8 @@
   border-radius: 0;
 }
 
-.prose pre > code * {
-  font-size: var(--font-size-s);
+.prose pre:not([data-language]) > code * {
+  font-size: calc(var(--font-size-s) * 1.05);
 }
 
 /* KaTeX Math Rendering */

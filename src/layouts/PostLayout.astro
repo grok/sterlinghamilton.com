@@ -3,7 +3,6 @@ import '@/styles/global.css';
 import BaseHead from '@/components/layout/BaseHead.astro';
 import Footer from '@/components/layout/Footer.astro';
 import BackButton from '@/components/ui/BackButton.astro';
-import CopyCode from '@/components/ui/CopyCode.astro';
 import GitHubCard from '@/components/ui/GitHubCard.astro';
 import GradientMask from '@/components/ui/GradientMask.astro';
 import ImageOptimizer from '@/components/ui/ImageOptimizer.astro';
@@ -71,7 +70,6 @@ const ogImage = `/open-graph/${postSlug}.png`;
     </main>
     <ImageOptimizer />
     <FootnoteScroll />
-    <CopyCode />
     <GitHubCard />
     <XPOST />
     <NeoDBCard />
@@ -197,10 +195,14 @@ const ogImage = `/open-graph/${postSlug}.png`;
     }
   }
 
-  function openMermaidFullscreen(source, title = 'Diagram') {
+  let mermaidFullscreenOpener = null
+
+  function openMermaidFullscreen(source, title = 'Diagram', openerEl) {
     const dialog = getOrCreateMermaidDialog()
     const container = dialog.querySelector('[data-mermaid-dialog-content]')
     if (!(container instanceof HTMLElement)) return
+
+    mermaidFullscreenOpener = openerEl instanceof HTMLElement ? openerEl : null
 
     dialog.setAttribute('aria-label', title)
     if (!dialog.open) dialog.showModal()
@@ -226,24 +228,55 @@ const ogImage = `/open-graph/${postSlug}.png`;
       ro.observe(container)
 
       dialog.addEventListener('close', () => {
-        dialog.removeAttribute('data-mermaid-source')
+        delete dialog.dataset.mermaidSource
         const openContainer = dialog.querySelector('[data-mermaid-dialog-content]')
         if (openContainer instanceof HTMLElement) openContainer.innerHTML = ''
+        ro.disconnect()
+
+        // <dialog> restores focus to the opener by default, which keeps :focus-within true on the diagram wrapper.
+        // Move focus away so the fullscreen button hides until you hover again.
+        try {
+          mermaidFullscreenOpener?.blur?.()
+          const escape = document.querySelector('[data-focus-escape]')
+          if (escape instanceof HTMLElement) {
+            // Avoid jumping the reader back to the top of the page.
+            escape.focus({ preventScroll: true })
+          }
+        } catch {
+          // no-op
+        } finally {
+          mermaidFullscreenOpener = null
+        }
       })
     }
 
     dialog.dataset.mermaidSource = source
   }
 
-  // Convert markdown output (<pre data-language="mermaid">) into <div class="mermaid"> for Mermaid to render.
+  // Convert markdown output into <div class="mermaid"> for Mermaid to render.
+  // Supports both:
+  // - legacy: <pre data-language="mermaid">
+  // - Expressive Code: blocks containing <pre data-language="mermaid">
   function ensureMermaidContainers() {
-    const pres = Array.from(document.querySelectorAll('pre'))
+    // Find candidate <pre> blocks first (both legacy and Expressive Code output).
+    const pres = Array.from(document.querySelectorAll('pre[data-language="mermaid"]'))
+
     for (const pre of pres) {
       if (!(pre instanceof HTMLElement)) continue
-      const lang = pre.getAttribute('data-language') || ''
-      if (lang !== 'mermaid') continue
+      if (pre.closest('.mermaid-block')) continue
 
-      const source = (pre.textContent || '').replace(/^\n+|\n+$/g, '')
+      // Expressive Code renders each line as `.ec-line` with a `.gutter` (line numbers)
+      // and a `.code` cell. Extract only the code cell text to avoid polluting Mermaid
+      // source with line numbers like `1flowchart TD2...`.
+      const ecLineCodes = Array.from(pre.querySelectorAll('.ec-line .code'))
+      const source =
+        ecLineCodes.length > 0
+          ? ecLineCodes.map((el) => (el.textContent || '').replace(/\s+$/g, '')).join('\n').trim()
+          : (pre.textContent || '').replace(/^\n+|\n+$/g, '')
+      if (!source) continue
+
+      const expressiveWrapper = pre.closest('.expressive-code')
+      const replaceNode = expressiveWrapper instanceof HTMLElement ? expressiveWrapper : pre
 
       const wrapper = document.createElement('div')
       wrapper.className = 'mermaid-block'
@@ -271,13 +304,13 @@ const ogImage = `/open-graph/${postSlug}.png`;
       btn.addEventListener('click', () => {
         if (btn.getAttribute('aria-disabled') === 'true') return
         const source = div.dataset.mermaidSource || ''
-        openMermaidFullscreen(source, 'Diagram')
+        openMermaidFullscreen(source, 'Diagram', btn)
       })
 
       wrapper.appendChild(btn)
       wrapper.appendChild(div)
 
-      pre.replaceWith(wrapper)
+      replaceNode.replaceWith(wrapper)
     }
   }
 
@@ -330,6 +363,75 @@ const ogImage = `/open-graph/${postSlug}.png`;
   })
 </script>
 
+<!-- Heading anchor link copy (H2/H3 with ids) -->
+<script is:inline>
+  ;(function () {
+    const SELECTOR = '.prose .content h2[id], .prose .content h3[id]'
+
+    async function copyHeadingLink(heading) {
+      const id = heading.id
+      if (!id) return
+
+      const url = new URL(window.location.href)
+      url.hash = id
+
+      // Update the URL for shareability, but don’t jump.
+      history.replaceState(null, '', url)
+
+      const text = url.toString()
+
+      try {
+        await navigator.clipboard.writeText(text)
+        window.toast?.('Copied link.', { variant: 'success' })
+        return
+      } catch {
+        // Fall through to legacy copy below
+      }
+
+      const ta = document.createElement('textarea')
+      ta.value = text
+      ta.setAttribute('readonly', '')
+      ta.style.position = 'fixed'
+      ta.style.top = '-9999px'
+      document.body.appendChild(ta)
+      ta.select()
+      try {
+        document.execCommand('copy')
+        window.toast?.('Copied link.', { variant: 'success' })
+      } finally {
+        document.body.removeChild(ta)
+      }
+    }
+
+    function bindHeadingAnchorCopy() {
+      for (const heading of document.querySelectorAll(SELECTOR)) {
+        if (!(heading instanceof HTMLElement)) continue
+        if (heading.dataset.anchorCopyBound === 'true') continue
+
+        heading.dataset.anchorCopyBound = 'true'
+        heading.dataset.anchorCopy = 'true'
+        heading.title = heading.title || 'Copy link'
+
+        heading.addEventListener('click', (e) => {
+          // If the user is selecting text, don’t hijack the click.
+          const selection = window.getSelection?.()?.toString?.() ?? ''
+          if (selection.trim().length > 0) return
+
+          // Avoid weirdness if the heading contains a link and the user clicked it.
+          const target = e.target
+          if (target instanceof Element && target.closest('a')) return
+
+          copyHeadingLink(heading)
+        })
+      }
+    }
+
+    document.addEventListener('astro:page-load', bindHeadingAnchorCopy)
+    document.addEventListener('astro:after-swap', bindHeadingAnchorCopy)
+    document.addEventListener('DOMContentLoaded', bindHeadingAnchorCopy)
+  })()
+</script>
+
 <style>
   .post-container {
     display: flex;
@@ -365,7 +467,7 @@ const ogImage = `/open-graph/${postSlug}.png`;
 
   :global(.mermaid-block) {
     position: relative;
-    margin: 1.25rem 0;
+    margin: 2rem 0 1.25rem 0;
   }
 
   :global(.mermaid-block .mermaid) {
@@ -393,8 +495,9 @@ const ogImage = `/open-graph/${postSlug}.png`;
     backdrop-filter: blur(48px);
   }
 
-  /* Mermaid diagrams often live inside the existing copy-code wrapper which already has a top-right button.
-     Offset our fullscreen button to sit next to the copy button (side-by-side) instead of overlapping. */
+  /* If a Mermaid diagram is inside a code block wrapper that also has a copy button,
+     offset fullscreen to sit next to it (side-by-side) instead of overlapping. */
+  :global(.expressive-code .mermaid-fullscreen),
   :global(.copy-code-wrapper .mermaid-fullscreen),
   :global(.copy-code-block .mermaid-fullscreen) {
     right: 3rem;
@@ -415,6 +518,8 @@ const ogImage = `/open-graph/${postSlug}.png`;
   }
 
   /* Show fullscreen button only when hovering/focusing the diagram area (match copy button behavior) */
+  :global(.expressive-code:hover .mermaid-fullscreen),
+  :global(.expressive-code:focus-within .mermaid-fullscreen),
   :global(.copy-code-wrapper:hover .mermaid-fullscreen),
   :global(.copy-code-wrapper:focus-within .mermaid-fullscreen),
   :global(.mermaid-block:hover .mermaid-fullscreen),
@@ -452,6 +557,8 @@ const ogImage = `/open-graph/${postSlug}.png`;
     color: #fff;
   }
 
+  :global(.expressive-code:hover .mermaid-fullscreen[aria-disabled="true"]),
+  :global(.expressive-code:focus-within .mermaid-fullscreen[aria-disabled="true"]),
   :global(.copy-code-wrapper:hover .mermaid-fullscreen[aria-disabled="true"]),
   :global(.copy-code-wrapper:focus-within .mermaid-fullscreen[aria-disabled="true"]),
   :global(.mermaid-block:hover .mermaid-fullscreen[aria-disabled="true"]),
