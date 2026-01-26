@@ -1,5 +1,4 @@
 ---
-import { themeConfig } from '@/config';
 import { getUiLabels, localeFromPathname } from '@/utils/i18n';
 
 const locale = localeFromPathname(Astro.url.pathname);
@@ -18,14 +17,7 @@ const { index } = getUiLabels(locale);
   {index}
 </a>
 
-<script
-  is:inline
-  define:vars={{
-    contentWidth: themeConfig.general.contentWidth,
-    centeredLayout: themeConfig.general.centeredLayout,
-    toc: themeConfig.post.toc
-  }}
->
+<script is:inline>
   ;(function () {
     // Adjust back button position based on layout and screen size
     function adjustBackButtonPosition() {
@@ -33,30 +25,34 @@ const { index } = getUiLabels(locale);
       if (!button) return
 
       // If not using centered layout, remove fixed positioning
+      const centeredLayout = document.body?.dataset?.centered === 'true'
       if (!centeredLayout) {
         button.classList.remove('fixed-position')
         button.style.left = ''
         return
       }
 
-      // Calculate available margin space for positioning
+      const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16
+      const rem = (value) => value * rootFontSize
+
+      // Use the canonical width set by BaseLayout (`max-width`) so we don't duplicate clamping logic.
+      const bodyMaxWidthPx = parseFloat(getComputedStyle(document.body).maxWidth)
       const pageWidth = window.innerWidth
-      const contentWidthValue = parseFloat(contentWidth)
-      // Apply the same minimum width logic as in BaseLayout
-      const widthValue = Math.min(contentWidthValue, 50)
-      const shouldUseCustomWidth = widthValue > 25
-      const finalWidthValue = shouldUseCustomWidth ? widthValue : 25
-      const margin = (pageWidth - finalWidthValue * 16) / 2
-      const baseMinSpace = 11 * 16 // Base minimum space needed
-      // If toc is enabled, need additional 2.5rem (40px) space
-      const minSpace = toc ? baseMinSpace + 52 : baseMinSpace + 12
+      const maxWidth = Number.isFinite(bodyMaxWidthPx) && bodyMaxWidthPx > 0 ? bodyMaxWidthPx : rem(25)
+      const margin = (pageWidth - maxWidth) / 2
+
+      const baseMinSpace = rem(11) // Base minimum space needed
+      const hasTOC = Boolean(document.querySelector('.toc-container'))
+      // If TOC is present, need additional space so the button doesn't collide with it.
+      const minSpace = hasTOC ? baseMinSpace + rem(3.25) : baseMinSpace + rem(0.75)
 
       // Position button fixed on the left if there's enough space
       if (margin >= minSpace) {
         button.classList.add('fixed-position')
         const basePosition = margin - baseMinSpace
-        // If toc is enabled, move 2.5rem (40px) further left
-        const leftPosition = toc ? basePosition - 40 : basePosition
+        // If TOC is present, move further left.
+        // 40px for lining up to TOC lines.
+        const leftPosition = hasTOC ? basePosition - 40 - rem(2.5) : basePosition
         button.style.left = `${leftPosition}px`
       } else {
         button.classList.remove('fixed-position')
@@ -64,11 +60,14 @@ const { index } = getUiLabels(locale);
       }
     }
 
-    adjustBackButtonPosition()
+    // Bind listeners once; Astro navigations can re-execute inline scripts.
+    if (!window.__sterlingBackButtonBound) {
+      window.__sterlingBackButtonBound = true
+      document.addEventListener('astro:page-load', adjustBackButtonPosition)
+      window.addEventListener('resize', adjustBackButtonPosition)
+    }
 
-    // Use only astro:page-load as it fires on initial load and navigation
-    document.addEventListener('astro:page-load', adjustBackButtonPosition)
-    window.addEventListener('resize', adjustBackButtonPosition)
+    adjustBackButtonPosition()
   })()
 </script>
 

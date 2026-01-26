@@ -1,5 +1,4 @@
 ---
-import { themeConfig } from '@/config';
 import type { TOCProps } from '@/types';
 
 const { toc = [] }: TOCProps = Astro.props;
@@ -31,217 +30,230 @@ const pageRootHref = `${Astro.url.pathname}${Astro.url.search}`;
 <script
   is:inline
   define:vars={{
-    contentWidth: themeConfig.general.contentWidth,
-    centeredLayout: themeConfig.general.centeredLayout,
-    toc: themeConfig.post.toc,
-    pageRootHref
+    pageRootHref,
+    tocIds: toc.map((i) => i.id)
   }}
 >
   ;(function () {
-    // Core state
-    const state = {
-      container: null,
-      links: null,
-      headings: null,
-      titleLink: null,
-      headingMap: new Map(),
-      positions: [],
-      scrollTimeout: null,
-      hasContent: false
-    }
-
-    // Initialize DOM elements
-    function initElements() {
-      state.container = document.querySelector('.toc-container')
-      if (!state.container) return false
-
-      state.links = document.querySelectorAll('.toc-link')
-      state.headings = document.querySelectorAll('h1, h2, h3')
-      state.titleLink = document.querySelector('.toc-link.toc-title')
-
-      // Build heading map
-      state.headingMap.clear()
-      state.links.forEach((link) => {
-        const href = link.getAttribute('href')
-        if (href?.startsWith('#')) {
-          state.headingMap.set(href.substring(1), link)
+    // Singleton controller so we don't double-bind on Astro navigations.
+    if (!window.__sterlingTOC) {
+      window.__sterlingTOC = (function () {
+        const state = {
+          container: null,
+          links: null,
+          titleLink: null,
+          headingMap: new Map(),
+          positions: [],
+          scrollTimeout: null,
+          hasContent: false,
+          tocIds: [],
+          pageRootHref: ''
         }
-      })
 
-      return true
-    }
+        function rootFontSize() {
+          return parseFloat(getComputedStyle(document.documentElement).fontSize) || 16
+        }
 
-    // Check if content exists
-    function checkContent() {
-      if (!state.container || !state.links) return
+        function rem(value) {
+          return value * rootFontSize()
+        }
 
-      const tocItems = Array.from(state.links).filter((link) => !link.classList.contains('toc-title'))
-      state.hasContent = tocItems.length > 0
+        function isCenteredLayout() {
+          return document.body?.dataset?.centered === 'true'
+        }
 
-      if (!state.hasContent) {
-        state.container.style.display = 'none'
-      }
-    }
+        function bodyMaxWidthPx() {
+          const v = parseFloat(getComputedStyle(document.body).maxWidth)
+          return Number.isFinite(v) && v > 0 ? v : rem(25)
+        }
 
-    // Cache heading positions
-    function cachePositions() {
-      if (!state.headings?.length) return
+        function initElements() {
+          state.container = document.querySelector('.toc-container')
+          if (!state.container) return false
 
-      const scrollTop = window.pageYOffset
-      state.positions = Array.from(state.headings)
-        .filter((_, index) => !(index === 0 && state.headings[0].tagName === 'H1'))
-        .map((heading) => ({
-          id: heading.id,
-          offsetTop: heading.getBoundingClientRect().top + scrollTop
-        }))
-    }
+          state.links = document.querySelectorAll('.toc-link')
+          state.titleLink = document.querySelector('.toc-link.toc-title')
 
-    // Adjust TOC position
-    function adjustPosition() {
-      if (!state.container || !centeredLayout || !state.hasContent) {
-        if (state.container) state.container.style.display = 'none'
-        return
-      }
+          state.headingMap.clear()
+          state.links.forEach((link) => {
+            const href = link.getAttribute('href')
+            if (href?.startsWith('#')) state.headingMap.set(href.substring(1), link)
+          })
 
-      const pageWidth = window.innerWidth
-      const contentWidthValue = Math.max(parseFloat(contentWidth), 25)
-      const margin = (pageWidth - contentWidthValue * 16) / 2
-      const baseMinSpace = 11 * 16 // Base minimum space needed
-      const minSpace = toc ? baseMinSpace + 52 : baseMinSpace + 12
+          return true
+        }
 
-      if (margin >= minSpace) {
-        state.container.style.display = 'block'
-        state.container.classList.add('fixed-position')
-        const leftPosition = toc ? margin - 100 - 40 : margin - 176
-        state.container.style.left = `${leftPosition}px`
-      } else {
-        state.container.style.display = 'none'
-        state.container.classList.remove('fixed-position')
-        state.container.style.left = ''
-      }
-    }
+        function checkContent() {
+          state.hasContent = Array.isArray(state.tocIds) && state.tocIds.length > 0
+          if (!state.hasContent && state.container) state.container.style.display = 'none'
+        }
 
-    // Handle click events
-    function handleClick(e) {
-      const link = e.target.closest('.toc-link')
-      if (!link) return
+        function cachePositions() {
+          if (!state.hasContent) {
+            state.positions = []
+            return
+          }
 
-      e.preventDefault()
+          const scrollTop = window.pageYOffset
+          const headings = state.tocIds
+            .map((id) => document.getElementById(id))
+            .filter((el) => el instanceof HTMLElement)
 
-      if (link.classList.contains('toc-title')) {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        history.pushState(null, null, pageRootHref)
-      } else {
-        const href = link.getAttribute('href')
-        if (href?.startsWith('#')) {
-          const target = document.getElementById(href.substring(1))
-          if (target) {
-            const rect = target.getBoundingClientRect()
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-            const offset = rect.top + scrollTop - 96
-            window.scrollTo({ top: offset, behavior: 'smooth' })
-            history.pushState(null, null, href)
+          state.positions = headings.map((heading) => ({
+            id: heading.id,
+            offsetTop: heading.getBoundingClientRect().top + scrollTop
+          }))
+        }
+
+        function adjustPosition() {
+          if (!state.container || !isCenteredLayout() || !state.hasContent) {
+            if (state.container) state.container.style.display = 'none'
+            return
+          }
+
+          const pageWidth = window.innerWidth
+          const maxWidth = bodyMaxWidthPx()
+          const margin = (pageWidth - maxWidth) / 2
+
+          const baseMinSpace = rem(11)
+          // When TOC is enabled, we need a bit more room in the left gutter.
+          const minSpace = baseMinSpace + rem(3.25)
+
+          if (margin >= minSpace) {
+            state.container.style.display = 'block'
+            state.container.classList.add('fixed-position')
+            // Match existing design: fixed width (12rem) + extra gap from content edge.
+            const leftPosition = margin - rem(12) - rem(2.5)
+            state.container.style.left = `${leftPosition}px`
+          } else {
+            state.container.style.display = 'none'
+            state.container.classList.remove('fixed-position')
+            state.container.style.left = ''
           }
         }
-      }
-    }
 
-    // Update active state
-    function updateActive() {
-      if (!state.links?.length || !state.positions.length) return
+        function handleClick(e) {
+          const link = e.target.closest('.toc-link')
+          if (!link) return
 
-      const scrollTop = window.pageYOffset + 100
-      let currentActive = null
+          e.preventDefault()
 
-      // Find current active heading
-      for (let i = state.positions.length - 1; i >= 0; i--) {
-        if (scrollTop >= state.positions[i].offsetTop) {
-          currentActive = state.positions[i].id
-          break
-        }
-      }
+          if (link.classList.contains('toc-title')) {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+            history.pushState(null, null, state.pageRootHref || '/')
+            return
+          }
 
-      // Update active state
-      state.links.forEach((link) => link.classList.remove('active'))
+          const href = link.getAttribute('href')
+          if (!href?.startsWith('#')) return
 
-      if (currentActive && state.headingMap.has(currentActive)) {
-        state.headingMap.get(currentActive).classList.add('active')
-      } else if (state.titleLink) {
-        state.titleLink.classList.add('active')
-      }
-    }
+          const target = document.getElementById(href.substring(1))
+          if (!target) return
 
-    // Initialize
-    function init(retryCount = 0) {
-      const maxRetries = 5
-
-      if (initElements()) {
-        checkContent()
-        adjustPosition()
-        cachePositions()
-
-        if (state.container) {
-          state.container.removeEventListener('click', handleClick)
-          state.container.addEventListener('click', handleClick)
+          const rect = target.getBoundingClientRect()
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+          const offset = rect.top + scrollTop - rem(6) // 96px @ 16px root
+          window.scrollTo({ top: offset, behavior: 'smooth' })
+          history.pushState(null, null, href)
         }
 
-        updateActive()
-      } else if (retryCount < maxRetries) {
-        setTimeout(() => init(retryCount + 1), 100)
-      }
+        function updateActive() {
+          if (!state.links?.length || !state.positions.length) return
+
+          const scrollTop = window.pageYOffset + rem(6.25) // 100px @ 16px root
+          let currentActive = null
+
+          for (let i = state.positions.length - 1; i >= 0; i--) {
+            if (scrollTop >= state.positions[i].offsetTop) {
+              currentActive = state.positions[i].id
+              break
+            }
+          }
+
+          state.links.forEach((link) => link.classList.remove('active'))
+
+          if (currentActive && state.headingMap.has(currentActive)) {
+            state.headingMap.get(currentActive).classList.add('active')
+          } else if (state.titleLink) {
+            state.titleLink.classList.add('active')
+          }
+        }
+
+        function init(retryCount = 0) {
+          const maxRetries = 5
+
+          if (initElements()) {
+            checkContent()
+            adjustPosition()
+            cachePositions()
+
+            if (state.container) {
+              state.container.removeEventListener('click', handleClick)
+              state.container.addEventListener('click', handleClick)
+            }
+
+            updateActive()
+          } else if (retryCount < maxRetries) {
+            setTimeout(() => init(retryCount + 1), 100)
+          }
+        }
+
+        function handleScroll() {
+          if (state.scrollTimeout) cancelAnimationFrame(state.scrollTimeout)
+          state.scrollTimeout = requestAnimationFrame(updateActive)
+        }
+
+        function handleResize() {
+          adjustPosition()
+          requestAnimationFrame(cachePositions)
+        }
+
+        function cleanup() {
+          if (state.scrollTimeout) {
+            cancelAnimationFrame(state.scrollTimeout)
+            state.scrollTimeout = null
+          }
+
+          Object.assign(state, {
+            container: null,
+            links: null,
+            titleLink: null,
+            headingMap: new Map(),
+            positions: [],
+            hasContent: false
+          })
+        }
+
+        // Bind once
+        document.addEventListener('astro:page-load', () => {
+          cleanup()
+          init()
+        })
+        document.addEventListener('astro:after-swap', () => {
+          cleanup()
+          init()
+        })
+        document.addEventListener('DOMContentLoaded', () => {
+          init()
+        })
+        window.addEventListener('resize', handleResize)
+        window.addEventListener('scroll', handleScroll)
+
+        return {
+          configure(config) {
+            state.pageRootHref = config?.pageRootHref || ''
+            state.tocIds = Array.isArray(config?.tocIds) ? config.tocIds : []
+          },
+          refresh() {
+            cleanup()
+            init()
+          }
+        }
+      })()
     }
 
-    // Event handlers
-    function handleScroll() {
-      if (state.scrollTimeout) {
-        cancelAnimationFrame(state.scrollTimeout)
-      }
-      state.scrollTimeout = requestAnimationFrame(updateActive)
-    }
-
-    function handleResize() {
-      adjustPosition()
-      requestAnimationFrame(cachePositions)
-    }
-
-    // Cleanup
-    function cleanup() {
-      if (state.scrollTimeout) {
-        cancelAnimationFrame(state.scrollTimeout)
-        state.scrollTimeout = null
-      }
-
-      Object.assign(state, {
-        container: null,
-        links: null,
-        headings: null,
-        titleLink: null,
-        headingMap: new Map(),
-        positions: [],
-        hasContent: false
-      })
-    }
-
-    // Event listeners
-    document.addEventListener('astro:page-load', () => {
-      cleanup()
-      init()
-    })
-
-    document.addEventListener('astro:after-swap', () => {
-      cleanup()
-      init()
-    })
-
-    // Fallback for when Astro transitions are disabled
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!state.container || !state.hasContent) {
-        init()
-      }
-    })
-
-    window.addEventListener('resize', handleResize)
-    window.addEventListener('scroll', handleScroll)
+    window.__sterlingTOC.configure({ pageRootHref, tocIds })
+    window.__sterlingTOC.refresh()
   })()
 </script>
 
