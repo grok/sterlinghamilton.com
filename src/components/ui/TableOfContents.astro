@@ -170,6 +170,23 @@ const pageRootHref = `${Astro.url.pathname}${Astro.url.search}`;
             }
           }
 
+          // If we’re at the bottom of the page, the last headings might never reach our
+          // activation threshold (near the top). Instead of forcing the final section
+          // immediately (which can skip the penultimate heading), pick the last heading
+          // that has actually entered the viewport.
+          const doc = document.documentElement
+          const bottomSlackPx = 8
+          const atBottom = window.innerHeight + window.pageYOffset >= doc.scrollHeight - bottomSlackPx
+          if (atBottom) {
+            const viewportBottom = window.pageYOffset + window.innerHeight - rem(1) // small slack
+            for (let i = state.positions.length - 1; i >= 0; i--) {
+              if (viewportBottom >= state.positions[i].offsetTop) {
+                currentActive = state.positions[i].id
+                break
+              }
+            }
+          }
+
           state.links.forEach((link) => link.classList.remove('active'))
 
           if (currentActive && state.headingMap.has(currentActive)) {
