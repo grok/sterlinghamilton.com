@@ -194,7 +194,16 @@ import { themeConfig } from '@/config';
   }
 
   .copy-button:hover {
-    color: var(--text-primary);
+    color: #000;
+  }
+
+  .copy-button:focus-visible {
+    color: #000;
+  }
+
+  html.dark .copy-button:hover,
+  html.dark .copy-button:focus-visible {
+    color: #fff;
   }
 
   .copy-button svg {

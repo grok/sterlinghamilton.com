@@ -31,6 +31,14 @@ This folder contains reusable AI prompts that help maintain and develop this Ast
 - Draft workflow (underscore filenames + `bun run new`)
 - Translation pairing via `translationKey`
 
+### 🗣️ [writing-style.md](./writing-style.md)
+**Purpose**: Keep Sterling’s writing voice consistent across posts and site copy  
+**Use when**: Drafting/editing anything public-facing  
+**Key actions**:
+- Tone + cadence guidelines
+- Do/don’t list
+- Examples and default post structure
+
 ## How to Use These Prompts
 
 ### For Warp AI (Agent Mode)

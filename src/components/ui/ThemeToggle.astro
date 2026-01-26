@@ -76,6 +76,17 @@ import { themeConfig } from '@/config';
     position: relative;
   }
 
+  /* Hover/focus tone: brighter in dark mode, darker in light mode */
+  .theme-toggle:hover,
+  .theme-toggle:focus-visible {
+    color: #000;
+  }
+
+  html.dark .theme-toggle:hover,
+  html.dark .theme-toggle:focus-visible {
+    color: #fff;
+  }
+
   /* Visible tooltip on hover/focus (aria-label remains the accessible name) */
   .theme-toggle::after {
     content: attr(data-tooltip);

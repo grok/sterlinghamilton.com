@@ -200,6 +200,22 @@ const hasLanguageMenu = !isTranslationAware || visibleTranslations.length > 1;
     position: relative;
   }
 
+  /* Hover/focus tone: brighter in dark mode, darker in light mode (skip disabled state) */
+  .language-button:hover,
+  .language-button:focus-visible {
+    color: #000;
+  }
+
+  html.dark .language-button:hover,
+  html.dark .language-button:focus-visible {
+    color: #fff;
+  }
+
+  .language-button[aria-disabled="true"]:hover,
+  .language-button[aria-disabled="true"]:focus-visible {
+    color: var(--text-primary);
+  }
+
   .language-button svg {
     width: 1.5rem;
     height: 1.5rem;
