@@ -6,6 +6,7 @@ import { getUiLabels, localeFromPathname } from '@/utils/i18n';
 const { toc = [] }: TOCProps = Astro.props;
 const locale = localeFromPathname(Astro.url.pathname);
 const { top } = getUiLabels(locale);
+const pageRootHref = `${Astro.url.pathname}${Astro.url.search}`;
 ---
 
 <div class="toc-container" id="toc">
@@ -13,7 +14,7 @@ const { top } = getUiLabels(locale);
     <ul class="toc-list" id="toc-list">
       <!-- Back to top link -->
       <li class="toc-item toc-level-0">
-        <a href="#" class="toc-link toc-title" title={top} data-text={top}> {top} </a>
+        <a href={pageRootHref} class="toc-link toc-title" title={top} data-text={top}> {top} </a>
       </li>
 
       <!-- TOC items -->
@@ -35,7 +36,8 @@ const { top } = getUiLabels(locale);
   define:vars={{
     contentWidth: themeConfig.general.contentWidth,
     centeredLayout: themeConfig.general.centeredLayout,
-    toc: themeConfig.post.toc
+    toc: themeConfig.post.toc,
+    pageRootHref
   }}
 >
   ;(function () {
@@ -131,7 +133,7 @@ const { top } = getUiLabels(locale);
 
       if (link.classList.contains('toc-title')) {
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        history.pushState(null, null, '#')
+        history.pushState(null, null, pageRootHref)
       } else {
         const href = link.getAttribute('href')
         if (href?.startsWith('#')) {
