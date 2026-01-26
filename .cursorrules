@@ -1,0 +1,16 @@
+## Cursor rules for this repo
+
+### Always consult project prompts first
+- At the start of **every** new chat/session, read `prompts/README.md`.
+- If the user’s request matches a documented workflow, also read the relevant prompt(s) in `prompts/` (for example: `content-authoring.md`, `writing-style.md`, `start-development.md`, `upgrade-dependencies.md`).
+- Follow the conventions in `prompts/` as the source of truth when they differ from generic defaults.
+
+### Commit message convention
+- Use: `type(scope): message.`
+- Lowercase `type` and `scope`.
+- Always include a scope (examples: `ui`, `post`, `i18n`, `a11y`, `content`, `prompts`).
+- Keep the message short, specific, and **end with a period**.
+
+### Tooling defaults
+- Use **Bun** (`bun`, `bunx`) instead of npm/yarn.
+- Prefer the project’s existing scripts (for example `bun run check`) for verification.
