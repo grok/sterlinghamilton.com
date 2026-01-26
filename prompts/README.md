@@ -68,11 +68,13 @@ Each prompt follows this structure:
 ## Project-Specific Conventions
 
 ### Commit Message Format
-This project uses: `[type] Description.`
-- Square brackets around type
-- Lowercase type (chore, feat, fix, etc.)
-- Period at the end
-- Specific version numbers for upgrades
+This project uses: `type(scope): message.`
+- Use a conventional type (feat, fix, docs, style, refactor, chore, perf, test, build, ci)
+- Always include a scope (e.g. ui, post, i18n, a11y, content, prompts)
+- Use lowercase `type` and `scope`
+- Keep the message short and specific
+- End with a period
+- For upgrades: include version numbers (e.g. “from X to Y”)
 
 ### Package Manager
 This project uses **Bun** exclusively:

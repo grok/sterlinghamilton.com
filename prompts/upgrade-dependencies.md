@@ -1,7 +1,7 @@
 # Upgrade Dependencies Prompt
 
 ## Project Context
-This is an Astro project using Bun as the package manager. The project follows a specific commit message format using square brackets and periods (e.g., `[chore] Upgrade astro from 5.6.1 to 5.13.7.`).
+This is an Astro project using Bun as the package manager. The project follows a conventional commit message format (e.g., `chore(deps): upgrade astro from 5.6.1 to 5.13.7.`).
 
 ## Task
 Perform a comprehensive upgrade of all project dependencies and tools, following the established patterns and commit conventions.
@@ -26,8 +26,8 @@ Perform a comprehensive upgrade of all project dependencies and tools, following
 ### 4. Commit Changes
 - Check what files changed: `git --no-pager status`
 - Review staged changes: `git --no-pager diff --cached`
-- Commit with format: `[chore] Upgrade astro from X.X.X to Y.Y.Y.`
-- Example: `git commit -m "[chore] Upgrade astro from 5.6.1 to 5.13.7."`
+- Commit with format: `chore(deps): upgrade astro from X.X.X to Y.Y.Y.`
+- Example: `git commit -m "chore(deps): upgrade astro from 5.6.1 to 5.13.7."`
 
 ### 5. Final Verification
 - Run `bun outdated` to confirm all dependencies are current
@@ -39,11 +39,10 @@ Perform a comprehensive upgrade of all project dependencies and tools, following
 - `.astro/` directory - May be regenerated
 
 ## Commit Message Format
-This project uses the format: `[type] Description.`
-- Always use square brackets around the type
+This project uses the format: `type(scope): message.`
 - Always end with a period
-- Use lowercase for the type (e.g., chore, feat, fix)
-- Be specific about version numbers in upgrade commits
+- Use lowercase `type` and `scope`
+- For upgrades: use `chore(deps)` and include version numbers
 
 ## Expected Tools and Versions
 - **Bun**: Latest stable version (check with `bun upgrade`)
