@@ -165,16 +165,29 @@ for (const post of posts) {
     border: 1px solid var(--border);
     border-radius: 0.5rem;
     padding: 0.65rem 0.75rem;
-    outline: none;
+    /* Keep focus styling animatable (outline-color can fade in/out). */
+    outline: 1.5px dashed transparent;
+    outline-offset: 2px;
+    transition:
+      outline-color 160ms ease-out,
+      border-color 160ms ease-out;
   }
 
   .post-search input::placeholder {
     color: var(--text-tertiary);
   }
 
+  @media (hover: hover) and (pointer: fine) {
+    /* Hover should gently preview the focus affordance. */
+    .post-search input:hover {
+      outline-color: color-mix(in srgb, var(--text-tertiary), transparent 55%);
+      border-color: color-mix(in srgb, var(--border), var(--text-tertiary) 35%);
+    }
+  }
+
   .post-search input:focus-visible {
-    outline: 1.5px dashed var(--text-tertiary);
-    outline-offset: 2px;
+    outline-color: var(--text-tertiary);
+    border-color: var(--text-tertiary);
   }
 
   .post-search-meta {
@@ -237,6 +250,16 @@ for (const post of posts) {
     color: var(--text-secondary);
   }
 
+  /* Keyboard focus should match hover (green) */
+  details.post-group > .post-group-title:focus-visible {
+    color: #a6e3a1;
+    outline: none;
+  }
+
+  details.post-group > .post-group-title:focus-visible::after {
+    color: #a6e3a1;
+  }
+
   @media (hover: hover) and (pointer: fine) {
     /* Ensure hover wins even when collapsed rules apply */
     details.post-group > .post-group-title:hover {
@@ -277,24 +300,29 @@ for (const post of posts) {
   a:focus-visible {
     opacity: 1;
     outline: none;
-  }
-
-  a:focus-visible .divider {
-    background-color: var(--text-tertiary);
-    opacity: 0.75;
-  }
-
-  a:focus-visible .dotted-divider {
-    color: var(--text-secondary);
+    color: #a6e3a1;
   }
 
   a:focus-visible .date {
-    color: var(--text-secondary);
-    opacity: 1;
+    color: #a6e3a1;
+    opacity: 0.9;
   }
 
-  /* Visited (read) posts: slightly muted compared to unread */
-  a:visited {
+  a:focus-visible .divider {
+    background-color: #a6e3a1;
+    opacity: 0.65;
+  }
+
+  a:focus-visible .dotted-divider {
+    color: #a6e3a1;
+    opacity: 0.65;
+  }
+
+  /* (removed old focus styling; green focus now handled above) */
+
+  /* Visited (read) posts: slightly muted compared to unread.
+     Keep hover/focus styles in control. */
+  a:visited:not(:hover):not(:focus-visible) {
     color: var(--text-secondary);
   }
 
@@ -311,17 +339,31 @@ for (const post of posts) {
       opacity: 1;
     }
 
-    ul:hover a:hover .divider {
-      background-color: var(--text-tertiary);
-      opacity: 0.75;
+    /* Post row hover matches section hover color */
+    ul:hover a:hover,
+    ul:hover a:focus-visible {
+      color: #a6e3a1;
     }
-    ul:hover a:hover .dotted-divider {
-      color: var(--text-secondary);
+
+    ul:hover a:hover .date,
+    ul:hover a:focus-visible .date {
+      color: #a6e3a1;
+      opacity: 0.9;
     }
-    ul:hover a:hover .date {
-      color: var(--text-secondary);
-      opacity: 1;
+
+    ul:hover a:hover .divider,
+    ul:hover a:focus-visible .divider {
+      background-color: #a6e3a1;
+      opacity: 0.65;
     }
+
+    ul:hover a:hover .dotted-divider,
+    ul:hover a:focus-visible .dotted-divider {
+      color: #a6e3a1;
+      opacity: 0.65;
+    }
+
+    /* (removed old hover styling; green hover now handled above) */
   }
 
   .post-item {

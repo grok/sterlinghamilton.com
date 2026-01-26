@@ -5,7 +5,7 @@ const locale = localeFromPathname(Astro.url.pathname);
 const { index } = getUiLabels(locale);
 ---
 
-<a href={`/${locale}/`} class="back-button" title={index} aria-label={index}>
+<a href={`/${locale}/`} class="back-button" title={index} aria-label={index} data-positioned="false">
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M2.5 6.5H9.5C11.1569 6.5 12.5 7.84315 12.5 9.5V9.5C12.5 11.1569 11.1569 12.5 9.5 12.5H7.5M2.5 6.5L5.5 9.5M2.5 6.5L5.5 3.5"
@@ -29,6 +29,7 @@ const { index } = getUiLabels(locale);
       if (!centeredLayout) {
         button.classList.remove('fixed-position')
         button.style.left = ''
+        button.dataset.positioned = 'true'
         return
       }
 
@@ -58,16 +59,24 @@ const { index } = getUiLabels(locale);
         button.classList.remove('fixed-position')
         button.style.left = ''
       }
+
+      button.dataset.positioned = 'true'
+    }
+
+    // Wait one frame so the rest of the layout (incl. TOC) is in the DOM.
+    function scheduleAdjust() {
+      requestAnimationFrame(adjustBackButtonPosition)
     }
 
     // Bind listeners once; Astro navigations can re-execute inline scripts.
     if (!window.__sterlingBackButtonBound) {
       window.__sterlingBackButtonBound = true
-      document.addEventListener('astro:page-load', adjustBackButtonPosition)
-      window.addEventListener('resize', adjustBackButtonPosition)
+      document.addEventListener('astro:page-load', scheduleAdjust)
+      document.addEventListener('DOMContentLoaded', scheduleAdjust)
+      window.addEventListener('resize', scheduleAdjust)
     }
 
-    adjustBackButtonPosition()
+    scheduleAdjust()
   })()
 </script>
 
@@ -92,6 +101,17 @@ const { index } = getUiLabels(locale);
     left: 0;
     transition: color 0.2s ease-out;
     text-decoration: none;
+  }
+
+  /* Prevent initial "jump" when JS switches to fixed positioning. */
+  .back-button[data-positioned='false'] {
+    visibility: hidden;
+  }
+
+  @media (max-width: 768px) {
+    .back-button[data-positioned='false'] {
+      visibility: visible;
+    }
   }
 
   .back-button:hover {
