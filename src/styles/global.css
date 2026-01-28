@@ -139,7 +139,6 @@ body {
   letter-spacing: var(--spacing-m);
   padding: 6rem 1.5rem 1.5rem 1.5rem;
   overscroll-behavior-y: contain;
-  text-autospace: normal;
   text-spacing-trim: space-first;
   text-rendering: optimizeLegibility;
   font-synthesis: none;
