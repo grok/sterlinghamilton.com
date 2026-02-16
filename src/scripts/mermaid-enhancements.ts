@@ -6,6 +6,8 @@ type MermaidModule = {
   };
 };
 
+import { getUiLabels, localeFromPathname } from '@/utils/i18n';
+
 declare global {
   interface Window {
     __sterlingMermaidBound?: boolean;
@@ -80,20 +82,24 @@ async function getMermaid() {
 }
 
 function hasMermaidContent() {
-  return Boolean(document.querySelector('pre[data-language="mermaid"]'));
+  // After first render, Mermaid blocks replace the original <pre>.
+  // We still want to re-render on theme toggles / navigations.
+  return Boolean(document.querySelector('pre[data-language="mermaid"], .mermaid'));
 }
 
 function getOrCreateMermaidDialog() {
   let dialog = document.getElementById('mermaid-dialog');
   if (dialog instanceof HTMLDialogElement) return dialog;
 
+  const ui = getUiLabels(localeFromPathname(window.location.pathname));
+
   dialog = document.createElement('dialog');
   dialog.id = 'mermaid-dialog';
   dialog.className = 'mermaid-dialog';
   dialog.innerHTML = `
     <div class="mermaid-dialog__bar">
-      <button type="button" class="mermaid-dialog__close" aria-label="Close diagram" title="Close">
-        Close
+      <button type="button" class="mermaid-dialog__close" aria-label="${ui.closeDiagram}" title="${ui.close}">
+        ${ui.close}
       </button>
     </div>
     <div class="mermaid-dialog__content" data-mermaid-dialog-content></div>
@@ -230,8 +236,9 @@ function ensureMermaidContainers() {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'mermaid-fullscreen';
-    btn.setAttribute('aria-label', 'View diagram full screen');
-    btn.setAttribute('title', 'View full screen');
+    const ui = getUiLabels(localeFromPathname(window.location.pathname));
+    btn.setAttribute('aria-label', ui.viewDiagramFullScreen);
+    btn.setAttribute('title', ui.viewFullScreen);
     btn.setAttribute('aria-disabled', 'true');
     btn.innerHTML = `
       <svg viewBox="-5 -10 110 135" aria-hidden="true">
@@ -259,10 +266,10 @@ function ensureMermaidContainers() {
 async function renderMermaid() {
   if (!hasMermaidContent()) return;
 
+  // On first render we convert <pre> blocks into `.mermaid` containers.
+  // On subsequent renders (theme toggles), only `.mermaid` containers remain.
   ensureMermaidContainers();
-
-  const has = document.querySelector('.mermaid');
-  if (!has) return;
+  if (!document.querySelector('.mermaid')) return;
 
   const mermaid = await getMermaid();
 

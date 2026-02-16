@@ -417,16 +417,17 @@ for (const post of posts) {
     flex: 1 1 3rem;
     min-width: 3rem;
     max-width: 100%;
-    text-align: end;
-    letter-spacing: 5px;
-    height: 1.675rem;
+    height: 1px;
     overflow: hidden;
     color: var(--text-tertiary);
-    opacity: 0.75;
+    opacity: 0.65;
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
+    background-size: 6px 1px;
+    background-repeat: repeat-x;
+    background-position: left center;
   }
 
   .dotted-divider::after {
-    content: '·····························································································································································';
-    pointer-events: none;
+    content: none;
   }
 </style>

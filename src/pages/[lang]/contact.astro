@@ -1,0 +1,70 @@
+---
+import BackButton from '@/components/ui/BackButton.astro';
+import IndexLayout from '@/layouts/IndexLayout.astro';
+import { themeConfig } from '@/config';
+
+export async function getStaticPaths() {
+  return themeConfig.site.locales.map((l) => ({ params: { lang: l.code } }));
+}
+
+const lang = Astro.params.lang || themeConfig.site.defaultLocale;
+const locale = themeConfig.site.locales.find((l) => l.code === lang);
+const htmlLang = locale?.langTag || themeConfig.site.language;
+
+const strings =
+  lang === 'es'
+    ? {
+        title: 'Contacto',
+        intro: 'La forma más fácil de contactarme es por LinkedIn.',
+        linkedin: 'Mensaje por LinkedIn',
+        note: 'Si prefieres otra vía (email, etc.), mándame un mensaje por LinkedIn y lo coordinamos.',
+      }
+    : {
+        title: 'Contact',
+        intro: 'The easiest way to reach me is on LinkedIn.',
+        linkedin: 'Message me on LinkedIn',
+        note: 'If you’d rather use something else (email, etc.), send me a LinkedIn message and we’ll coordinate from there.',
+      };
+---
+
+<IndexLayout
+  title={`${strings.title} · ${themeConfig.site.name}`}
+  description={strings.intro}
+  lang={htmlLang}
+  headerTitle={strings.title}
+>
+  <main class="contact">
+    <h1 class="sr-only">{strings.title}</h1>
+    <BackButton />
+    <p>{strings.intro}</p>
+
+    <ul class="contact-list">
+      <li>
+        <a href="https://www.linkedin.com/in/sterlinghamilton/" target="_blank" rel="noopener noreferrer">
+          {strings.linkedin}
+        </a>
+      </li>
+    </ul>
+
+    <p class="note">{strings.note}</p>
+  </main>
+</IndexLayout>
+
+<style>
+  .contact {
+    margin-top: 2rem;
+  }
+
+  .contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 1.25rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .note {
+    color: var(--text-secondary);
+  }
+</style>
+

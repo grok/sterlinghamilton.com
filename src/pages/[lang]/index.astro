@@ -4,6 +4,7 @@ import PostList from '@/components/widgets/PostList.astro';
 import { themeConfig } from '@/config';
 import IndexLayout from '@/layouts/IndexLayout.astro';
 import { getSortedFilteredPosts } from '@/utils/draft';
+import { getUiLabels } from '@/utils/i18n';
 
 export async function getStaticPaths() {
   return themeConfig.site.locales.map((l) => ({ params: { lang: l.code } }));
@@ -14,12 +15,18 @@ const locale = themeConfig.site.locales.find((l) => l.code === lang);
 const htmlLang = locale?.langTag || themeConfig.site.language;
 
 const posts = await getSortedFilteredPosts(lang);
+const ui = getUiLabels(lang);
 ---
 
 <IndexLayout title={themeConfig.site.name} description={themeConfig.site.description} lang={htmlLang}>
   <About />
   <main>
-    <PostList posts={posts} lang={lang} />
+    {posts.length > 0 ? (
+      <PostList posts={posts} lang={lang} />
+    ) : (
+      <section class="empty-locale" data-no-posts aria-live="polite">
+        <p class="empty-locale__text">{ui.noPostsYet}</p>
+      </section>
+    )}
   </main>
 </IndexLayout>
-

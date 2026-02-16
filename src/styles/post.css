@@ -1,3 +1,12 @@
+/*
+  CSS ownership note:
+  - This file owns *content styling* for rendered markdown/MDX blocks under the `.prose` hook.
+    Think: typography, rhythm, headings, lists, code, blockquotes, tables, embeds.
+  - Avoid putting page/layout chrome here (nav bars, control rows, app-level spacing).
+    Those should live with their templates/components (e.g. `src/layouts/PostLayout.astro`).
+  - `.prose` is reused outside posts (e.g. About), so keep selectors scoped and intentional.
+*/
+
 /* Base styles for article content (avoid overriding embedded widgets like Mermaid blocks) */
 .prose .content {
   font-size: var(--font-size-m);
@@ -36,13 +45,9 @@
   margin-top: 0;
 }
 
-/* Post title section */
-.prose .title {
-  margin-bottom: 2.5em;
-}
 
-.prose .title h1 {
-  margin: 0 0 0.375rem 0;
+.prose .title {
+  padding-bottom: 3rem;
 }
 
 /* Headings (article body)
@@ -60,10 +65,13 @@
     calc(1.6vw * var(--font-scale)),
     calc(1.7rem * var(--font-scale))
   );
-  font-weight: 650;
+  font-weight: 400;
   line-height: 1.25;
-  margin: 2.25em 0 0.85em 0;
+  margin: 2em 0 0.85em 0;
   text-transform: capitalize;
+  display: block;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-tertiary), transparent 60%);
 }
 
 .prose .content h3 {
@@ -158,116 +166,26 @@
   letter-spacing: 0;
 }
 
-/* Links (article body only) */
-.prose .content a {
-  color: var(--primary);
+/* Links
+   - Article body: `.prose .content`
+   - About blurb (home): `.about.prose` (intentionally *not* `.content` so spacing stays "site copy")
+   - Contact page copy: `.contact` */
+.prose .content a,
+.about.prose a,
+.contact a {
+  color: var(--link);
   text-decoration: underline;
-  text-decoration-color: var(--text-tertiary);
-  transition: text-decoration-color 320ms ease-out;
+  text-decoration-color: color-mix(in srgb, var(--link), transparent 55%);
+  transition: color 160ms ease-out, text-decoration-color 320ms ease-out;
   position: relative;
   z-index: 0;
 }
 
-.prose .content a:hover {
-  animation: mocha-link-pulse 4400ms ease-in-out infinite;
+.prose .content a:hover,
+.about.prose a:hover,
+.contact a:hover {
+  color: var(--link-hover);
   text-decoration-color: transparent;
-}
-
-/* Smoke halo on hover */
-.prose .content a::before {
-  content: "";
-  position: absolute;
-  inset: -0.35em -0.55em;
-  border-radius: 0.5em;
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0;
-  transform: scale(0.96);
-  transition:
-    opacity 140ms ease-out,
-    transform 200ms ease-out;
-  background:
-    radial-gradient(
-      120% 140% at 20% 30%,
-      rgba(148, 226, 213, 0.16) 0%,
-      transparent 55%
-    ),
-    radial-gradient(
-      140% 160% at 80% 70%,
-      rgba(203, 166, 247, 0.12) 0%,
-      transparent 60%
-    ),
-    radial-gradient(
-      160% 180% at 55% 55%,
-      rgba(166, 227, 161, 0.1) 0%,
-      transparent 65%
-    );
-  filter: blur(10px);
-  mix-blend-mode: screen;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .prose .content a:hover::before {
-    opacity: 1;
-    transform: scale(1);
-    animation: mocha-link-smoke 1400ms ease-in-out infinite;
-  }
-}
-
-@keyframes mocha-link-smoke {
-  0% {
-    transform: translate3d(-1px, 0, 0) scale(1);
-    filter: blur(10px);
-  }
-  50% {
-    transform: translate3d(1px, -1px, 0) scale(1.02);
-    filter: blur(12px);
-  }
-  100% {
-    transform: translate3d(-1px, 0, 0) scale(1);
-    filter: blur(10px);
-  }
-}
-
-@keyframes mocha-link-pulse {
-  /* Smooth fade in/out: browser interpolates between keyframe colors */
-  0% {
-    color: var(--primary);
-  }
-  10% {
-    color: #89b4fa; /* blue */
-  }
-  20% {
-    color: var(--primary);
-  }
-  35% {
-    color: #cba6f7; /* mauve */
-  }
-  45% {
-    color: var(--primary);
-  }
-  60% {
-    color: #f5c2e7; /* pink */
-  }
-  70% {
-    color: var(--primary);
-  }
-  85% {
-    color: #94e2d5; /* teal */
-  }
-  100% {
-  color: var(--primary);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .prose .content a:hover {
-    animation: none;
-  }
-
-  .prose .content a:hover::before {
-    animation: none;
-  }
 }
 
 /* Paragraphs */
@@ -696,6 +614,46 @@
   /* Keep code blocks within the normal content width */
   width: 100%;
   margin: 2em 0;
+}
+
+/* Light mode: make code blocks feel like a distinct surface */
+html:not(.dark) .prose .expressive-code {
+  background: var(--code-bg);
+  border: 1px solid var(--surface1);
+  border-radius: 12px;
+  box-shadow:
+    0 16px 44px rgba(0, 0, 0, 0.14),
+    0 1px 0 rgba(255, 255, 255, 0.55) inset;
+  overflow: hidden;
+}
+
+/* Expressive Code renders its own internal <pre>; keep it transparent so the outer container reads as the block */
+html:not(.dark) .prose .expressive-code :where(pre, code) {
+  background: transparent !important;
+}
+
+/* Dark mode: make code blocks feel like a distinct surface */
+html.dark .prose {
+  /* Slightly lift code backgrounds off the page background. */
+  --astro-code-background: var(--surface0);
+}
+
+html.dark .prose pre:not([data-language]) {
+  border-color: var(--surface1);
+}
+
+html.dark .prose .expressive-code {
+  background: var(--astro-code-background);
+  border: 1px solid var(--surface1);
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.35),
+    0 1px 0 rgba(255, 255, 255, 0) inset;
+  overflow: hidden;
+}
+
+/* Expressive Code renders its own internal <pre>; keep it transparent so the outer container reads as the block */
+html.dark .prose .expressive-code :where(pre, code) {
+  background: transparent !important;
 }
 
 .prose pre:not([data-language]) {

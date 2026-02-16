@@ -69,7 +69,9 @@
       if (!(target instanceof Element)) return
       const btn = target.closest('.expressive-code .copy button')
       if (!btn) return
-      window.toast?.('Copied code.', { variant: 'success' })
+      const locale = (window.location.pathname.split('/').filter(Boolean)[0] || 'en').toLowerCase()
+      const msg = locale.startsWith('es') ? 'Código copiado.' : 'Copied code.'
+      window.toast?.(msg, { variant: 'success' })
     })
   })()
 </script>

@@ -1,10 +1,15 @@
 const DEFAULT_SELECTOR = '.prose .content h2[id], .prose .content h3[id]';
+import { getUiLabels, localeFromPathname } from '@/utils/i18n';
 
 declare global {
   interface Window {
     __sterlingHeadingAnchorCopyBound?: boolean;
     toast?: (message: string, options?: unknown) => void;
   }
+}
+
+function ui() {
+  return getUiLabels(localeFromPathname(window.location.pathname));
 }
 
 async function copyHeadingLink(heading: HTMLElement) {
@@ -21,7 +26,7 @@ async function copyHeadingLink(heading: HTMLElement) {
 
   try {
     await navigator.clipboard.writeText(text);
-    window.toast?.('Copied link.', { variant: 'success' });
+    window.toast?.(ui().copiedLink, { variant: 'success' });
     return;
   } catch {
     // Fall through to legacy copy below
@@ -37,7 +42,7 @@ async function copyHeadingLink(heading: HTMLElement) {
   try {
     // Deprecated but still a useful fallback for older browsers.
     document.execCommand('copy');
-    window.toast?.('Copied link.', { variant: 'success' });
+    window.toast?.(ui().copiedLink, { variant: 'success' });
   } finally {
     document.body.removeChild(ta);
   }
@@ -50,7 +55,7 @@ function bindHeadingAnchorCopy(selector = DEFAULT_SELECTOR) {
 
     heading.dataset.anchorCopyBound = 'true';
     heading.dataset.anchorCopy = 'true';
-    heading.title = heading.title || 'Copy link';
+    heading.title = heading.title || ui().copyLink;
 
     heading.addEventListener('click', (e) => {
       // If the user is selecting text, don’t hijack the click.

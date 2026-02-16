@@ -1,0 +1,127 @@
+---
+type Props = {
+  href: string;
+  label?: string;
+  disabled?: boolean;
+  disabledLabel?: string;
+};
+
+const {
+  href,
+  label = 'Contact',
+  disabled = false,
+  disabledLabel = "You're already on the contact page",
+} = Astro.props as Props;
+
+const tooltip = disabled ? disabledLabel : label;
+---
+
+<a
+  class="contact-icon-link"
+  href={disabled ? undefined : href}
+  aria-label={tooltip}
+  title={tooltip}
+  data-tooltip={tooltip}
+  aria-disabled={disabled ? 'true' : undefined}
+  tabindex={disabled ? '-1' : undefined}
+>
+  <svg class="logo" viewBox="0 0 148.05697721165689 225.60348284240035" aria-hidden="true">
+    <g transform="translate(-2049.971511394173 -2048.1004410577198)">
+      <path
+        fill="currentColor"
+        d="m2055.36 2273.7h19.91c2.97 0 5.39-2.41 5.39-5.39v-56.3c0-1.75-0.86-3.4-2.29-4.41l-19.91-14c-3.57-2.51-8.49 0.05-8.49 4.41v70.3c0 2.98 2.41 5.39 5.39 5.39z"
+      />
+      <path
+        fill="currentColor"
+        d="m2080.66 2144.35v-90.86c0-2.98-2.42-5.39-5.39-5.39h-19.91c-2.98 0-5.39 2.41-5.39 5.39v96.25 10.53c0 1.75 0.86 3.4 2.29 4.41l21.8 15.33 6.6 4.64 49.91 35.12c3.57 2.51 8.49-0.05 8.49-4.41v-24.35c0-1.75-0.85-3.4-2.29-4.41l-53.82-37.85c-1.44-1-2.29-2.65-2.29-4.4z"
+      />
+      <path
+        fill="currentColor"
+        d="m2192.64 2048.1h-19.91c-2.97 0-5.39 2.41-5.39 5.39v56.3c0 1.76 0.86 3.4 2.29 4.41l19.91 14c3.57 2.51 8.49-0.04 8.49-4.41v-70.3c0-2.98-2.41-5.39-5.39-5.39z"
+      />
+      <path
+        fill="currentColor"
+        d="m2167.34 2177.46v90.85c0 2.98 2.42 5.39 5.39 5.39h19.91c2.98 0 5.39-2.41 5.39-5.39v-96.24-10.53c0-1.76-0.86-3.4-2.29-4.41l-21.8-15.34-6.6-4.63-49.91-35.12c-3.57-2.51-8.49 0.04-8.49 4.41v24.34c0 1.76 0.85 3.4 2.29 4.41l53.82 37.85c1.44 1.01 2.29 2.65 2.29 4.41z"
+      />
+    </g>
+  </svg>
+</a>
+
+<style>
+  .contact-icon-link {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    height: 1.75rem;
+    color: var(--text-primary);
+    transition: opacity 0.2s ease;
+    padding: 0;
+    position: relative;
+    text-decoration: none;
+    margin-right: 0.75rem;
+  }
+
+  /* Hover/focus tone: brighter in dark mode, darker in light mode */
+  .contact-icon-link:hover,
+  .contact-icon-link:focus-visible {
+    color: #000;
+  }
+
+  html.dark .contact-icon-link:hover,
+  html.dark .contact-icon-link:focus-visible {
+    color: #fff;
+  }
+
+  .contact-icon-link[aria-disabled='true'] {
+    cursor: default;
+    opacity: 0.45;
+  }
+
+  .contact-icon-link[aria-disabled='true']:hover,
+  .contact-icon-link[aria-disabled='true']:focus-visible {
+    color: var(--text-primary);
+  }
+
+  .contact-icon-link::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(-2px);
+    padding: 0.35rem 0.5rem;
+    border-radius: 0.5rem;
+    background: var(--surface0);
+    border: 1px solid var(--surface1);
+    color: var(--text-primary);
+    font-family: var(--sans);
+    font-size: var(--font-size-s);
+    letter-spacing: var(--spacing-m);
+    line-height: 1.1;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms ease-out, transform 120ms ease-out;
+    z-index: 100;
+  }
+
+  .contact-icon-link:hover::after,
+  .contact-icon-link:focus-visible::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .contact-icon-link:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text-primary), transparent 55%);
+    outline-offset: 6px;
+    border-radius: 0.5rem;
+  }
+
+  .logo {
+    width: 1.125rem;
+    height: 1.125rem;
+    display: block;
+  }
+</style>
+

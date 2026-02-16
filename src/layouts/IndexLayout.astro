@@ -7,7 +7,12 @@ import GradientMask from '@/components/ui/GradientMask.astro';
 import { themeConfig } from '@/config';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
-const { title, description, lang } = Astro.props;
+const { title, description, lang, headerTitle } = Astro.props as {
+  title?: string;
+  description?: string;
+  lang?: string;
+  headerTitle?: string;
+};
 ---
 
 <BaseLayout title={title} description={description} type="page" lang={lang}>
@@ -15,7 +20,7 @@ const { title, description, lang } = Astro.props;
   <div class="page-content">
     <GradientMask />
     <div>
-      <Header lang={lang} />
+      <Header lang={lang} title={headerTitle} />
     </div>
     <main>
       <slot />

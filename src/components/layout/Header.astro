@@ -1,10 +1,14 @@
 ---
 import ThemeToggle from '@/components/ui/ThemeToggle.astro';
 import LanguageToggle from '@/components/ui/LanguageToggle.astro';
+import ContactIconLink from '@/components/ui/ContactIconLink.astro';
 import { themeConfig } from '@/config';
+import { getUiLabels } from '@/utils/i18n';
 
 type Props = {
   lang?: string;
+  /** Optional override for the wordmark title text (e.g. on the contact page). */
+  title?: string;
   translations?: Array<{
     code: string;
     label: string;
@@ -16,15 +20,26 @@ type Props = {
   showTitle?: boolean;
 };
 
-const { lang, translations, showTitle = true } = Astro.props as Props;
+const { lang, title, translations, showTitle = true } = Astro.props as Props;
+const langCandidate = (lang || themeConfig.site.defaultLocale).split('-')[0] || themeConfig.site.defaultLocale;
+const contactHref = `/${langCandidate}/contact/`;
+const ui = getUiLabels(langCandidate);
+const wordmarkTitle = title || ui.homeTitle;
+const isOnContactPage = /\/contact\/?$/.test(Astro.url.pathname);
 ---
 
 <header data-show-title={showTitle}>
   <nav>
-    {showTitle && <span class="site-title wordmark-title">{themeConfig.site.headerTitle}</span>}
-    <div class="controls">
+    {showTitle && <span class="site-title wordmark-title">{wordmarkTitle}</span>}
+    <div class="controls icon-controls">
+      <ContactIconLink
+        href={contactHref}
+        label={ui.contact}
+        disabled={isOnContactPage}
+        disabledLabel={ui.alreadyOnContactPage}
+      />
       <ThemeToggle />
-      <LanguageToggle lang={lang} translations={translations} />
+      <LanguageToggle lang={langCandidate} translations={translations} />
     </div>
   </nav>
 </header>

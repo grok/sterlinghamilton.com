@@ -1,0 +1,18 @@
+---
+import PostLayout from '@/layouts/PostLayout.astro';
+
+// Dev-only debug page used by Playwright to ensure Mermaid re-renders on theme toggles.
+if (import.meta.env.PROD) {
+  return new Response('Not Found', { status: 404 });
+}
+---
+
+<PostLayout title="Mermaid debug" pubDate={new Date()} toc={[]} lang="en-US">
+  <pre data-language="mermaid">
+flowchart TD
+  A[Start] --> B[Theme toggle]
+  B -->|Light| C[Latte]
+  B -->|Dark| D[Mocha]
+  </pre>
+</PostLayout>
+

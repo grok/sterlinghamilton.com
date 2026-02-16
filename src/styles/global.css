@@ -37,6 +37,9 @@
   --code-bg: #e6e9ef; /* mantle */
   --overlay0: #9ca0b0; /* overlay0 */
   --mark: #df8e1d; /* yellow */
+  --link: #d20f39; /* latte red */
+  /* Hover: ~20% stronger (darker) in light mode */
+  --link-hover: color-mix(in srgb, var(--link), #000 20%);
 
 
   /* Syntax Theme (Catppuccin Latte-ish) */
@@ -68,6 +71,9 @@ html.light {
   --code-bg: #e6e9ef; /* mantle */
   --overlay0: #9ca0b0; /* overlay0 */
   --mark: #df8e1d; /* yellow */
+  --link: #d20f39; /* latte red */
+  /* Hover: ~20% stronger (darker) in light mode */
+  --link-hover: color-mix(in srgb, var(--link), #000 20%);
 
 
   /* Syntax Theme (Catppuccin Latte-ish) */
@@ -99,6 +105,9 @@ html.dark {
   --code-bg: #181825; /* mantle */
   --overlay0: #6c7086; /* overlay0 */
   --mark: #f9e2af; /* yellow */
+  --link: #fab387; /* mocha peach (orange) */
+  /* Hover: ~20% stronger (lighter) in dark mode */
+  --link-hover: color-mix(in srgb, var(--link), #fff 20%);
 
 
   /* Syntax Theme (Catppuccin-ish) */
@@ -173,6 +182,17 @@ html.dark .wordmark-title {
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
 }
 
+/* Shared utility: icon rows that include the taller logo mark */
+.icon-controls .theme-toggle {
+  /* Optical centering vs the taller logo mark */
+  transform: translateY(1px);
+}
+
+.icon-controls .language-button {
+  /* Optical centering vs the taller logo mark */
+  transform: translateY(3px);
+}
+
 @media (max-width: 768px) {
   body {
     padding: 4rem 1.35rem 1.35rem 1.35rem;
@@ -216,8 +236,38 @@ main {
   box-sizing: border-box;
 }
 
+/* Home: empty locale callout ("no translated posts yet") */
+.empty-locale {
+  margin: 1.75rem 0 0 0;
+  padding: 1.1rem 1rem;
+  border-radius: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--border), var(--text-tertiary) 18%);
+  background: color-mix(in srgb, var(--surface0) 35%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 4.25rem;
+}
+
+.empty-locale__text {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: var(--font-size-s);
+  color: var(--text-secondary);
+  /* Keep consistent tracking with the rest of the site (avoid "bunched up" feel). */
+  letter-spacing: var(--spacing-m);
+  line-height: 1.55;
+}
+
+html.dark .empty-locale {
+  background: color-mix(in srgb, var(--surface0) 45%, transparent);
+  border-color: color-mix(in srgb, var(--border), var(--text-tertiary) 22%);
+}
+
 .date {
   margin: 0;
+  margin-top: .5rem;
   font-weight: var(--font-weight-light);
   color: var(--text-secondary);
   opacity: 0.75;

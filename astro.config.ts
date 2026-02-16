@@ -46,7 +46,14 @@ export default defineConfig({
       Exclude: [(file: string) => file.toLowerCase().includes('katex')],
     }),
     // Must come before `mdx()` so MDX pages also get Expressive Code rendering.
-    astroExpressiveCode(),
+    astroExpressiveCode({
+      // Our theme toggle sets `html.light` / `html.dark`.
+      // Configure Expressive Code to follow that (not system `prefers-color-scheme`),
+      // so code block colors match the selected site theme.
+      useDarkModeMediaQuery: false,
+      themeCssRoot: 'html',
+      themeCssSelector: (theme) => (theme.type === 'dark' ? '.dark' : '.light'),
+    }),
     mdx(),
     sitemap(),
   ],

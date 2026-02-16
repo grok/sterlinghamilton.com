@@ -9,6 +9,7 @@ import ImageOptimizer from '@/components/ui/ImageOptimizer.astro';
 import ImageViewer from '@/components/ui/ImageViewer.astro';
 import ThemeToggle from '@/components/ui/ThemeToggle.astro';
 import LanguageToggle from '@/components/ui/LanguageToggle.astro';
+import ContactIconLink from '@/components/ui/ContactIconLink.astro';
 import LinkCard from '@/components/ui/LinkCard.astro';
 import NeoDBCard from '@/components/ui/NeoDBCard.astro';
 import TableOfContents from '@/components/ui/TableOfContents.astro';
@@ -20,11 +21,15 @@ import MermaidEnhancements from '@/components/widgets/MermaidEnhancements.astro'
 import { themeConfig } from '@/config';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import type { PostLayoutProps } from '@/types';
+import { getUiLabels } from '@/utils/i18n';
 
 const { title, pubDate, readingTime, toc, lang, translations } = Astro.props as PostLayoutProps;
 
 const postSlug = Astro.url.pathname.split('/').filter(Boolean).pop() || '';
 const ogImage = `/open-graph/${postSlug}.png`;
+const localeCode = translations?.find((t) => t.active)?.code || themeConfig.site.defaultLocale;
+const ui = getUiLabels(localeCode);
+const contactHref = `/${localeCode}/contact/`;
 ---
 
 <BaseLayout
@@ -48,7 +53,8 @@ const ogImage = `/open-graph/${postSlug}.png`;
         <div class="title">
           <div class="post-topbar">
             <h1 class="wordmark-title post-title">{title}</h1>
-            <div class="post-controls">
+            <div class="post-controls icon-controls">
+              <ContactIconLink href={contactHref} label={ui.contact} />
               <ThemeToggle />
               <LanguageToggle translations={translations} />
             </div>
@@ -85,6 +91,12 @@ const ogImage = `/open-graph/${postSlug}.png`;
 </BaseLayout>
 
 <style>
+  /*
+    CSS ownership note:
+    - Keep *layout/structure* styles for this template here (containers, flex, spacing of chrome).
+    - Keep *content/typography* styles in `src/styles/post.css` under the `.prose` hook
+      (headings, paragraphs, lists, code blocks, etc.), since `.prose` is reused outside posts.
+  */
   .post-container {
     display: flex;
     flex-direction: column;

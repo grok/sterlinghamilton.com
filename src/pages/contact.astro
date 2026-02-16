@@ -1,0 +1,40 @@
+---
+import { themeConfig } from '@/config';
+---
+
+<!-- Locale redirect: /contact/ -> /:lang/contact/ -->
+<html lang={themeConfig.site.language}>
+  <head>
+    <link rel="canonical" href={`/${themeConfig.site.defaultLocale}/contact/`} />
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <script
+      is:inline
+      define:vars={{
+        defaultLocale: themeConfig.site.defaultLocale,
+        localeCodes: themeConfig.site.locales.map((l) => l.code),
+      }}
+    >
+      try {
+        const preferred = localStorage.getItem('preferredLang')
+        const next = preferred && localeCodes.includes(preferred) ? preferred : defaultLocale
+        const url = new URL(window.location.href)
+        url.pathname = `/${next}/contact/`
+        // preserve search/hash
+        window.location.replace(url.toString())
+      } catch {
+        const url = new URL(window.location.href)
+        url.pathname = `/${defaultLocale}/contact/`
+        window.location.replace(url.toString())
+      }
+    </script>
+    <noscript>
+      <p>
+        Continue to <a href={`/${themeConfig.site.defaultLocale}/contact/`}>/{themeConfig.site.defaultLocale}/contact/</a>
+        .
+      </p>
+    </noscript>
+  </body>
+</html>
+

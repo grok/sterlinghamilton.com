@@ -1,8 +1,11 @@
 ---
 import type { TOCProps } from '@/types';
+import { getUiLabels, localeFromPathname } from '@/utils/i18n';
 
 const { toc = [] }: TOCProps = Astro.props;
 const pageRootHref = `${Astro.url.pathname}${Astro.url.search}`;
+const locale = localeFromPathname(Astro.url.pathname);
+const ui = getUiLabels(locale);
 ---
 
 <div class="toc-container" id="toc">
@@ -10,7 +13,9 @@ const pageRootHref = `${Astro.url.pathname}${Astro.url.search}`;
     <ul class="toc-list" id="toc-list">
       <!-- Back to top link -->
       <li class="toc-item toc-level-0">
-        <a href={pageRootHref} class="toc-link toc-title" title="Back to top" data-text="Back to top"> Back to top </a>
+        <a href={pageRootHref} class="toc-link toc-title" title={ui.backToTop} data-text={ui.backToTop}>
+          {ui.backToTop}
+        </a>
       </li>
 
       <!-- TOC items -->

@@ -1,5 +1,9 @@
 ---
 import { themeConfig } from '@/config';
+import { getUiLabels, localeFromPathname } from '@/utils/i18n';
+
+const locale = localeFromPathname(Astro.url.pathname);
+const ui = getUiLabels(locale);
 ---
 
 {
@@ -9,10 +13,10 @@ import { themeConfig } from '@/config';
       class="theme-toggle"
       type="button"
       tabindex="1"
-      aria-label="Toggle theme"
+      aria-label={ui.switchToDarkMode}
       aria-pressed="false"
-      title="Toggle theme"
-      data-tooltip="Toggle theme"
+      title={ui.switchToDarkMode}
+      data-tooltip={ui.switchToDarkMode}
     >
       <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -30,7 +34,13 @@ import { themeConfig } from '@/config';
   )
 }
 
-<script is:inline>
+<script
+  is:inline
+  define:vars={{
+    switchToLightMode: ui.switchToLightMode,
+    switchToDarkMode: ui.switchToDarkMode,
+  }}
+>
   function bindThemeToggle() {
     const themeToggle = document.getElementById('theme-toggle')
     if (!themeToggle || !window.ThemeManager) return
@@ -41,7 +51,7 @@ import { themeConfig } from '@/config';
 
     const updateA11y = () => {
       const isDark = document.documentElement.classList.contains('dark')
-      const label = isDark ? 'Switch to light mode' : 'Switch to dark mode'
+      const label = isDark ? switchToLightMode : switchToDarkMode
       themeToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false')
       themeToggle.setAttribute('aria-label', label)
       themeToggle.setAttribute('title', label)

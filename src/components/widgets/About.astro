@@ -1,7 +1,11 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import { localeFromPathname } from '@/utils/i18n';
+import { pickAboutEntryByLang } from '@/utils/about';
 
-const aboutEntry = await getEntry('about', 'about');
+const locale = localeFromPathname(Astro.url.pathname);
+const entries = await getCollection('about');
+const aboutEntry = pickAboutEntryByLang(entries, locale) || entries[0];
 // Check if there is actual content (excluding comments)
 const hasContent = aboutEntry?.body
   ? aboutEntry.body.replace(/<!--[\s\S]*?-->/g, '').trim().length > 0

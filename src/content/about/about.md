@@ -1,15 +1,10 @@
 ---
 title: 'About'
+lang: en
 ---
 
-👋 Welcome!
+This site is where I write about code, tech, and the places I wander. Sometimes photos. Sometimes opinions nobody asked for.
 
-This is where I ramble about&hellip; code, tech, places I wander, and occasionally drop too many photos. Expect programming, travel, and opinions nobody asked for.
+It's just writing. That's the whole deal. No cookies. No tracking. No ads. Nothing for sale.
 
-This is purely a place of knowledge and content.
-
-No cookies, tracking, ads, or anything to sell.
-
-I promise to respect your time&hellip; but I can't promise I'll use fewer words.
-
-Buckle up.
+Read further for the thoughts and ideas. If you want to chat go [here](/contact/).
