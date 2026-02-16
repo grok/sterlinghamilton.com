@@ -1,0 +1,19 @@
+---
+description: UI/i18n conventions (holistic translation + transitions-safe CSS)
+alwaysApply: true
+---
+
+# UI + i18n
+
+## Holistic translation
+
+- UI chrome must translate along with content: **wordmark title**, **tooltips**, **toasts**, TOC labels, Mermaid controls.
+- Canonical UI strings live in `src/utils/i18n.ts` (`getUiLabels()`).
+  - Prefer `getUiLabels(locale)` over hardcoded UI strings in components and client scripts.
+  - Use `localeFromPathname()` (or passed `lang`) to select the locale consistently.
+
+## Astro transitions + CSS
+
+- Avoid page-scoped `<style>` for UI that must persist across navigations.
+  - If you see “style flashes then disappears”, move the styling to `src/styles/global.css` (or another globally imported stylesheet).
+

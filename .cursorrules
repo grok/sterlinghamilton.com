@@ -5,6 +5,10 @@
 - If the user’s request matches a documented workflow, also read the relevant prompt(s) in `prompts/` (for example: `content-authoring.md`, `writing-style.md`, `start-development.md`, `upgrade-dependencies.md`).
 - Follow the conventions in `prompts/` as the source of truth when they differ from generic defaults.
 
+### New setup (preferred)
+- This repo now also has `AGENTS.md` and `.cursor/rules/` which are the preferred, modern way to provide persistent guidance in Cursor.
+- Keep this file for backwards compatibility, but update rules in `.cursor/rules/` going forward.
+
 ### Commit message convention
 - Use: `type(scope): message.`
 - Lowercase `type` and `scope`.

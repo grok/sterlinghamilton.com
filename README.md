@@ -1,185 +1,220 @@
-# Sterling Hamilton's Website
+# sterlinghamilton.com
 
-## Table of Contents
+Sterling’s personal site, built with **Astro** and managed with **Bun**.
 
-- [Setup](#setup)
-- [Development Tools](#️-development-tools)
-  - [Terminal & Editor](#terminal--editor)
-  - [AI Assistants & LLMs](#ai-assistants--llms)
-  - [AI Prompt System](#ai-prompt-system)
-- [Project Structure](#-project-structure)
-- [Commands](#-commands)
-- [Upgrading Dependencies and Runtime](#-upgrading-dependencies-and-runtime)
-  - [Checking for Updates](#checking-for-updates)
-  - [Upgrading Bun Runtime](#upgrading-bun-runtime)
-  - [Upgrading Project Dependencies (Astro)](#upgrading-project-dependencies-astro)
-  - [Committing Upgrade Changes](#committing-upgrade-changes)
-  - [Verification After Upgrades](#verification-after-upgrades)
-  - [Files That May Change During Upgrades](#files-that-may-change-during-upgrades)
-  - [Troubleshooting](#troubleshooting)
+If you’re new here (or you’re an intern who got tossed into the deep end): you’re safe. This README is meant to be a calm map of the repo.
 
-## Setup
+## Table of contents
 
-This project was created with astro using a command like: `bun create astro@latest -- --template basics`
+- [Quick start](#quick-start)
+- [Common commands](#common-commands)
+- [Project layout](#project-layout)
+- [How the site works](#how-the-site-works)
+  - [Routing + layouts](#routing--layouts)
+  - [Content publishing (Markdown/MDX)](#content-publishing-markdownmdx)
+  - [i18n (English/Spanish)](#i18n-englishspanish)
+  - [Theme (light/dark)](#theme-lightdark)
+- [Testing](#testing)
+  - [Unit tests (Vitest)](#unit-tests-vitest)
+  - [E2E + visual regression (Playwright)](#e2e--visual-regression-playwright)
+- [AI prompts + rules](#ai-prompts--rules)
+- [Upgrades](#upgrades)
 
-## 🛠️ Development Tools
+## Quick start
 
-This project is developed using modern AI-assisted development tools and workflows.
+Prereqs:
+- Install **Bun** (and make sure it’s reasonably recent).
 
-### Terminal & Editor
-
-- **Warp**: Modern terminal with AI agent capabilities
-  - Used for running commands and AI-assisted terminal workflows
-  - Agent mode supports executing complex multi-step tasks
-- **Cursor**: AI-powered code editor
-  - Primary IDE for this project
-  - Provides AI code completion, chat, and codebase understanding
-  - Supports context-aware suggestions and refactoring
-
-### AI Assistants & LLMs
-
-This project leverages Large Language Models (LLMs) for development assistance:
-
-- **Cursor AI**: Integrated AI assistant in the editor
-- **Warp AI Agent**: Terminal-based AI agent for command execution
-- **Other AI Tools**: Compatible with GitHub Copilot, Claude, and other AI coding assistants
-
-### AI Prompt System
-
-This project includes a reusable prompt system in the `prompts/` directory:
-
-- **Purpose**: Standardized prompts for common development tasks
-- **Location**: See `prompts/README.md` for available prompts
-- **Usage**: Prompts can be used with Warp AI, Cursor, or other AI assistants
-- **Available Prompts**:
-  - `start-development.md` - Start development environment
-  - `upgrade-dependencies.md` - Upgrade dependencies and runtime
-
-These prompts help maintain consistency and enable AI assistants to follow project-specific conventions and workflows.
-
-## 🚀 Project Structure
-
-@TODO: This is a work in progress.
-
-### Content authoring
-
-- Demo content has been removed; see `docs/demo-content.md` for what it used to demonstrate (MDX, KaTeX, embeds, drafts, translations), so you can replicate those patterns in real posts.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`                 | Starts local dev server at `localhost:4321`      |
-| `bun build`               | Build your production site to `./dist/`          |
-| `bun preview`             | Preview your build locally, before deploying     |
-| `bun check`               | Run Astro type checking and validation           |
-| `bun lint`                | Run Biome linter and formatter (check only)      |
-| `bun lint:fix`            | Run Biome linter and auto-fix issues             |
-| `bun format`              | Format code with Biome                           |
-| `bun astro ...`           | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help`     | Get help using the Astro CLI                     |
-
-## 🔄 Upgrading Dependencies and Runtime
-
-This project uses Bun as the runtime and package manager, and Astro as the framework. Follow these processes to keep everything up to date.
-
-### Checking for Updates
-
-First, check what needs updating:
+Then:
 
 ```bash
-# Check current versions
-bun --version
-bunx astro --version
-
-# Check for outdated dependencies
-bun outdated
-```
-
-### Upgrading Bun Runtime
-
-Bun can upgrade itself:
-
-```bash
-# Check if Bun update is available (this will also upgrade if available)
-bun upgrade --dry-run
-
-# If an update is available, upgrade Bun
-bun upgrade
-
-# Verify the upgrade
-bun --version
-```
-
-**Note**: The `--dry-run` flag may actually perform the upgrade. This is expected behavior.
-
-### Upgrading Project Dependencies (Astro)
-
-Use Astro's official upgrade tool to handle migrations automatically:
-
-```bash
-# Upgrade Astro and all related dependencies
-bunx @astrojs/upgrade
-
-# Verify the upgrade
-bunx astro --version
-```
-
-This tool automatically:
-- Updates `package.json` with the latest version
-- Updates `bun.lockb` lock file
-- Handles any necessary migration steps
-- Checks for compatibility issues
-
-### Committing Upgrade Changes
-
-After upgrading, commit the changes using the project's commit format:
-
-```bash
-# Check what changed
-git status
-
-# Review the changes
-git diff package.json
-
-# Stage and commit
-git add package.json bun.lockb README.md  # Add any other changed files
-git commit -m "[chore] Upgrade astro from X.X.X to Y.Y.Y."
-```
-
-**Commit Message Format**: `[type] Description.`
-- Use square brackets around the type (e.g., `[chore]`)
-- Always end with a period
-- Include specific version numbers for upgrades
-
-### Verification After Upgrades
-
-Always verify everything still works:
-
-```bash
-# Confirm all dependencies are current
-bun outdated
-
-# Test that the project starts
+bun install
 bun dev
-# (Press Ctrl+C to stop after verifying it starts)
 ```
 
-### Files That May Change During Upgrades
+Open `http://localhost:4321/`.
 
-- `package.json` - Dependency versions
-- `bun.lockb` - Lock file (binary format)
-- `README.md` - May be updated by upgrade tools
-- `.astro/` directory - May be regenerated
+## Common commands
 
-### Troubleshooting
+All commands run from the repo root:
 
-- If `bun outdated` shows no output, all dependencies are current
-- If the project fails to start after upgrade, check the console for specific errors
-- The `@astrojs/upgrade` tool handles most migration steps automatically
-- If Bun upgrade says "already on latest", you're already up to date
+| Command | What it does |
+| --- | --- |
+| `bun install` | Install dependencies |
+| `bun dev` | Run the dev server (`http://localhost:4321/`) |
+| `bun run build` | Build the production site to `dist/` |
+| `bun run preview` | Preview the production build locally |
+| `bun run check` | Astro checks (typechecking + content validation) |
+| `bun run lint` | Biome checks |
+| `bun run lint:fix` | Biome checks + auto-fix |
+| `bun run format` | Format with Biome |
+| `bun run test:unit` | Run Vitest unit tests |
+| `bun run test:e2e` | Run Playwright E2E (also used for visual diffs) |
+| `bun run test:e2e:ui` | Playwright UI runner |
 
+## Project layout
 
+High-level structure (the 80/20 you’ll actually touch):
+
+```text
+public/                   Static assets (favicon, logo, etc.)
+src/
+  components/             UI building blocks (Astro components)
+  layouts/                Page templates (IndexLayout, PostLayout, BaseLayout)
+  pages/                  Route entrypoints (Astro routing)
+  scripts/                Client-side JS/TS (theme, mermaid, copy-link, etc.)
+  styles/                 Global + post styles (Catppuccin tokens)
+  utils/                  Small pure helpers (i18n, content selection, etc.)
+  content/
+    posts/                Blog posts (Markdown/MDX via content collections)
+    about/                About blurb (localized)
+tests/
+  unit/                   Vitest unit tests
+  e2e/                    Playwright E2E + visual regression
+prompts/                  “Runbooks” for common tasks
+.cursor/rules/            Cursor agent rules (always-on guidance)
+AGENTS.md                 Agent guide + “shared reality” notes
+```
+
+## How the site works
+
+### Routing + layouts
+
+Routes are file-based:
+- Home pages: `src/pages/[lang]/index.astro` → `/en/`, `/es/`
+- Posts: `src/pages/[lang]/[...slug].astro` → `/:lang/:slug/`
+- Contact: `src/pages/[lang]/contact.astro` → `/:lang/contact/`
+- Convenience redirects:
+  - `src/pages/index.astro` redirects `/` → `/:lang/` (prefers stored locale)
+  - `src/pages/[...slug].astro` redirects legacy `/:slug/` → `/:lang/:slug/`
+
+The layouts stack like this:
+- `BaseLayout.astro` (global HTML shell, theme manager, toasts)
+  - `IndexLayout.astro` (site pages)
+  - `PostLayout.astro` (blog posts: TOC, headings, code, mermaid, etc.)
+
+Here’s the mental model:
+
+```mermaid
+flowchart TD
+  A["Request: /:lang/:route/"] --> B["src/pages/..."]
+  B --> C["BaseLayout.astro"]
+  C --> D{Page type}
+  D -->|home/contact| E["IndexLayout.astro + Header"]
+  D -->|post| F["PostLayout.astro + post widgets"]
+  E --> G["Components + styles"]
+  F --> G
+```
+
+### Content publishing (Markdown/MDX)
+
+Posts live in `src/content/posts/`. Astro turns them into pages at build time.
+
+Key bits:
+- **Drafts**: files starting with `_` are excluded from routes/lists.
+- Posts can include:
+  - fenced code blocks (rendered via **astro-expressive-code**)
+  - Mermaid blocks (rendered + enhanced client-side)
+  - TOC + reading time (computed by remark plugins)
+
+```mermaid
+flowchart LR
+  A["Markdown in src/content/posts"] --> B["Astro content collections"]
+  B --> C["remark/rehype pipeline"]
+  C --> D["Static HTML per route"]
+  D --> E["Client scripts enhance UX: copy link, Mermaid fullscreen, etc."]
+```
+
+### i18n (English/Spanish)
+
+Locales are configured in `src/config.ts`.
+
+Rules we follow:
+- Every post has a `lang` (`en` or `es`).
+- Translations are linked with `translationKey`.
+- The language toggle:
+  - **stays on the same page** for normal routes (`/en/contact/` → `/es/contact/`)
+  - is **disabled on posts** when a translation doesn’t exist (so we don’t lie)
+- UI chrome is translated too (wordmark title, tooltips, toasts, etc.)
+
+UI strings live in one place:
+- `src/utils/i18n.ts` → `getUiLabels(locale)`
+
+```mermaid
+flowchart TD
+  A["URL: /:lang/..."] --> B["localeFromPathname()"]
+  B --> C["getUiLabels(lang)"]
+  C --> D["Header title + tooltips + toasts"]
+  A --> E["Post translation map"]
+  E --> F{Has translation?}
+  F -->|yes| G["Enable language switch to translated route"]
+  F -->|no| H["Disable language switch + explain why"]
+```
+
+### Theme (light/dark)
+
+Theme is controlled by the `html.light` / `html.dark` class.
+
+Important: we intentionally configure code highlighting to follow that class (not `prefers-color-scheme`), so the site theme and code theme always match.
+
+```mermaid
+flowchart LR
+  A["Theme toggle"] --> B["ThemeManager sets html.light/html.dark"]
+  B --> C["CSS variables update: Catppuccin tokens"]
+  B --> D["Expressive Code swaps theme via css-variables"]
+  B --> E["Mermaid re-renders with themed variables"]
+```
+
+## Testing
+
+We try to keep “shared reality”: if we fixed it, we test it.
+
+### Unit tests (Vitest)
+
+- **Run**: `bun run test:unit`
+- **Where**: `tests/unit/**/*.test.ts`
+- **What to put here**: small pure helpers (i18n parsing, content selection, URL transforms)
+
+### E2E + visual regression (Playwright)
+
+- **Run**: `bun run test:e2e`
+- Playwright starts its own dev server on `http://localhost:4400` (see `playwright.config.ts`)
+
+Visual regression:
+- **Run (diff)**: `bunx playwright test tests/e2e/visual.spec.ts`
+- **Update baselines**: `bunx playwright test tests/e2e/visual.spec.ts --update-snapshots`
+
+```mermaid
+flowchart TD
+  A["bun run test:unit"] --> B["Vitest: pure utils"]
+  C["bun run test:e2e"] --> D["Playwright"]
+  D --> E["Launch Astro dev server: :4400"]
+  D --> F["Behavior assertions"]
+  D --> G["Visual snapshots: light + dark"]
+```
+
+## AI prompts + rules
+
+This repo is set up so an AI assistant can be helpful *without* making a mess.
+
+- `prompts/` contains task runbooks (start dev, upgrade deps, content authoring, writing voice).
+  - Start with `prompts/README.md`.
+- `AGENTS.md` describes the agent mission (“shared reality”) and testing notes.
+- `.cursor/rules/` contains always-on rules for Cursor (Bun usage, commit style, testing discipline, UI/i18n conventions).
+
+```mermaid
+flowchart LR
+  A["Human goal"] --> B["prompts/README.md + prompts/*.md"]
+  B --> C["AGENTS.md: shared reality"]
+  C --> D[".cursor/rules: always-on constraints"]
+  D --> E["Implementation + tests"]
+```
+
+## Upgrades
+
+We keep upgrades boring:
+- Use the prompt: `prompts/upgrade-dependencies.md`
+- Verify with: `bun run check`, `bun run test:unit`, `bun run test:e2e`
+
+Commit messages follow:
+- `type(scope): message.` (always a scope, always ends with a period)

@@ -1,0 +1,24 @@
+---
+description: Content authoring & i18n conventions (posts + about)
+globs: src/content/**/*.{md,mdx}
+alwaysApply: false
+---
+
+# Content authoring
+
+## Posts
+
+- Posts live in `src/content/posts/`
+- Drafts: filenames starting with `_` are excluded from lists/routes
+- Use `bun run new "_My Draft Title"` for drafts
+- Use `lang` + `translationKey` for translations
+
+## About
+
+- About content lives in `src/content/about/`
+- The `about` collection uses frontmatter `lang` to pick the correct locale copy.
+
+## Writing voice
+
+Follow `prompts/writing-style.md` for public copy.
+

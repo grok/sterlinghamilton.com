@@ -1,0 +1,26 @@
+---
+description: Testing conventions (Vitest + Playwright)
+alwaysApply: true
+---
+
+# Testing
+
+Canonical notes live in `AGENTS.md` (Testing notes section). Keep this rule short and non-redundant.
+
+## Regression discipline
+
+- When you **fix a bug**, add or tighten a test that would have caught it (unit or Playwright).
+- When adjusting **i18n/UI copy**, add assertions for translated **chrome** (title/tooltips/toasts), not just page body content.
+
+## Unit tests (Vitest)
+
+- Run: `bun run test:unit`
+- Config: `vitest.config.ts`
+
+## E2E + visual regression (Playwright)
+
+- Run: `bun run test:e2e`
+- Visual snapshots:
+  - Update baselines: `bunx playwright test tests/e2e/visual.spec.ts --update-snapshots`
+- Note: test scripts unset `NO_COLOR` and set `PLAYWRIGHT_BROWSERS_PATH=0` for stability.
+

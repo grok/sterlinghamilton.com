@@ -1,0 +1,51 @@
+---
+description: Git commits (message format + lightweight workflow)
+alwaysApply: true
+---
+
+# Git commits
+
+## Commit message format
+
+Use:
+
+`type(scope): message.`
+
+Rules:
+- **`type`** and **`scope`** are lowercase
+- **always include a scope**
+- **end with a period**
+- keep it short and specific (optimize for “why”)
+
+Common `type` values:
+- `feat`: user-visible feature
+- `fix`: bug fix
+- `docs`: docs-only changes (README, prompts, etc.)
+- `test`: tests only (unit/e2e/visual)
+- `refactor`: non-behavior refactor
+- `style`: formatting / non-functional styling
+- `chore`: maintenance (scripts, tooling)
+- `build`: build system changes
+- `ci`: CI config changes
+- `perf`: performance improvements
+
+Common `scope` values in this repo:
+- `ui`, `content`, `post`, `i18n`, `a11y`, `testing`, `prompts`, `deps`
+
+Examples:
+- `feat(ui): add empty-locale callout on /es/.`
+- `fix(i18n): translate header title and tooltips.`
+- `test(e2e): cover mermaid fullscreen and close.`
+- `docs(readme): add architecture and testing diagrams.`
+- `chore(deps): upgrade astro from 5.16.0 to 5.16.11.`
+
+## Commit methodology (lightweight)
+
+- **One commit per logical change**. If it’s two independent changes, split it.
+- **Run the right checks** before committing:
+  - UI/content: `bun run test:e2e` (or at least the relevant spec)
+  - Utilities: `bun run test:unit`
+  - When in doubt: `bun run check`
+- **If you fix a regression**, add/tighten a test in the same PR/series.
+- Avoid committing secrets (`.env`, credentials).
+
