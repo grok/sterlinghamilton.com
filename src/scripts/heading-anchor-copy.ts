@@ -12,6 +12,18 @@ function ui() {
   return getUiLabels(localeFromPathname(window.location.pathname));
 }
 
+function scrollHeadingIntoView(heading: HTMLElement) {
+  // Match what a real `#hash` page load does: bring the target heading into view.
+  // Respect reduced motion.
+  const prefersReducedMotion =
+    window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
+
+  heading.scrollIntoView({
+    block: 'start',
+    behavior: prefersReducedMotion ? 'auto' : 'smooth',
+  });
+}
+
 async function copyHeadingLink(heading: HTMLElement) {
   const id = heading.id;
   if (!id) return;
@@ -19,8 +31,11 @@ async function copyHeadingLink(heading: HTMLElement) {
   const url = new URL(window.location.href);
   url.hash = id;
 
-  // Update the URL for shareability, but don't jump.
+  // Update the URL for shareability.
   history.replaceState(null, '', url);
+
+  // Also scroll to simulate landing on the permalink.
+  scrollHeadingIntoView(heading);
 
   const text = url.toString();
 

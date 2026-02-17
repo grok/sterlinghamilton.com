@@ -88,6 +88,10 @@ test.describe('acceptance: core UX expectations', () => {
     await page.locator('#the-idea').click();
     await expect(page.locator('.toast-region')).toContainText('Copied link.');
 
+    // Clicking a heading should also behave like landing on the permalink.
+    await expect(page).toHaveURL(/#the-idea$/);
+    await page.waitForFunction(() => window.scrollY > 80);
+
     const text = await page.evaluate(() => navigator.clipboard.readText());
     expect(text).toContain('/debug/post/#the-idea');
   });

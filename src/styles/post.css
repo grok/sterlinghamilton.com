@@ -10,6 +10,8 @@
 /* Base styles for article content (avoid overriding embedded widgets like Mermaid blocks) */
 .prose .content {
   font-size: var(--font-size-m);
+  /* Make body copy a touch lighter so `strong` has real contrast. */
+  font-weight: var(--font-weight-light);
 }
 
 .prose
@@ -58,6 +60,11 @@
   font-weight: var(--font-weight-bold);
   line-height: 1.75;
   margin: 3.75em 0 1.75em 0;
+}
+
+.prose .content :where(h2[id], h3[id], h4[id], h5[id]) {
+  /* When navigating to `#hash` anchors, keep headings from landing flush to the top. */
+  scroll-margin-top: 3.5rem;
 }
 
 .prose .content h2 {
@@ -158,7 +165,14 @@
 /* Bold text */
 .prose .content strong,
 .prose .content b {
-  font-weight: var(--font-weight-bold);
+  /* Make inline emphasis visibly distinct from body copy. */
+  font-weight: 700;
+}
+
+html.dark .prose .content strong,
+html.dark .prose .content b {
+  /* Catppuccin Mocha mauve */
+  color: var(--astro-code-token-keyword);
 }
 
 /* Italic text */
@@ -166,6 +180,8 @@
   font-family: var(--serif);
   font-style: italic;
   letter-spacing: 0;
+  /* Catppuccin Sapphire (theme-aware via CSS variables) */
+  color: var(--astro-code-token-link);
 }
 
 /* Links
@@ -196,9 +212,10 @@
 }
 
 /* Paragraphs */
-.prose p {
+.prose .content p,
+.about.prose p {
   line-height: 1.75;
-  margin: 1.75em 0;
+  margin: 1.15em 0;
 }
 
 /* Tables */
@@ -323,18 +340,18 @@
 }
 
 /* Blockquotes */
-.prose blockquote {
+.prose .content blockquote {
   border-left: 2px solid var(--border);
   margin: 0 0 1.75em 0.125em;
   padding: 0 0 0 1.375em;
   text-align: left;
 }
 
-.prose blockquote p {
+.prose .content blockquote p {
   margin: 0;
 }
 
-.prose blockquote cite {
+.prose .content blockquote cite {
   display: inline-block;
   margin-top: 0.5em;
 }
