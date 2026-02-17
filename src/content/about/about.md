@@ -1,10 +1,12 @@
 ---
-title: 'About'
+title: "About"
 lang: en
 ---
 
-This site is where I write about code, tech, and the places I wander. Sometimes photos. Sometimes opinions nobody asked for.
+This site is where I write about code, tech, and the places I wander.<br />
+Sometimes photos. Sometimes opinions nobody asked for.
 
-It's just writing. That's the whole deal. No cookies. No tracking. No ads. Nothing for sale.
+It's just writing. That's the whole deal.<br />
+No cookies. No tracking. No ads. Nothing for sale. Not here to create a following.
 
-Read further for the thoughts and ideas. If you want to chat go [here](/contact/).
+If you want to chat head on over [here](/contact/).
