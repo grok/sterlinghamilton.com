@@ -3,8 +3,7 @@ import { glob } from 'astro/loaders';
 
 const posts = defineCollection({
   // Load Markdown and MDX files in the `src/content/posts/` directory.
-  // Use md?(x) to avoid duplicate matches from brace expansion on some glob implementations.
-  loader: glob({ base: './src/content/posts', pattern: '**/*.md?(x)' }),
+  loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx}' }),
   // Type-check frontmatter using a schema
   schema: () =>
     z.object({
