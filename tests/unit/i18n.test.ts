@@ -27,4 +27,3 @@ describe('i18n utils', () => {
     expect(getUiLabels('es').chooseLanguage).toBe('Elegir idioma');
   });
 });
-

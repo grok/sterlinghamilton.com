@@ -1,0 +1,155 @@
+---
+import PostLayout from '@/layouts/PostLayout.astro';
+import { themeConfig } from '@/config';
+import LinkCard from '@/components/ui/LinkCard.astro';
+
+// Dev-only page used by Playwright to exercise post UX (TOC, heading copy, code copy, mermaid).
+if (import.meta.env.PROD) {
+  return new Response('Not Found', { status: 404 });
+}
+
+const pubDate = new Date('2026-02-16T00:00:00.000Z');
+const toc = [
+  { id: 'tldr', text: 'TL;DR', level: 2 },
+  { id: 'the-idea', text: 'The Idea', level: 2 },
+  { id: 'code', text: 'Code', level: 2 },
+  { id: 'diagram', text: 'Diagram', level: 2 },
+];
+
+// Mark Spanish as unavailable to verify the language toggle disables on non-translated posts.
+const translations = themeConfig.site.locales.map((l) => ({
+  code: l.code,
+  label: l.label,
+  href: `/${l.code}/`,
+  active: l.code === themeConfig.site.defaultLocale,
+  available: l.code === themeConfig.site.defaultLocale,
+}));
+
+const FIXTURE_CODE = `type SpikeResult = {
+  latencyMsP95: number
+  errorRate: number
+  notes: string[]
+}
+`;
+
+const FIXTURE_GITHUB_REPO = 'octocat/Hello-World';
+const FIXTURE_LINK_URL = 'https://example.com/some-article';
+const FIXTURE_NEODB_URL = 'https://neodb.social/movie/fixture-uuid';
+---
+
+<PostLayout
+  title="Debug Post Fixture"
+  pubDate={pubDate}
+  readingTime={{ text: '1min', minutes: 1, time: 60_000, words: 200 }}
+  toc={toc}
+  lang="en-US"
+  translations={translations}
+>
+  <h2 id="tldr">TL;DR</h2>
+  <p>This page exists to keep our tests stable without relying on real posts.</p>
+
+  <h2 id="the-idea">The Idea</h2>
+  <p>Click headings to copy permalinks (and show a toast).</p>
+
+  <h2 id="code">Code</h2>
+  <div class="expressive-code" data-fixture-expressive-code>
+    <div class="copy">
+      <button type="button" aria-label="Copy code" title="Copy code" data-copy-text={FIXTURE_CODE}>
+        Copy
+      </button>
+    </div>
+    <pre><code>{FIXTURE_CODE}</code></pre>
+  </div>
+
+  <section data-external-cards aria-labelledby="external">
+    <h2 id="external">External cards</h2>
+    <p>
+      These fixtures exist to verify our "enhancer" scripts with mocked network responses (GitHub,
+      NeoDB, X embeds, and link-card metadata).
+    </p>
+
+    <a class="gc-container" data-repo={FIXTURE_GITHUB_REPO} href={`https://github.com/${FIXTURE_GITHUB_REPO}`} target="_blank" rel="noopener noreferrer">
+      <div class="gc-title-bar">
+        <div class="gc-owner-avatar" aria-hidden="true"></div>
+        <div class="gc-repo-title">
+          <strong>octocat</strong><span class="gc-slash">/</span>Hello-World
+        </div>
+        <svg class="gc-github-icon" viewBox="0 0 16 16" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+          ></path>
+        </svg>
+      </div>
+      <p class="gc-repo-description">Loading...</p>
+      <div class="gc-info-bar">
+        <span class="gc-stars-count">--</span>
+        <span class="gc-forks-count">--</span>
+        <span class="gc-license-info">--</span>
+      </div>
+    </a>
+
+    <div class="neodb-card-container" data-url={FIXTURE_NEODB_URL}></div>
+
+    <a class="link-card" data-url={FIXTURE_LINK_URL} href={FIXTURE_LINK_URL} target="_blank" rel="noopener noreferrer">
+      <div class="link-card-image-outer">
+        <div class="link-card-image" style="display: none;">
+          <img alt="" />
+        </div>
+      </div>
+      <div class="link-card-content">
+        <div class="link-card-title"></div>
+        <div class="link-card-description"></div>
+        <div class="link-card-url">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path>
+          </svg>
+          <span>loading</span>
+        </div>
+      </div>
+    </a>
+
+    <div class="x-card">
+      <blockquote class="twitter-tweet">
+        <p lang="en" dir="ltr">Fixture tweet for X embed enhancer.</p>
+        <a href="https://twitter.com/example/status/123">February 16, 2026</a>
+      </blockquote>
+    </div>
+  </section>
+
+  {
+    // Add enough vertical content so TOC scrolling is testable in all viewports.
+    Array.from({ length: 24 }).map((_, i) => (
+      <p data-spacer>
+        Spacer line {i + 1}. This exists only to make the page scroll.
+      </p>
+    ))
+  }
+
+  <h2 id="diagram">Diagram</h2>
+  <pre data-language="mermaid">
+flowchart TD
+  A[Start] --> B[Toggle theme]
+  B --> C[Mermaid re-renders]
+  </pre>
+
+  <script is:inline>
+    // Minimal copy behavior for the debug code fixture. Expressive Code does this for real posts.
+    document.addEventListener('click', async (e) => {
+      const target = e.target
+      if (!(target instanceof Element)) return
+      const btn = target.closest('[data-fixture-expressive-code] .copy button')
+      if (!(btn instanceof HTMLButtonElement)) return
+      const text = btn.getAttribute('data-copy-text') || ''
+      try {
+        await navigator.clipboard.writeText(text)
+      } catch {
+        // no-op (tests run in modern browsers w/ permissions)
+      }
+    })
+  </script>
+
+  {/* Mount LinkCard only on this dev-only fixture page. */}
+  <LinkCard />
+</PostLayout>
+

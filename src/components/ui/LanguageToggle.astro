@@ -38,7 +38,9 @@ const availableTranslations = isTranslationAware
   : [];
 const visibleTranslations: MenuItem[] = isTranslationAware
   ? // Hide languages that don't have this article.
-    ((availableTranslations.length ? availableTranslations : translations) as MenuItem[])
+    ((availableTranslations.length
+      ? availableTranslations
+      : translations) as MenuItem[])
   : // For normal pages, do not provide an explicit href so the click handler can
     // preserve the current path when switching languages (e.g. /en/contact/ -> /es/contact/).
     locales.map((l) => ({
@@ -339,4 +341,3 @@ const hasLanguageMenu = !isTranslationAware || visibleTranslations.length > 1;
     cursor: not-allowed;
   }
 </style>
-

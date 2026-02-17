@@ -7,12 +7,15 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "tsx scripts/toggle-proxy.ts",
-    "build": "bun run prebuild && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "lint": "biome check .",
-    "lint:fix": "biome check --write .",
+    "lint": "biome check . && bun run lint:whitespace && bun run lint:prose",
+    "lint:fix": "biome check --write . && bun run lint:whitespace:fix && bun run lint:prose:fix",
+    "lint:whitespace": "tsx scripts/lint-whitespace.ts",
+    "lint:whitespace:fix": "tsx scripts/lint-whitespace.ts --fix",
+    "lint:prose": "tsx scripts/lint-prose.ts",
+    "lint:prose:fix": "tsx scripts/lint-prose.ts --fix",
     "format": "biome format --write .",
     "test": "env -u NO_COLOR vitest run",
     "test:unit": "env -u NO_COLOR vitest run",
@@ -20,7 +23,6 @@
     "test:e2e": "env -u NO_COLOR PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
     "test:e2e:ui": "env -u NO_COLOR PLAYWRIGHT_BROWSERS_PATH=0 playwright test --ui",
     "new": "tsx scripts/new-post.ts",
-    "update-theme": "tsx scripts/update-theme.ts",
     "astro": "astro"
   },
   "dependencies": {

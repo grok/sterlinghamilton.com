@@ -2,6 +2,10 @@
 import { getCollection, render } from 'astro:content';
 import { localeFromPathname } from '@/utils/i18n';
 import { pickAboutEntryByLang } from '@/utils/about';
+import GitHubCard from '@/components/ui/GitHubCard.astro';
+import NeoDBCard from '@/components/ui/NeoDBCard.astro';
+import XPOST from '@/components/ui/XPOST.astro';
+import LinkCard from '@/components/ui/LinkCard.astro';
 
 const locale = localeFromPathname(Astro.url.pathname);
 const entries = await getCollection('about');
@@ -12,12 +16,25 @@ const hasContent = aboutEntry?.body
   : false;
 const { Content } =
   hasContent && aboutEntry ? await render(aboutEntry) : { Content: null };
+
+const body = aboutEntry?.body || '';
+const usesDirectives = (name: string) =>
+  new RegExp(`(^|\\n):{2,3}${name}\\{`, 'm').test(body);
+
+const usesGitHub = usesDirectives('github');
+const usesNeoDb = usesDirectives('neodb');
+const usesX = usesDirectives('x');
+const usesLink = usesDirectives('link');
 ---
 
 {
   hasContent && Content && (
     <div class="about prose">
       <Content />
+      {usesGitHub && <GitHubCard />}
+      {usesNeoDb && <NeoDBCard />}
+      {usesX && <XPOST />}
+      {usesLink && <LinkCard />}
     </div>
   )
 }

@@ -3,11 +3,15 @@ import { expect, test } from '@playwright/test';
 test('es homepage shows Spanish about copy', async ({ page }) => {
   await page.goto('/es/');
   await expect(
-    page.getByText('Este sitio es donde escribo sobre código', { exact: false }),
+    page.getByText('Este sitio es donde escribo sobre código', {
+      exact: false,
+    }),
   ).toBeVisible();
 
   // Wordmark title should translate too.
-  await expect(page.locator('.wordmark-title')).toContainText('¡Hola, soy Sterling!');
+  await expect(page.locator('.wordmark-title')).toContainText(
+    '¡Hola, soy Sterling!',
+  );
 
   // Empty-locale callout should look intentional (border + background), not like normal text.
   await expect(page.locator('[data-no-posts]')).toBeVisible();
@@ -40,7 +44,10 @@ test('language toggle keeps you on contact page', async ({ page }) => {
   await expect(page).toHaveURL(/\/es\/contact\/$/);
 
   // Control chrome should be translated on the destination page too.
-  await expect(page.locator('[data-language-button]')).toHaveAttribute('aria-label', 'Elegir idioma');
+  await expect(page.locator('[data-language-button]')).toHaveAttribute(
+    'aria-label',
+    'Elegir idioma',
+  );
   // On the contact page the contact icon is disabled and should explain why.
   await expect(page.locator('.contact-icon-link')).toHaveAttribute(
     'data-tooltip',
@@ -49,6 +56,8 @@ test('language toggle keeps you on contact page', async ({ page }) => {
 
   // On a normal page, the contact icon should be enabled and labeled "Contacto".
   await page.goto('/es/');
-  await expect(page.locator('.contact-icon-link')).toHaveAttribute('data-tooltip', 'Contacto');
+  await expect(page.locator('.contact-icon-link')).toHaveAttribute(
+    'data-tooltip',
+    'Contacto',
+  );
 });
-

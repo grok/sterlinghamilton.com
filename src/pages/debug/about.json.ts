@@ -14,8 +14,18 @@ export async function GET() {
     es: pickAboutEntryByLang(entries, 'es')?.id ?? null,
   };
 
-  return new Response(JSON.stringify({ ids, picked, langs: entries.map((e) => ({ id: e.id, lang: e.data.lang })) }, null, 2), {
-    headers: { 'content-type': 'application/json; charset=utf-8' },
-  });
+  return new Response(
+    JSON.stringify(
+      {
+        ids,
+        picked,
+        langs: entries.map((e) => ({ id: e.id, lang: e.data.lang })),
+      },
+      null,
+      2,
+    ),
+    {
+      headers: { 'content-type': 'application/json; charset=utf-8' },
+    },
+  );
 }
-

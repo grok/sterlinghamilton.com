@@ -12,7 +12,9 @@
   font-size: var(--font-size-m);
 }
 
-.prose .content :where(
+.prose
+  .content
+  :where(
     p,
     blockquote,
     pre,
@@ -45,7 +47,6 @@
   margin-top: 0;
 }
 
-
 .prose .title {
   padding-bottom: 3rem;
 }
@@ -70,8 +71,9 @@
   margin: 2em 0 0.85em 0;
   text-transform: capitalize;
   display: block;
-  padding-bottom: .5rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--text-tertiary), transparent 60%);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--text-tertiary), transparent 60%);
 }
 
 .prose .content h3 {
@@ -176,7 +178,9 @@
   color: var(--link);
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, var(--link), transparent 55%);
-  transition: color 160ms ease-out, text-decoration-color 320ms ease-out;
+  transition:
+    color 160ms ease-out,
+    text-decoration-color 320ms ease-out;
   position: relative;
   z-index: 0;
 }
@@ -453,7 +457,11 @@
   -webkit-appearance: none;
 }
 
-.prose .content ul.contains-task-list li.task-list-item input[type="checkbox"]:checked {
+.prose
+  .content
+  ul.contains-task-list
+  li.task-list-item
+  input[type="checkbox"]:checked {
   position: relative;
   background: var(--code-bg);
   font-family: var(--sans);
@@ -744,6 +752,18 @@ html.dark .prose .expressive-code :where(pre, code) {
 
 .reading-time .separator {
   margin: 0 0.25em;
+}
+
+/* Embeds: shared card surfaces
+   (GitHubCard, LinkCard, NeoDBCard). */
+.prose :where(.gc-container, .link-card, .neodb-card) {
+  background: var(--astro-code-background);
+  transition: background 0.2s ease-out;
+  margin: 1.25rem 0 1.75rem 0;
+}
+
+.prose :where(.gc-container:hover, .link-card:hover, .neodb-card:hover) {
+  background: color-mix(in srgb, var(--selection) 75%, transparent);
 }
 
 /* Video */

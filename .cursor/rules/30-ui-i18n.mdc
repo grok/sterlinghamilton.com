@@ -15,5 +15,4 @@ alwaysApply: true
 ## Astro transitions + CSS
 
 - Avoid page-scoped `<style>` for UI that must persist across navigations.
-  - If you see “style flashes then disappears”, move the styling to `src/styles/global.css` (or another globally imported stylesheet).
-
+  - If you see "style flashes then disappears", move the styling to `src/styles/global.css` (or another globally imported stylesheet).

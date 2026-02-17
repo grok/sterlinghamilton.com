@@ -1,0 +1,21 @@
+#
+# EditorConfig helps different editors agree on basics like line endings and whitespace.
+# See https://editorconfig.org/
+#
+
+# Treat this file as the "root" EditorConfig for the repo.
+# This prevents EditorConfig from walking up parent directories and inheriting other configs.
+root = true
+
+[*]
+# Use UTF-8 everywhere.
+charset = utf-8
+
+# Use Unix line endings (LF) everywhere.
+end_of_line = lf
+
+# Ensure every file ends with a newline (avoids "No newline at end of file" diffs).
+insert_final_newline = true
+
+# Remove trailing spaces at the end of lines.
+trim_trailing_whitespace = true

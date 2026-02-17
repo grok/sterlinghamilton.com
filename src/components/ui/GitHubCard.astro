@@ -1,5 +1,6 @@
 <script>
   import type { GitHubRepoData, CachedRepoData, CardElements } from '@/types'
+  import { onAstroPageLoad } from '@/utils/client-events'
 
   let githubCardsObserver: IntersectionObserver | null = null
 
@@ -143,8 +144,7 @@
     Array.from(githubCards).forEach((card) => githubCardsObserver?.observe(card))
   }
 
-  lazySetupGithubCards()
-  document.addEventListener('astro:page-load', lazySetupGithubCards)
+  onAstroPageLoad(lazySetupGithubCards)
 </script>
 
 <style is:inline>
@@ -153,15 +153,11 @@
     border: 0.5px solid var(--border);
     border-radius: 8px;
     padding: 1rem 1.25rem 0.75rem 1.25rem;
-    margin: 1.25rem 0 1.75rem 0;
     text-decoration: none;
     color: inherit;
-    transition: background 0.2s ease-out;
-    background: var(--astro-code-background);
   }
 
   .prose .gc-container:hover {
-    background: color-mix(in srgb, var(--selection) 75%, transparent);
     text-decoration: none;
   }
 

@@ -1,4 +1,6 @@
 <script>
+  import { getThemeFromDocument, onAstroPageLoad, onThemeChange } from '@/utils/client-events'
+
   function loadXCards() {
     const xCards = document.querySelectorAll('.twitter-tweet')
     if (xCards.length === 0) return
@@ -7,7 +9,7 @@
       return
     }
 
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isDark = getThemeFromDocument() === 'dark'
     xCards.forEach((element) => {
       element.setAttribute('data-theme', isDark ? 'dark' : 'light')
     })
@@ -28,8 +30,31 @@
     }
   }
 
-  // Use only astro:page-load as it fires on initial load and navigation
-  document.addEventListener('astro:page-load', loadXCards)
+  function applyThemeToXEmbeds() {
+    const xCards = document.querySelectorAll('.twitter-tweet')
+    if (xCards.length === 0) return
+    const isDark = getThemeFromDocument() === 'dark'
+    xCards.forEach((element) => {
+      element.setAttribute('data-theme', isDark ? 'dark' : 'light')
+    })
+
+    // Best-effort: if widgets are already loaded, ask them to re-scan the DOM.
+    // (Some embeds may not fully re-theme without a reload, but this helps.)
+    try {
+      ;(window as unknown as { twttr?: { widgets?: { load?: () => void } } }).twttr?.widgets?.load?.()
+    } catch {
+      // ignore
+    }
+  }
+
+  onAstroPageLoad(() => {
+    applyThemeToXEmbeds()
+    loadXCards()
+  })
+
+  onThemeChange(() => {
+    applyThemeToXEmbeds()
+  })
 </script>
 
 <style is:inline>

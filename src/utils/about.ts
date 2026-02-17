@@ -15,4 +15,3 @@ export function pickAboutEntryByLang<T extends AboutEntryLike>(
   if (primary) return primary;
   return entries.find((e) => (e.data?.lang || 'en') === fallbackLang);
 }
-

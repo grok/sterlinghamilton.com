@@ -23,4 +23,3 @@ describe('pickAboutEntryByLang', () => {
     expect(pickAboutEntryByLang(entries, 'es-ES')?.id).toBe('aboutes');
   });
 });
-

@@ -35,11 +35,7 @@ export default defineConfig({
       remarkReadingTime,
       remarkTOC,
     ],
-    rehypePlugins: [
-      rehypeKatex,
-      rehypeCleanup,
-      rehypeImageProcessor,
-    ],
+    rehypePlugins: [rehypeKatex, rehypeCleanup, rehypeImageProcessor],
   },
   integrations: [
     playformInline({

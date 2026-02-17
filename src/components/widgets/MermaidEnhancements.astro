@@ -1,6 +1,13 @@
 <script>
+  /**
+   * Why this wrapper exists:
+   * - Keep layouts/pages clean: they render `<MermaidEnhancements />` instead of pasting a long script.
+   * - Centralize lifecycle wiring: Mermaid needs re-init after Astro navigations and on theme changes.
+   * - Avoid drift: one mount point means fixes apply everywhere Mermaid is used (posts, debug pages, etc.).
+   *
+   * The heavy lifting lives in `src/scripts/mermaid-enhancements.ts`.
+   */
   import { initMermaidEnhancements } from '@/scripts/mermaid-enhancements'
 
   initMermaidEnhancements()
 </script>
-

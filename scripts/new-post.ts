@@ -1,6 +1,18 @@
 /**
- * Create a new post with frontmatter
- * Usage: pnpm new <title>
+ * scripts/new-post.ts
+ *
+ * What:
+ * - Creates a new post file in `src/content/posts/` with basic frontmatter.
+ *
+ * Why:
+ * - Standardizes filenames and frontmatter so content authoring is fast and consistent.
+ *
+ * How:
+ * - `bun run new -- "My Post Title"`
+ *
+ * Notes:
+ * - Prefix the title with `_` to create a draft (it keeps the underscore in the filename,
+ *   but removes it from the visible title).
  */
 
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
@@ -25,6 +37,10 @@ const fileName: string = rawTitle
 const targetFile: string = `${fileName}.md`;
 const fullPath: string = join('src/content/posts', targetFile);
 
+// For i18n: translations across languages share a stable `translationKey`.
+// Default to the slug-like filename, but strip the draft prefix `_` if present.
+const translationKey: string = fileName.replace(/^_+/, '');
+
 // Check if the target file already exists
 if (existsSync(fullPath)) {
   console.error(`😇 File already exists: ${fullPath}`);
@@ -38,6 +54,8 @@ mkdirSync(dirname(fullPath), { recursive: true });
 const content: string = `---
 title: ${displayTitle}
 pubDate: '${new Date().toISOString().split('T')[0]}'
+lang: en
+translationKey: ${translationKey}
 ---
 
 `;

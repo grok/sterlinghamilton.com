@@ -21,7 +21,9 @@ type Props = {
 };
 
 const { lang, title, translations, showTitle = true } = Astro.props as Props;
-const langCandidate = (lang || themeConfig.site.defaultLocale).split('-')[0] || themeConfig.site.defaultLocale;
+const langCandidate =
+  (lang || themeConfig.site.defaultLocale).split('-')[0] ||
+  themeConfig.site.defaultLocale;
 const contactHref = `/${langCandidate}/contact/`;
 const ui = getUiLabels(langCandidate);
 const wordmarkTitle = title || ui.homeTitle;

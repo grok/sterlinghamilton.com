@@ -46,7 +46,7 @@ export function getUiLabels(locale: string): UiLabels {
       homeTitle: '¡Hola, soy Sterling!',
       index: 'índice',
       top: 'Arriba',
-      noPostsYet: 'Todavía no he traducido artículos a este idioma.',
+      noPostsYet: 'Todavía no he publicado contenido en este idioma. ¡Pronto™!',
       backToTop: 'Volver arriba',
 
       contact: 'Contacto',
@@ -70,7 +70,7 @@ export function getUiLabels(locale: string): UiLabels {
     homeTitle: "Hello, I'm Sterling!",
     index: 'index',
     top: 'Top',
-    noPostsYet: "I haven't translated articles to this language yet.",
+    noPostsYet: "I haven't published content in this language yet! Soon™.",
     backToTop: 'Back to top',
 
     contact: 'Contact',
@@ -90,4 +90,3 @@ export function getUiLabels(locale: string): UiLabels {
     close: 'Close',
   };
 }
-

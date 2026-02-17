@@ -1,6 +1,13 @@
 <script>
+  /**
+   * Why this wrapper exists:
+   * - Keep layouts/pages clean: they render `<HeadingAnchorCopy />` instead of pasting a long script.
+   * - Centralize lifecycle wiring: headings need re-binding after Astro navigations.
+   * - Avoid drift: one mount point means fixes apply everywhere headings are rendered.
+   *
+   * The heavy lifting lives in `src/scripts/heading-anchor-copy.ts`.
+   */
   import { initHeadingAnchorCopy } from '@/scripts/heading-anchor-copy'
 
   initHeadingAnchorCopy()
 </script>
-

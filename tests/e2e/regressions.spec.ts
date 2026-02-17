@@ -17,7 +17,8 @@ test('theme toggle persists across navigation', async ({ page }) => {
 
   await page.locator('#theme-toggle').click();
   await page.waitForFunction(
-    (wasDark) => document.documentElement.classList.contains('dark') !== wasDark,
+    (wasDark) =>
+      document.documentElement.classList.contains('dark') !== wasDark,
     initialIsDark,
   );
 
@@ -60,4 +61,3 @@ test('mermaid re-renders on theme toggle', async ({ page }) => {
     })
     .not.toBe(before);
 });
-

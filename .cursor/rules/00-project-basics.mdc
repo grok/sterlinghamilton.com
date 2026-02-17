@@ -18,4 +18,3 @@ Use: `type(scope): message.`
 - end with a period
 
 For detailed commit workflow and examples, see `.cursor/rules/40-git-commits.mdc`.
-

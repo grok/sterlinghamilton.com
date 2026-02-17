@@ -1,8 +1,15 @@
 # sterlinghamilton.com
 
-Sterling’s personal site, built with **Astro** and managed with **Bun**.
+Sterling's personal site, built with **Astro** and managed with **Bun**.
 
-If you’re new here (or you’re an intern who got tossed into the deep end): you’re safe. This README is meant to be a calm map of the repo.
+If you're new here (chances are you are a one-time-visitor): you're safe. This README is meant to be a calm map of the repo.
+
+## Upstream theme reference
+
+This repo started from the Chiri Astro theme, but it has diverged a lot.
+
+- Use the upstream guide for inspiration: `https://astro-chiri.netlify.app/theme-guide/`
+- Do not follow its commands verbatim (it mentions pnpm and an `update-theme` script that we removed here).
 
 ## Table of contents
 
@@ -23,7 +30,7 @@ If you’re new here (or you’re an intern who got tossed into the deep end): y
 ## Quick start
 
 Prereqs:
-- Install **Bun** (and make sure it’s reasonably recent).
+- Install **Bun** (and make sure it's reasonably recent).
 
 Then:
 
@@ -45,8 +52,10 @@ All commands run from the repo root:
 | `bun run build` | Build the production site to `dist/` |
 | `bun run preview` | Preview the production build locally |
 | `bun run check` | Astro checks (typechecking + content validation) |
-| `bun run lint` | Biome checks |
-| `bun run lint:fix` | Biome checks + auto-fix |
+| `bun run lint` | Layered lint (Biome + whitespace + prose punctuation) |
+| `bun run lint:fix` | Auto-fix lint issues (Biome + whitespace + prose punctuation) |
+| `bun run lint:whitespace` | Whitespace lint (trailing spaces, final newline) |
+| `bun run lint:prose` | Prose lint (plain keyboard punctuation only) |
 | `bun run format` | Format with Biome |
 | `bun run test:unit` | Run Vitest unit tests |
 | `bun run test:e2e` | Run Playwright E2E (also used for visual diffs) |
@@ -54,7 +63,7 @@ All commands run from the repo root:
 
 ## Project layout
 
-High-level structure (the 80/20 you’ll actually touch):
+High-level structure (the 80/20 you'll actually touch):
 
 ```text
 public/                   Static assets (favicon, logo, etc.)
@@ -71,9 +80,9 @@ src/
 tests/
   unit/                   Vitest unit tests
   e2e/                    Playwright E2E + visual regression
-prompts/                  “Runbooks” for common tasks
+prompts/                  "Runbooks" for common tasks
 .cursor/rules/            Cursor agent rules (always-on guidance)
-AGENTS.md                 Agent guide + “shared reality” notes
+AGENTS.md                 Agent guide + "shared reality" notes
 ```
 
 ## How the site works
@@ -93,7 +102,7 @@ The layouts stack like this:
   - `IndexLayout.astro` (site pages)
   - `PostLayout.astro` (blog posts: TOC, headings, code, mermaid, etc.)
 
-Here’s the mental model:
+Here's the mental model:
 
 ```mermaid
 flowchart TD
@@ -134,7 +143,7 @@ Rules we follow:
 - Translations are linked with `translationKey`.
 - The language toggle:
   - **stays on the same page** for normal routes (`/en/contact/` → `/es/contact/`)
-  - is **disabled on posts** when a translation doesn’t exist (so we don’t lie)
+  - is **disabled on posts** when a translation doesn't exist (so we don't lie)
 - UI chrome is translated too (wordmark title, tooltips, toasts, etc.)
 
 UI strings live in one place:
@@ -167,7 +176,20 @@ flowchart LR
 
 ## Testing
 
-We try to keep “shared reality”: if we fixed it, we test it.
+We try to keep "shared reality": if we fixed it, we test it.
+
+## Linting (layered)
+
+Linting is intentionally layered so we catch both code issues and "repo hygiene" issues:
+
+- Layer 1 (code): `biome check .`
+  - Basic formatting and code linting
+- Layer 2 (repo hygiene): `bun run lint:whitespace`
+  - Trailing whitespace and final newline issues across tracked files
+- Layer 3 (prose constraints): `bun run lint:prose`
+  - Enforces plain keyboard punctuation only (see `.cursor/rules/35-plain-punctuation.mdc`)
+
+The default `bun run lint` runs all layers.
 
 ### Unit tests (Vitest)
 
@@ -179,6 +201,15 @@ We try to keep “shared reality”: if we fixed it, we test it.
 
 - **Run**: `bun run test:e2e`
 - Playwright starts its own dev server on `http://localhost:4400` (see `playwright.config.ts`)
+
+Design choice (important):
+- Our E2E + visual tests prefer **dev-only fixture routes** under `/debug/*` (for example `/debug/post/`, `/debug/mermaid/`).
+- That means tests validate **behavior contracts** (TOC scroll, copy-to-clipboard + toast, Mermaid fullscreen, etc.) without depending on "whatever production post exists today".
+- These fixtures are **404 in production** (guarded by `import.meta.env.PROD`), so they're safe to keep in the repo.
+
+If you add a new UX feature and want it covered:
+- Add a minimal fixture under `src/pages/debug/...` that exercises the DOM/behavior you care about
+- Add a Playwright assertion that would have failed before the change
 
 Visual regression:
 - **Run (diff)**: `bunx playwright test tests/e2e/visual.spec.ts`
@@ -199,7 +230,7 @@ This repo is set up so an AI assistant can be helpful *without* making a mess.
 
 - `prompts/` contains task runbooks (start dev, upgrade deps, content authoring, writing voice).
   - Start with `prompts/README.md`.
-- `AGENTS.md` describes the agent mission (“shared reality”) and testing notes.
+- `AGENTS.md` describes the agent mission ("shared reality") and testing notes.
 - `.cursor/rules/` contains always-on rules for Cursor (Bun usage, commit style, testing discipline, UI/i18n conventions).
 
 ```mermaid

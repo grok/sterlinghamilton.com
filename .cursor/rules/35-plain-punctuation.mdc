@@ -1,0 +1,27 @@
+---
+description: Writing rule - plain keyboard punctuation only
+alwaysApply: true
+---
+
+# Plain punctuation only
+
+When writing copy (README, docs, UI strings, content, comments, etc.), use **plain keyboard punctuation only**.
+
+## Do not use typographic / "smart" punctuation
+
+Avoid:
+- Em dash / en dash (Unicode punctuation - avoid U+2014 / U+2013). Use `-` instead.
+- Curly quotes / apostrophes (Unicode punctuation - avoid U+201C/U+201D and U+2018/U+2019). Use `"` and `'` instead.
+- Ellipsis (Unicode punctuation - avoid U+2026). Use `...` instead.
+- Middle dot (Unicode punctuation - avoid U+00B7). Use `.` or `-` instead.
+- Any other decorative Unicode punctuation
+
+## Do not use encoded punctuation
+
+Avoid HTML entities for punctuation like:
+- `&mdash;`, `&ndash;`, `&hellip;`, `&ldquo;`, `&rdquo;`, `&lsquo;`, `&rsquo;`
+
+## Notes
+
+- Non-English **letters** are fine (e.g. `á`, `ñ`) - this rule is about punctuation, not language.
+- If you need a dash, always use the normal hyphen-minus `-`.

@@ -1,11 +1,11 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
-	"vcs": {
-		"enabled": true,
-		"clientKind": "git",
-		"useIgnoreFile": true
-	},
-	"files": {
+  "$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
     "ignoreUnknown": false,
     "includes": [
       "**",
@@ -17,15 +17,15 @@
       "!**/.vscode",
       "!**/public"
     ]
-	},
-	"formatter": {
-		"enabled": true,
+  },
+  "formatter": {
+    "enabled": true,
     "indentStyle": "space",
     "indentWidth": 2
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
       "recommended": true,
       "complexity": {
         "noImportantStyles": "off"
@@ -37,8 +37,8 @@
       "suspicious": {
         "noShadowRestrictedNames": "off"
       }
-		}
-	},
+    }
+  },
   "overrides": [
     {
       "includes": ["**/*.astro"],
@@ -47,10 +47,10 @@
       }
     }
   ],
-	"javascript": {
-		"formatter": {
+  "javascript": {
+    "formatter": {
       "quoteStyle": "single"
-		}
-	},
+    }
+  },
   "assist": { "enabled": false }
 }

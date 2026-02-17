@@ -15,7 +15,7 @@ Rules:
 - **`type`** and **`scope`** are lowercase
 - **always include a scope**
 - **end with a period**
-- keep it short and specific (optimize for “why”)
+- keep it short and specific (optimize for "why")
 
 Common `type` values:
 - `feat`: user-visible feature
@@ -41,11 +41,10 @@ Examples:
 
 ## Commit methodology (lightweight)
 
-- **One commit per logical change**. If it’s two independent changes, split it.
+- **One commit per logical change**. If it's two independent changes, split it.
 - **Run the right checks** before committing:
   - UI/content: `bun run test:e2e` (or at least the relevant spec)
   - Utilities: `bun run test:unit`
   - When in doubt: `bun run check`
 - **If you fix a regression**, add/tighten a test in the same PR/series.
 - Avoid committing secrets (`.env`, credentials).
-

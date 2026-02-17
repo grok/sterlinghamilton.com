@@ -15,14 +15,17 @@ declare global {
   }
 }
 
-const MERMAID_CDN = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const MERMAID_CDN =
+  'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 
 function themeForMermaid() {
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 }
 
 function cssVar(name: string) {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
 }
 
 function catppuccinMermaidTheme() {
@@ -84,7 +87,9 @@ async function getMermaid() {
 function hasMermaidContent() {
   // After first render, Mermaid blocks replace the original <pre>.
   // We still want to re-render on theme toggles / navigations.
-  return Boolean(document.querySelector('pre[data-language="mermaid"], .mermaid'));
+  return Boolean(
+    document.querySelector('pre[data-language="mermaid"], .mermaid'),
+  );
 }
 
 function getOrCreateMermaidDialog() {
@@ -107,7 +112,9 @@ function getOrCreateMermaidDialog() {
   document.body.appendChild(dialog);
 
   const closeBtn = dialog.querySelector('.mermaid-dialog__close');
-  closeBtn?.addEventListener('click', () => (dialog as HTMLDialogElement).close());
+  closeBtn?.addEventListener('click', () =>
+    (dialog as HTMLDialogElement).close(),
+  );
 
   // Click outside content closes
   dialog.addEventListener('click', (e) => {
@@ -117,7 +124,11 @@ function getOrCreateMermaidDialog() {
   return dialog as HTMLDialogElement;
 }
 
-async function renderMermaidInto(mermaid: Awaited<ReturnType<typeof getMermaid>>, container: HTMLElement, source: string) {
+async function renderMermaidInto(
+  mermaid: Awaited<ReturnType<typeof getMermaid>>,
+  container: HTMLElement,
+  source: string,
+) {
   if (!source) return;
 
   // Mermaid likes stable ids per render.
@@ -145,7 +156,12 @@ async function renderMermaidInto(mermaid: Awaited<ReturnType<typeof getMermaid>>
 
 let mermaidFullscreenOpener: HTMLElement | null = null;
 
-async function openMermaidFullscreen(mermaid: Awaited<ReturnType<typeof getMermaid>>, source: string, title = 'Diagram', openerEl?: HTMLElement) {
+async function openMermaidFullscreen(
+  mermaid: Awaited<ReturnType<typeof getMermaid>>,
+  source: string,
+  title = 'Diagram',
+  openerEl?: HTMLElement,
+) {
   const dialog = getOrCreateMermaidDialog();
   const container = dialog.querySelector('[data-mermaid-dialog-content]');
   if (!(container instanceof HTMLElement)) return;
@@ -167,7 +183,9 @@ async function openMermaidFullscreen(mermaid: Awaited<ReturnType<typeof getMerma
     const ro = new ResizeObserver(() => {
       if (raf) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        const openContainer = dialog.querySelector('[data-mermaid-dialog-content]');
+        const openContainer = dialog.querySelector(
+          '[data-mermaid-dialog-content]',
+        );
         if (!(openContainer instanceof HTMLElement)) return;
         const s = dialog.dataset.mermaidSource || '';
         renderMermaidInto(mermaid, openContainer, s);
@@ -177,7 +195,9 @@ async function openMermaidFullscreen(mermaid: Awaited<ReturnType<typeof getMerma
 
     dialog.addEventListener('close', () => {
       delete dialog.dataset.mermaidSource;
-      const openContainer = dialog.querySelector('[data-mermaid-dialog-content]');
+      const openContainer = dialog.querySelector(
+        '[data-mermaid-dialog-content]',
+      );
       if (openContainer instanceof HTMLElement) openContainer.innerHTML = '';
       ro.disconnect();
 
@@ -203,7 +223,9 @@ async function openMermaidFullscreen(mermaid: Awaited<ReturnType<typeof getMerma
 
 function ensureMermaidContainers() {
   // Find candidate <pre> blocks first (both legacy and Expressive Code output).
-  const pres = Array.from(document.querySelectorAll('pre[data-language="mermaid"]'));
+  const pres = Array.from(
+    document.querySelectorAll('pre[data-language="mermaid"]'),
+  );
 
   for (const pre of pres) {
     if (!(pre instanceof HTMLElement)) continue;
@@ -223,7 +245,8 @@ function ensureMermaidContainers() {
     if (!source) continue;
 
     const expressiveWrapper = pre.closest('.expressive-code');
-    const replaceNode = expressiveWrapper instanceof HTMLElement ? expressiveWrapper : pre;
+    const replaceNode =
+      expressiveWrapper instanceof HTMLElement ? expressiveWrapper : pre;
 
     const wrapper = document.createElement('div');
     wrapper.className = 'mermaid-block';
@@ -298,7 +321,10 @@ async function renderMermaid() {
       const btn = block.querySelector('.mermaid-fullscreen');
       const svg = block.querySelector('.mermaid svg');
       if (btn instanceof HTMLButtonElement) {
-        btn.setAttribute('aria-disabled', svg instanceof SVGElement ? 'false' : 'true');
+        btn.setAttribute(
+          'aria-disabled',
+          svg instanceof SVGElement ? 'false' : 'true',
+        );
       }
     });
   } catch (e) {
@@ -307,6 +333,8 @@ async function renderMermaid() {
 }
 
 export function initMermaidEnhancements() {
+  // This is called from the small Astro wrapper `src/components/widgets/MermaidEnhancements.astro`.
+  // Rationale: keep templates clean, and ensure our navigation and theme-change wiring stays consistent.
   if (window.__sterlingMermaidBound) return;
   window.__sterlingMermaidBound = true;
 
@@ -319,6 +347,3 @@ export function initMermaidEnhancements() {
     requestAnimationFrame(() => renderMermaid());
   });
 }
-
-export {};
-

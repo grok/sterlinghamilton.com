@@ -5,18 +5,18 @@ This folder contains reusable AI prompts that help maintain and develop this Ast
 ## Available Prompts
 
 ### 🚀 [start-development.md](./start-development.md)
-**Purpose**: Start the development environment and verify everything is working  
-**Use when**: Beginning a development session or troubleshooting startup issues  
-**Key actions**: 
+**Purpose**: Start the development environment and verify everything is working
+**Use when**: Beginning a development session or troubleshooting startup issues
+**Key actions**:
 - Verify project setup
 - Install dependencies if needed
 - Start dev server
 - Confirm everything is running correctly
 
 ### ⬆️ [upgrade-dependencies.md](./upgrade-dependencies.md)
-**Purpose**: Comprehensively upgrade all project dependencies and tools  
-**Use when**: Regular maintenance, security updates, or getting latest features  
-**Key actions**: 
+**Purpose**: Comprehensively upgrade all project dependencies and tools
+**Use when**: Regular maintenance, security updates, or getting latest features
+**Key actions**:
 - Check current versions
 - Upgrade Astro using official upgrade tool
 - Upgrade Bun runtime
@@ -24,19 +24,19 @@ This folder contains reusable AI prompts that help maintain and develop this Ast
 - Verify everything still works
 
 ### ✍️ [content-authoring.md](./content-authoring.md)
-**Purpose**: Create posts correctly (including drafts + translations)  
-**Use when**: Writing new content or setting up translated versions of the same post  
+**Purpose**: Create posts correctly (including drafts + translations)
+**Use when**: Writing new content or setting up translated versions of the same post
 **Key actions**:
 - New post frontmatter template
 - Draft workflow (underscore filenames + `bun run new`)
 - Translation pairing via `translationKey`
 
 ### 🗣️ [writing-style.md](./writing-style.md)
-**Purpose**: Keep Sterling’s writing voice consistent across posts and site copy  
-**Use when**: Drafting/editing anything public-facing  
+**Purpose**: Keep Sterling's writing voice consistent across posts and site copy
+**Use when**: Drafting/editing anything public-facing
 **Key actions**:
 - Tone + cadence guidelines
-- Do/don’t list
+- Do/don't list
 - Examples and default post structure
 
 ## How to Use These Prompts
@@ -74,7 +74,7 @@ This project uses: `type(scope): message.`
 - Use lowercase `type` and `scope`
 - Keep the message short and specific
 - End with a period
-- For upgrades: include version numbers (e.g. “from X to Y”)
+- For upgrades: include version numbers (e.g. "from X to Y")
 
 ### Package Manager
 This project uses **Bun** exclusively:

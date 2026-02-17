@@ -41,7 +41,6 @@
   /* Hover: ~20% stronger (darker) in light mode */
   --link-hover: color-mix(in srgb, var(--link), #000 20%);
 
-
   /* Syntax Theme (Catppuccin Latte-ish) */
   --astro-code-foreground: #4c4f69; /* text */
   --astro-code-background: #e6e9ef; /* mantle */
@@ -75,7 +74,6 @@ html.light {
   /* Hover: ~20% stronger (darker) in light mode */
   --link-hover: color-mix(in srgb, var(--link), #000 20%);
 
-
   /* Syntax Theme (Catppuccin Latte-ish) */
   --astro-code-foreground: #4c4f69; /* text */
   --astro-code-background: #e6e9ef; /* mantle */
@@ -108,7 +106,6 @@ html.dark {
   --link: #fab387; /* mocha peach (orange) */
   /* Hover: ~20% stronger (lighter) in dark mode */
   --link-hover: color-mix(in srgb, var(--link), #fff 20%);
-
 
   /* Syntax Theme (Catppuccin-ish) */
   --astro-code-foreground: #cdd6f4; /* text */
@@ -267,7 +264,7 @@ html.dark .empty-locale {
 
 .date {
   margin: 0;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   font-weight: var(--font-weight-light);
   color: var(--text-secondary);
   opacity: 0.75;

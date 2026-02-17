@@ -8,7 +8,9 @@ export async function getStaticPaths() {
   const allowed = new Set(themeConfig.site.locales.map((l) => l.code));
   return posts
     .filter((post) => !post.id.startsWith('_'))
-    .filter((post) => allowed.has(post.data.lang || themeConfig.site.defaultLocale))
+    .filter((post) =>
+      allowed.has(post.data.lang || themeConfig.site.defaultLocale),
+    )
     .map((post) => ({
       params: { lang: post.data.lang || 'en', slug: post.id },
       props: post,
@@ -55,4 +57,3 @@ const translations = themeConfig.site.locales.map((l) => {
 >
   <Content />
 </PostLayout>
-

@@ -11,7 +11,7 @@ export interface SiteInfo {
   website: string;
   /** Stable site name used for <title>, RSS, etc. */
   name: string;
-  /** Header wordmark text (can be more “content-y” like a greeting). */
+  /** Header wordmark text (can be more "content-y" like a greeting). */
   headerTitle: string;
   author: string;
   description: string;

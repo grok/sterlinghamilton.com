@@ -1,5 +1,6 @@
 <script>
   import type { LinkCardMetadata } from '@/types'
+  import { onAstroPageLoad } from '@/utils/client-events'
 
   let linkCardsObserver: IntersectionObserver | null = null
   const metadataCache = new Map<string, LinkCardMetadata>()
@@ -193,8 +194,7 @@
     Array.from(linkCards).forEach((card) => linkCardsObserver?.observe(card))
   }
 
-  setupLinkCards()
-  document.addEventListener('astro:page-load', setupLinkCards)
+  onAstroPageLoad(setupLinkCards)
 </script>
 
 <style is:inline>
@@ -206,14 +206,10 @@
     overflow: hidden;
     text-decoration: none;
     color: inherit;
-    background: var(--astro-code-background);
     min-height: 22.75px;
-    margin: 1.25rem 0 1.75rem 0;
-    transition: background 0.2s ease-out;
   }
 
   .prose .link-card:hover {
-    background: color-mix(in srgb, var(--selection) 75%, transparent);
     text-decoration: none;
   }
 

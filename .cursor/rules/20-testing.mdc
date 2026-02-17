@@ -23,4 +23,3 @@ Canonical notes live in `AGENTS.md` (Testing notes section). Keep this rule shor
 - Visual snapshots:
   - Update baselines: `bunx playwright test tests/e2e/visual.spec.ts --update-snapshots`
 - Note: test scripts unset `NO_COLOR` and set `PLAYWRIGHT_BROWSERS_PATH=0` for stability.
-

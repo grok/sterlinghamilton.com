@@ -94,7 +94,7 @@ translationKey: hello-world
 
 Notes:
 - The language switcher on post pages uses `translationKey` to jump to the matching translation **even if slugs differ**.
-- If a translation doesn’t exist for a locale, that locale will be hidden/disabled (depending on where the toggle is rendered).
+- If a translation doesn't exist for a locale, that locale will be hidden/disabled (depending on where the toggle is rendered).
 
 ## Quick checks
 
@@ -102,4 +102,3 @@ Notes:
 bun run check
 bun dev
 ```
-

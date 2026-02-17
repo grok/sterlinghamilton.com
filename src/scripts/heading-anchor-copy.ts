@@ -19,7 +19,7 @@ async function copyHeadingLink(heading: HTMLElement) {
   const url = new URL(window.location.href);
   url.hash = id;
 
-  // Update the URL for shareability, but don’t jump.
+  // Update the URL for shareability, but don't jump.
   history.replaceState(null, '', url);
 
   const text = url.toString();
@@ -58,7 +58,7 @@ function bindHeadingAnchorCopy(selector = DEFAULT_SELECTOR) {
     heading.title = heading.title || ui().copyLink;
 
     heading.addEventListener('click', (e) => {
-      // If the user is selecting text, don’t hijack the click.
+      // If the user is selecting text, don't hijack the click.
       const selection = window.getSelection?.()?.toString?.() ?? '';
       if (selection.trim().length > 0) return;
 
@@ -72,6 +72,8 @@ function bindHeadingAnchorCopy(selector = DEFAULT_SELECTOR) {
 }
 
 export function initHeadingAnchorCopy() {
+  // This is called from the small Astro wrapper `src/components/widgets/HeadingAnchorCopy.astro`.
+  // Rationale: keep templates clean, and ensure our navigation wiring stays consistent.
   if (window.__sterlingHeadingAnchorCopyBound) return;
   window.__sterlingHeadingAnchorCopyBound = true;
 
@@ -79,4 +81,3 @@ export function initHeadingAnchorCopy() {
   document.addEventListener('astro:after-swap', () => bindHeadingAnchorCopy());
   document.addEventListener('DOMContentLoaded', () => bindHeadingAnchorCopy());
 }
-
