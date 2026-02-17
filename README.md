@@ -191,6 +191,10 @@ Linting is intentionally layered so we catch both code issues and "repo hygiene"
 
 The default `bun run lint` runs all layers.
 
+Why we still run `bun run lint` even if the editor fixes things on save:
+- Editor-on-save only affects files you touch. It can not tell you if some other tracked file already has trailing whitespace or weird punctuation.
+- Our repo scripts scan git tracked files on purpose, so they catch issues anywhere in the tree, not just the file you just saved.
+
 ### Unit tests (Vitest)
 
 - **Run**: `bun run test:unit`
