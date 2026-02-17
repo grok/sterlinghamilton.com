@@ -19,7 +19,7 @@ Avoid:
 ## Do not use encoded punctuation
 
 Avoid HTML entities for punctuation like:
-- `&mdash;`, `&ndash;`, `&hellip;`, `&ldquo;`, `&rdquo;`, `&lsquo;`, `&rsquo;`
+- "mdash/ndash" entities, "hellip", and quote entities
 
 ## Notes
 

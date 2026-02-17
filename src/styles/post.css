@@ -130,12 +130,12 @@
     background-color 0.12s ease-out;
 
   /* Use mask so the icon inherits our chosen background-color */
-  mask-image: url("/icons/url.svg");
+  mask-image: url("/assets/url.svg");
   mask-repeat: no-repeat;
   mask-position: center;
   mask-size: contain;
 
-  -webkit-mask-image: url("/icons/url.svg");
+  -webkit-mask-image: url("/assets/url.svg");
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
   -webkit-mask-size: contain;
@@ -171,10 +171,12 @@
 /* Links
    - Article body: `.prose .content`
    - About blurb (home): `.about.prose` (intentionally *not* `.content` so spacing stays "site copy")
-   - Contact page copy: `.contact` */
+   - Contact page copy: `.contact`
+   - Callouts (home empty state, 404): `.empty-locale` */
 .prose .content a,
 .about.prose a,
-.contact a {
+.contact a,
+.empty-locale a {
   color: var(--link);
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, var(--link), transparent 55%);
@@ -187,7 +189,8 @@
 
 .prose .content a:hover,
 .about.prose a:hover,
-.contact a:hover {
+.contact a:hover,
+.empty-locale a:hover {
   color: var(--link-hover);
   text-decoration-color: transparent;
 }

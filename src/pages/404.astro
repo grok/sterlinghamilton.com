@@ -1,13 +1,32 @@
 ---
+import BackButton from '@/components/ui/BackButton.astro';
 import { themeConfig } from '@/config';
 import IndexLayout from '@/layouts/IndexLayout.astro';
+import { getUiLabels, localeFromPathname } from '@/utils/i18n';
+
+const locale = localeFromPathname(Astro.url.pathname);
+const ui = getUiLabels(locale);
+const htmlLang =
+  themeConfig.site.locales.find((l) => l.code === locale)?.langTag ||
+  themeConfig.site.language;
+const homeHref = `/${locale}/`;
 ---
 
-<IndexLayout title={`404 - ${themeConfig.site.name}`} description="Not Found">
-  <style>
-    .error-container {
-      color: var(--text-secondary);
-    }
-  </style>
-  <p class="error-container">Page Not Found...</p>
+<IndexLayout
+  title={`${ui.notFoundTitle} - ${themeConfig.site.name}`}
+  description="Not Found"
+  lang={htmlLang}
+  headerTitle={ui.notFoundTitle}
+>
+  <section class="empty-locale" data-404 aria-live="polite">
+    <div>
+      <p class="empty-locale__text">{ui.notFoundMessage}</p>
+      <p class="empty-locale__text" style="margin-top: 0.5rem">
+        <a href={homeHref} data-home-link>{ui.backToHome}</a>
+      </p>
+      <div style="margin-top: 0.75rem">
+        <BackButton />
+      </div>
+    </div>
+  </section>
 </IndexLayout>

@@ -53,6 +53,8 @@ const shouldCheck = makeFileMatcher({
   allowedBasenames,
 });
 
+const SELF_PATH = path.normalize('scripts/lint-prose.ts');
+
 function canAutoFix(filePath: string): boolean {
   // Auto-fixing punctuation in code can break string literals (for example: `don't` inside single quotes).
   // We keep `--fix` conservative and only auto-fix "prose-first" files.
@@ -80,12 +82,16 @@ const REPLACEMENTS: Replacement[] = [
 
   // Encoded punctuation -> ASCII
   {
-    label: 'encoded mdash/ndash',
+    label: 'encoded mdash and ndash',
     re: /&(m|n)d?ash;|&ndash;|&mdash;/gi,
     replace: '-',
   },
   { label: 'encoded ellipsis', re: /&hellip;/gi, replace: '...' },
-  { label: 'encoded quotes', re: /&(l|r)dquo;|&(l|r)squo;/gi, replace: '"' },
+  {
+    label: 'encoded quotes',
+    re: /&(l|r)dquo;|&(l|r)squo;/gi,
+    replace: '"',
+  },
   { label: 'encoded apostrophe', re: /&rsquo;|&lsquo;/gi, replace: "'" },
 ];
 
@@ -100,7 +106,10 @@ function applyFixes(input: string): string {
 }
 
 function main() {
-  const files = gitTrackedFiles().filter(shouldCheck);
+  const files = gitTrackedFiles()
+    .filter(shouldCheck)
+    // This script contains patterns like "&ndash;" in regex source. Do not lint itself.
+    .filter((p) => path.normalize(p) !== SELF_PATH);
 
   const offenders: string[] = [];
   let fixedCount = 0;

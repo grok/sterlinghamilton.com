@@ -8,6 +8,11 @@ export type UiLabels = {
   noPostsYet: string;
   backToTop: string;
 
+  // 404
+  notFoundTitle: string;
+  notFoundMessage: string;
+  backToHome: string;
+
   // Header / controls
   contact: string;
   alreadyOnContactPage: string;
@@ -49,6 +54,10 @@ export function getUiLabels(locale: string): UiLabels {
       noPostsYet: 'Todavía no he publicado contenido en este idioma. ¡Pronto™!',
       backToTop: 'Volver arriba',
 
+      notFoundTitle: '404: que sorpresa.',
+      notFoundMessage: 'Oye. Buscas algo que no existe aqui.',
+      backToHome: 'Volver al inicio',
+
       contact: 'Contacto',
       alreadyOnContactPage: 'Ya estás en la página de contacto',
       chooseLanguage: 'Elegir idioma',
@@ -72,6 +81,10 @@ export function getUiLabels(locale: string): UiLabels {
     top: 'Top',
     noPostsYet: "I haven't published content in this language yet! Soon™.",
     backToTop: 'Back to top',
+
+    notFoundTitle: '404: well, this is awkward.',
+    notFoundMessage: "Yo. You're looking for something that ain't here.",
+    backToHome: 'Back to home',
 
     contact: 'Contact',
     alreadyOnContactPage: "You're already on the contact page",

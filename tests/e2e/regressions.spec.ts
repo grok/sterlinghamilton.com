@@ -61,3 +61,16 @@ test('mermaid re-renders on theme toggle', async ({ page }) => {
     })
     .not.toBe(before);
 });
+
+test('404: shows message and link back home', async ({ page }) => {
+  await page.goto('/en/definitely-not-a-page/');
+
+  await expect(page.locator('.wordmark-title')).toContainText('404');
+  await expect(page.locator('[data-404]')).toContainText("ain't here");
+
+  const back = page.locator('a.back-button[href="/en/"]');
+  await expect(back).toBeVisible();
+
+  const back2 = page.locator('[data-home-link][href="/en/"]');
+  await expect(back2).toBeVisible();
+});
