@@ -10,8 +10,8 @@ It's a failure of being on the same planet, at the same time, in the same space.
 
 The model did exactly what you said. The problem is that what you said wasn't what you meant.
 
-That gap has a name: **shared reality**.<br />
-Close it, and AI starts to feel like a real collaborator. Leave it open, and you'll spend most of your time cleaning up after output that technically did what you asked.
+You knew what you wanted. You said something close to it. The model had no way to tell the difference. That has a name: **shared reality**.<br />
+Get it right and AI starts to feel like a real collaborator. Get it wrong and you spend your time correcting output that executed flawlessly on the wrong brief.
 
 ## TL;DR
 
