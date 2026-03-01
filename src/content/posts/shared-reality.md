@@ -5,217 +5,213 @@ lang: en
 translationKey: shared-reality-with-ai
 ---
 
-## TL;DR
+Most AI failures aren't model failures. They're definition failures.
 
-This article is about saying what you mean - to other people, and especially to AI. Humans can waffle about with ambiguity via context and social glue.<br /> AI cannot.
+The model did exactly what you said. The problem is that what you said wasn't what you meant.
 
-If you want it to be a good partner, you have to build shared reality on purpose: define the words, define "done", and put guardrails in place so you can actually verify what you got back.
+That gap has a name: **shared reality**. Closing it is the most leveraged thing you can do when working with AI.
 
-## On Reality
+## A Concrete Example First
+
+You can't run "a play." You run _the_ play.
+
+Every player on the field knows the same terminology, the same routes, the same signals.
+If the coach says "run 42" and you run the version of 42 you invented in your head, that's not creativity.
+That's a polite way to lose.
+
+Working with AI is exactly this. Except when AI runs the wrong play, it doesn't hesitate or look confused.
+It runs the wrong play at full speed, with confidence, and hands you the result like it just won the game.
+
+## What Is Shared Reality?
 
 > **Reality** is the state of everything that exists, not how they might be imagined. <br />
 > - <cite>Wikipedia[^1]</cite>
 
-[^1]: [Reality](https://en.wikipedia.org/wiki/Reality) article on Wikipedia.
+[^1]: [Reality](https://en.wikipedia.org/wiki/Reality) on Wikipedia. The article defines reality as the state of everything that actually exists, as distinct from how things might be imagined or perceived. Useful grounding for a concept most people never bother to define.
 
-Humans, take reality for granted.<br />
-Shared reality is just an abstract way to talk about how we all operate in the same world.
+Humans share reality without thinking about it. Same year. Same gravity. Same vague understanding of what "ship it" means. We fill gaps with context, tone, and history.
 
-It's an assumption. Of course that person sitting over there sees the same Purple.<br />
-Obviously we are in the same year. Gravity still works the same for everyone.
+AI doesn't have that. It has the context you gave it. That's it.
 
-What happens when reality _isn't_ the same?
+There's a useful distinction here, between *consensus* reality and *consensual* reality.[^2]
 
-Everyday, we both point at the same thing and say, "yes, _that_". We agree on the details. We might waffle about philisophical ideas or moralities, but at the end of the day, everyone is on the same page about what a coconut is.
+[^2]: [Consensus Reality](https://en.wikipedia.org/wiki/Consensus_reality) on Wikipedia. Covers the difference between consensus (the outcome a group lands on) and consensual (the process of actually opting in and agreeing). That distinction is the whole point of this article.
 
-The shared set of assumptions underneath the conversation.<br />
-The invisible rules, definitions, and expectations that make words mean the same thing to both beings.
+- **Consensus reality** is the outcome: what a group ends up treating as true. It could come from careful alignment, or it could come from one loud person winning the meeting.
+- **Consensual reality** is the process: people actually opted in, defined the terms, and agreed on the rules.
 
-If we do not agree on what is real, then we are just taking turns making noises. 😵‍💫
+What we want with AI is the second one.
+Not "I guess we both ended up here." But "we agreed on this, explicitly, on purpose."
 
-### Consensual vs. Consensus
+Shared reality is the agreement underneath the agreement:
 
-These two words look like twins. They are not.
+- What do the words mean?
+- What does "done" look like?
+- What counts as good?
 
-> **Consensus reality** is related to, but distinct from, **consensual reality**. The difference between these terms is that whereas consensus reality describes a state of mutual agreement about what is true (consensus is a noun), consensual reality describes a type of agreement about what is true (consensual is an adjective). In other words, reality may also be non-consensual, as when one person's preferred version of reality conflicts with another person's preferred version of reality. <br />
-> - <cite>Wikipedia[^2]</cite>
+Without it, you're not collaborating. You're just taking turns making noise at each other. 😵
 
-[^2]: [Consensus Reality](https://en.wikipedia.org/wiki/Consensus_reality) article on Wikipedia.
+## What Failure Actually Looks Like
 
-Consensus vs. consensual is basically **outcome** vs. **process**.
+Here's a failure mode you probably have a version of already.
 
-Consensus reality is what a group ends up treating as true. The shared "we all agree this is the deal" layer. It might come from careful alignment, or it might come from inertia and one loud person winning the meeting. Either way, it's the end state.
+You write a prompt. AI returns code. It looks right. Your tests pass. You ship it.
+Six weeks later, a user hits an edge case. You dig in and realize the AI solved a slightly different problem than the one you actually had.
+It threaded the needle perfectly, on the wrong problem.
 
-Consensual reality is how you got there: people actually opted in. You named the rules, defined the words, and everyone agreed to play the same game.
+You can't even trace where it broke, because there were no checkpoints. No explicit definition of "done." No verification that the output matched the intent.
+Just "this looks right" and a commit.
 
-The "shared reality" we're talking about is closest to consensual reality - because we want the agreement to be intentional, not accidental. But the practical goal is still consensus: a shared map you can rely on when it matters.
+The worst version of this isn't a bug. It's an entire architecture built around a misunderstanding.
 
-- What the words mean.
-- What we are trying to do.
-- What "good" and "bad" appear to be.
-- What the rules are.
+Here are a few smaller versions that happen every day:
 
-Here are a few small examples:
+- You can have agent code that passes tests but isn't working as intended.
+- The AI says "mission complete" and it is very much not.
+- Commands run with the wrong environment, or inside the wrong sandbox.
+- Artifacts pile up in your workspace and never get used.
+- You think you're building layered prompt instructions, but every conversation is actually a blank slate.
 
-- If I say "meet me at 5", do I mean 5:00 on the dot, or "sometime around 5-ish"?
-- If I say "let's ship it", do I mean "merge it", "deploy it", or "tell the customer it's done"?
-- If I say "this is urgent", do I mean "drop everything", or "do it today after lunch"?
+If you don't have shared reality, you won't know what a good solution looks like until you've already built the bad one.
 
-If that sounds obvious... yeah. It CAN be. <br />
-Or depending on where you live, your culture, your background... "around 5-ish" will mean something VERY different to you.
+## Why AI Makes This More Urgent
 
-It is still the #1 thing we skip when we are tired, rushing, or feeling clever/lazy. <br />
-It's also the thing that commonly creates us the most work and wasted time.
+Humans fail at shared reality too.
 
-## Analogy Time
+We say "done by Friday" and mean "I'll start Thursday night." We hand-wave. We change our minds. We fill gaps with assumptions.
 
-If you are on a sports team, you can not run "a play".
+AI doesn't fill gaps with assumptions. It fills gaps with whatever the training data suggests is most likely. Those are not the same thing.
 
-You run _the_ play.
+Worse: AI doesn't slow down when confused. It just produces wrong output faster.
 
-Same rules. Same terms. Same expectations. <br />
-If the coach says "run 42", and you run "the version of 42 you invented in your head", that's not creativity.
+Imagine hiring 500 smart interns who can move at machine speed.
+Not senior engineers. Not people who already know how you do things.
+Smart interns who will confidently do the wrong thing if you're vague.
 
-That is just a polite way to lose.
+You'd never rely on vibes with an onboarding wave that big. You'd lay groundwork:
 
-Relationships are the same. Work is the same. Even friendships have a playbook. <br />
-We just pretend they don't because writing it down feels cringe.
+- **Definitions:** What does "ship" mean here, exactly?
+- **Standards:** What are the naming conventions, commit formats, and definition of done?
+- **Guardrails:** What linting, tests, and CI checks are non-negotiable?
+- **Verification:** How do you prove the work is good, and not just that it looks good?
 
-## Cool story B2B bro, where's the AI?
+That's not bureaucracy. That's compassion for Future You.
 
-It's all around you my dude.
+With AI, you can onboard 500 of those interns in an afternoon.
+So the cost of skipping that groundwork shows up much, much faster.
 
-I thought about linking to a ton of articles. Some supporting my thoughts here, some going in a completely different direction. But I've decided that I'm just some guy who has found success in a set of methodologies and there are other peeps who have also found success.
+## What Good Looks Like
 
-In general, a lot of the themes of discussion look like...
+Here's the part people skip: good isn't a vibe. Good is a definition.
 
-- Completely change the way you are thinking and if you are opening up a terminal or an editor you've already failed.
-- AI is a partner. Treat it as an engineer.
-- AI is an existential crisis. The end is nigh, rejoice.
-- Always trust AI. It knows more than you do. If the AI wrote it, it must be correct. The machine has spoken.
-- Never trust AI. It's constantly on drugs and is going to cause you endless problems. Any AI code is a time bomb with a cute autocomplete UI.
+If you can't describe what "done" looks like without using the word "looks," you don't have a definition yet.
 
-... and so on.
+Here's a model that works, in layers:
 
-Some are publishing nuanced articles about how documentation no longer matters.<br />
-Some are saying that requirements are all that matters.
+```mermaid
+flowchart TD
+  A["Layer 1: Define done"] --> B["Layer 2: Make it executable"]
+  B --> C["Layer 3: Give AI the playbook"]
+  C --> D["Layer 4: Verify adversarially"]
+  D --> E["Layer 5: Iterate the playbook"]
+  E -->|"gap found"| A
+```
 
-I do not think **anyone** has proven a universal winning model yet.<br />
-If they had, they would be _extremely_ wealthy.
+**Layer 1: Define done precisely.** <br />
+Not "working." Provably done.
+What test passes? What lint rule runs? What snapshot matches? What API response is acceptable?
+Write the definition before you write the prompt.
 
-We are all running the same race. We are just wearing different shoes.
+**Layer 2: Make the standard executable.** <br />
+A rule in a README is a suggestion. A rule in a linter, a test, or a CI check is a constraint.
+AI can work inside constraints. It will casually ignore suggestions when they're inconvenient.
+If it matters, make it run.
 
-So... I am not here to sell you a perfect process.
+**Layer 3: Give AI your playbook.** <br />
+This is your AGENTS.md, your prompts folder, your style guide, your naming conventions, everything that answers "how do we do things here?"
+If you don't write it down, AI guesses. If you write it down badly, AI guesses confidently.
+Write it well and AI starts to feel like a good hire on day two.
 
-I am here to argue for something more basic: <br />
-If you want AI to be a useful partner, you need a shared reality with it.
+**Layer 4: Verify adversarially.** <br />
+The best check on AI output is a second pass that assumes the first answer was wrong.
 
-Imagine you are hiring 500 new engineers.<br />
-Not senior engineers. Not people who "already know how we do things".<br />
-More like a swarm of smart interns who can move fast, but will confidently do the wrong thing if you are vague.
+Some people formalize this. Verified Spec-Driven Development (VSDD)[^3] takes it seriously enough to run a separate AI model, literally named "Sarcasmotron," whose only job is to find gaps in specs, tests, and implementation. The idea: if your shared reality is solid, adversarial review should bounce off it. If it breaks, you found out cheaply, before shipping.
 
-If you knew that onboarding wave was coming, you would not rely on vibes.<br />
-You would lay groundwork:
+[^3]: [Verified Spec-Driven Development (VSDD)](https://gist.github.com/dollspace-gay/d8d3bc3ecf4188df049d7a4726bb2a00) is a methodology that formalizes spec, test, implementation, and adversarial review as a sequential pipeline.
 
-- definitions (what does "ship" mean here)
-- standards (naming, commit messages, "definition of done")
-- guardrails (linting, tests, CI checks)
-- a way to prove work is good (not just "it looks right")
+**Layer 5: Iterate the playbook, not just the output.** <br />
+When AI makes a mistake, don't just fix the code. Ask what rule was missing and what was undefined.
+Then add that to Layer 1 or 2. The goal isn't a perfect prompt. It's a system that gets sharper over time.
 
-That is not bureaucracy. That is compassion for Future You.
+When this is working well, things look like this:
 
-AI is similar, except you can onboard 500 "interns" in an afternoon.<br />
-So the cost of missing groundwork shows up faster.
+- AI confirms a problem actually exists before jumping to a solution.
+- Solutions get verified with tests, E2E runs, and real checks, not just a quick eyeball.
+- AI pushes back when you ask it to do something bad.
+- Mistakes are traceable, so you can fix the process and not just the output.
 
-This is going to apply to designing things, writing content, making financial trades.<br/>
-I'm a software engineer by trade, but the application of a shared reality is not only applicable to writing code.
+## Your Repo Is the Prompt
 
-## What's Good? What's Bad?
+Here's the part most people miss.
 
-Setting aside existential and moral debates for another time - because those are important too.
+AI reads your codebase like a library of hints.
+Every file name, every variable name, every half-finished comment, every test that says `// TODO: actually test this` is context. It all shapes what AI thinks you want.
 
-### The Bad
+If your repo is inconsistent, AI learns inconsistency.
+If it's explicit and well-tested, AI gets better at helping you.
 
-Consequences of not having a shared reality:
+Not because of magic. Because you gave it better material to work with.
 
-- Some agent written code can pass tests and still be insecure or not working as intended.
-- Often an agent will say "mission complete" and you'll go look at it... and it's very much no bueno. The more "agentic" your workflow is, the more you need explicit success checks and constraints, not just a prompt.
-- AI makes stuff up, it does insane things. More often because of a skewed reality.
-- It will try to run commands with the wrong environment variables, or inside a sandbox when it shouldn't.
-- It'll create artifacts (in this context, an "artifact" is any output the AI produces for you, like a file, a report, or an updated line of code) that just pollute your workspace and don't get used.
-- You'll think you're building layers of prompting instructions but really it's a blank slate every conversation.
+That means how you maintain your codebase is also, now, how you communicate with your AI tooling.
 
-The worst of all of this, in my opinion, is you will know what needs to be done... but you won't know what a good solution looks like.
+- The README is the spec.
+- The tests are the definition of done.
+- The lint rules are the standards.
+- The commit messages are the history.
+- The prompts folder is the playbook.
 
-You'll end up with something and go "I guess this works" and it may, in fact, be the absolute worst way you could have implemented that.
+Write them for a fast, smart, zero-context collaborator who can only know what you put in the repo.
 
-We are not ready to hand over the steering wheel to AI.<br />
-Not because of AI's deficiencies.<br />
-Because of ours.
+You're not writing documentation. You're writing the shared reality.
 
-Humans are inconsistent. We forget. We hand-wave. Change our minds.
+## It's an Open Book
 
-AI can help, but it can not fix a missing objective. <br />
-It can not guess your standards reliably. <br />
-It can not read your mind (yet, thankfully).
+Here's a property of AI that most people don't think to use: you can just ask.
 
-So, it's a partnership right now, because in my opinion, the other options are not viable yet.
+AI is the first collaborator you've ever had that will tell you, directly and honestly, what context it loaded, what rules it thinks it's working under, and why it made a choice.
 
-To be a good partner, you need clear communication.<br />
-And clear communication needs shared reality.
+If something comes out wrong, you don't have to guess what happened. You can ask "what rules are you working with right now?" and it will tell you. You can ask "why did you choose that approach?" and it will explain. You can ask "what do you think the definition of done is here?" and it will show you its current understanding.
 
-### The Good
+That's not something you can do with a human teammate. People have gaps in what they know, gaps in what they'll admit to, and a whole set of social reasons not to say "actually, I have no idea what the standard is here."
 
-With the right setup you can achieve the following good things:
+AI has none of that friction.
 
-- When you want to fix a problem, it will confirm the problem even exists before offering a solution.
-- Solutions provided are tested using Unit Tests, E2E Tests, API Calls, inspecting payloads, etc.
-- When you ask it to do something bad, it will actually push back and go "hey, that's a bad idea".
-- You won't have to repeat yourself or argue as much as you currently are doing right now.
+This makes the loop tight. You write the playbook. You give it to AI. You can then ask AI to read it back. If what comes back doesn't match what you wrote, the gap is real and now it's visible. You can fix it before it becomes a six-week problem.
 
-The most important thing will be that if it DOES (and it will) make mistakes, you can follow along and figure out where in the **process** did it fall apart?<br />
-You can then itterate and over time end up with something special and highly productive.
+Think of it less like delegating to a black box, and more like pair programming with someone who will always be honest about what they understood from the brief.
 
-## How?
+```mermaid
+flowchart LR
+  A["Write the playbook"] --> B["AI loads it and acts"]
+  B --> C["Ask: what did you load?"]
+  C --> D{Gap?}
+  D -->|"yes, fix it"| A
+  D -->|"no"| E["Good to go."]
+```
 
-This article isn't going to go into super nuanced, highly detailed implementation strategies.<br />
-We're going to stay high level so I can later write those ideas into their own articles.
+That bidirectional check is part of what makes this different from every other tool in your stack. Use it.
 
-Off the top of my head, what has worked extremely well:
+## The Real Claim
 
-- Mixing of deterministic and non-deterministic tools. AI that uses/builds repeatable scripts, things like that.
-- Thorough documentation. The argument that documentation gets stale is a side-effect of humans being in charge of that documentation. Which is no longer the case. Documentation is a partnership now.
-- Consistency. Formatting. Commit messages. PR descriptions. Testing. Tickets. Specs. Designs. All of this can be done with an AI partnership. All of this feeds back into a positive loop. For both the humans and the machines.
-- Articulate your goal. Simply. Quickly. If you cannot say the goal in one sentence, you do not understand the goal yet.
-- Define what "done" means. Tests. Snapshots. End to End. Linting.
-- Make standards real (and cheap).
-- Understanding AI bootstrapping and layered prompting.
-- Making full use of `git subtree`.
-- Give the agent your playbook. Styleguides, naming conventions, holistic pictures of how it works with other repositories and technologies.
+The model isn't your bottleneck. Your clarity is.
 
-In the AI era, all of these things mentioned above add up faster, because the AI reads your repo like a library of hints.<br />
-If your repo is half-finished thoughts and mystery meat decisions, the AI learns that too.
+AI is powerful enough right now that the limiting factor in most workflows is the human on the other end,
+not having a clear definition of what they want, what done looks like, or what good means.
 
-If your repo is consistent, tested, and explicit, the AI gets better at helping you.
+That's not a technical problem. It's a communication problem.
 
-Its all context now.
+And shared reality is how you fix it. You get fewer surprises. You do less rework. You build more trust that what got built is actually what you asked for.
 
-You are not writing bureaucracy.<br />
-You are writing the shared reality.
+AI can help you build anything. But it can't guess your standards, fix a missing objective, or read your mind.
 
-## In Closing
-
-AI is powerful, but it's not a mind reader.
-
-Humans keep shared reality alive with context, tone, and eyebrow raises. We can hear "you know what I meant" and fill in the gaps.<br />
-AI does not do that.<br />
-It does exactly what you said - and then it does it again, at scale, in 0.8 seconds.
-
-So if this whole article felt like "please be more specific", yes. That's the point.
-
-The practical upside is not just speed.<br />
-It's that AI forces you to be clear.
-
-When you're clear, you can verify the work, spot misunderstandings earlier, and improve the system instead of arguing about what someone "probably meant".
-
-That is shared reality: fewer surprises, less rework, and more trust that what got built matches what you asked for.
+So be the coach who wrote the playbook, not the one who said "you know, run the play."
