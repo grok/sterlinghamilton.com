@@ -55,6 +55,46 @@ When adding features, ask "what could regress?" and cover at the right layer:
 - **E2E behavior**: language toggle stays on same page, contact icon disabled on contact, theme toggle doesn't break navigation
 - **Visual**: home/contact/article in light+dark (snapshot tests)
 
+## VSDD process
+
+VSDD (Verified Spec-Driven Development) is the methodology used in this repo.
+The short version: write the spec first, then tests, then code.
+
+### When to write a spec
+
+Before editing a utility or writing a test, read the relevant spec in `specs/`.
+If no spec exists for the thing you are changing, write one first.
+
+### The pipeline
+
+1. **Spec** - write or update `specs/<feature>.md` describing behaviors, inputs/outputs, edge cases.
+2. **Failing tests** - write unit tests in `tests/unit/` that encode the spec. Run them; they should fail.
+3. **Implementation** - write or update `src/utils/` until the tests pass.
+4. **Adversarial review** - hand the spec + tests + implementation to a second model using `prompts/adversarial-review.md`. It produces a gap report.
+5. **Iterate** - address real gaps found. Repeat from step 1 or 4 as needed.
+
+### Where specs live
+
+`specs/` - one file per feature area. See `specs/README.md` for the full list.
+
+### Spec vs. test conflicts
+
+When a test and a spec disagree, the spec wins. Fix the test to match the spec.
+If the spec is wrong, update the spec first - that is a deliberate contract change,
+not a test fix.
+
+### Convergence exit condition
+
+Done when adversarial review finds no real gaps - only hypotheticals or invented scenarios.
+The adversary writes "No real gaps found." You ship.
+
+### Formal verification
+
+Formal hardening (Kani, Dafny, TLA+) is skipped for this static blog.
+Adversarial review is the last tier.
+
+---
+
 ## UI + i18n notes (learned)
 
 - **Holistic translation**: UI chrome should translate too (wordmark title, tooltips, toasts, "back to top", Mermaid controls).

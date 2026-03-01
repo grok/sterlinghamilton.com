@@ -39,6 +39,14 @@ This folder contains reusable AI prompts that help maintain and develop this Ast
 - Do/don't list
 - Examples and default post structure
 
+### 🔍 [adversarial-review.md](./adversarial-review.md)
+**Purpose**: Find gaps in specs, tests, and implementations - not fix them
+**Use when**: After writing a spec + tests + implementation (VSDD pipeline step 4)
+**Key actions**:
+- Hand this prompt + spec + test file + implementation to a second model (fresh context)
+- The model acts as the Adversary: produces a gap report, not a fix
+- Iterate until the adversary finds no real gaps
+
 ## How to Use These Prompts
 
 ### For Warp AI (Agent Mode)
