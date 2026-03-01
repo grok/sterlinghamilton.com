@@ -11,6 +11,10 @@ The model did exactly what you said. The problem is that what you said wasn't wh
 
 That gap has a name: **shared reality**. Closing it is the most leveraged thing you can do when working with AI.
 
+## TL;DR
+
+AI does exactly what you say, not what you mean. The fix is to build shared reality on purpose: define your words, define what done looks like, and put something in place that lets you actually verify what you got back. Your repo, your prompts, and your process are the spec. Treat them that way.
+
 ## A Concrete Example First
 
 You can't run "a play." You run _the_ play.
