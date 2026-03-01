@@ -1,0 +1,105 @@
+---
+type SocialLink = {
+  href: string;
+  label: string;
+  icon: 'linkedin' | 'github' | 'instagram';
+};
+
+type Props = {
+  links: SocialLink[];
+};
+
+const { links } = Astro.props as Props;
+---
+
+<div class="social-grid" data-social-grid>
+  {links.map((l) => (
+    <a
+      class="social-grid__link"
+      href={l.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={l.label}
+      title={l.label}
+    >
+      {l.icon === 'github' ? (
+        <svg class="social-grid__icon" viewBox="0 0 16 16" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+          />
+        </svg>
+      ) : l.icon === 'instagram' ? (
+        <svg class="social-grid__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9Zm4.5 4.25A3.75 3.75 0 1 1 8.25 12 3.76 3.76 0 0 1 12 8.25Zm0 2A1.75 1.75 0 1 0 13.75 12 1.75 1.75 0 0 0 12 10.25ZM17.9 6.5a.85.85 0 1 1-.85.85.85.85 0 0 1 .85-.85Z"
+          />
+        </svg>
+      ) : (
+        <svg class="social-grid__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm8 0h3.8v1.64h.05c.53-1 1.82-2.06 3.75-2.06C22 8.58 22 11 22 14.05V21h-4v-6.15c0-1.47-.03-3.36-2.05-3.36-2.05 0-2.36 1.6-2.36 3.25V21H9V9Z"
+          />
+        </svg>
+      )}
+      <span class="sr-only">{l.label}</span>
+    </a>
+  ))}
+</div>
+
+<style>
+  .social-grid {
+    margin: 1rem 0 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .social-grid__link {
+    display: grid;
+    place-items: center;
+    padding: 0.85rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--code-bg), transparent 35%);
+    transition:
+      transform 120ms ease-out,
+      border-color 120ms ease-out,
+      background-color 120ms ease-out,
+      color 120ms ease-out;
+  }
+
+  .social-grid__icon {
+    width: 1.55rem;
+    height: 1.55rem;
+    display: block;
+    opacity: 0.9;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .social-grid__link:hover {
+      border-color: color-mix(in srgb, var(--border), var(--text-tertiary) 25%);
+      transform: translateY(-1px);
+      color: #000;
+    }
+
+    html.dark .social-grid__link:hover {
+      color: #fff;
+    }
+  }
+
+  .social-grid__link:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text-primary), transparent 55%);
+    outline-offset: 4px;
+  }
+  
+  @media (max-width: 420px) {
+    .social-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

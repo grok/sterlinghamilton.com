@@ -52,11 +52,11 @@ test.describe('acceptance: core UX expectations', () => {
     await expect(page.locator('[data-no-posts]')).toBeVisible();
   });
 
-  test('non-home pages: index button exists and returns to home', async ({
+  test('non-home pages: home navigation exists and returns to home', async ({
     page,
   }) => {
     await page.goto('/en/contact/');
-    const indexLink = page.locator('a.back-button[href="/en/"]');
+    const indexLink = page.locator('a.wordmark[href="/en/"]');
     await expect(indexLink).toBeVisible();
     await indexLink.click();
     await expect(page).toHaveURL(/\/en\/$/);
@@ -66,6 +66,25 @@ test.describe('acceptance: core UX expectations', () => {
     await expect(indexLink2).toBeVisible();
     await indexLink2.click();
     await expect(page).toHaveURL(/\/en\/$/);
+  });
+
+  test('contact: social links grid includes my socials', async ({ page }) => {
+    await page.goto('/en/contact/');
+
+    const grid = page.locator('[data-social-grid]');
+    await expect(grid).toBeVisible();
+
+    await expect(
+      grid.locator('a[title="LinkedIn"][href="https://www.linkedin.com/in/sterlinghamilton/"]'),
+    ).toBeVisible();
+    await expect(
+      grid.locator('a[title="GitHub"][href="https://github.com/grok"]'),
+    ).toBeVisible();
+    await expect(
+      grid.locator(
+        'a[title="Instagram"][href="https://www.instagram.com/sterhamke/"]',
+      ),
+    ).toBeVisible();
   });
 
   test('post: TOC click scrolls to heading and updates hash', async ({
