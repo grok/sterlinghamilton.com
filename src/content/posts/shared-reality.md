@@ -187,8 +187,20 @@ That means how you maintain your codebase is also, now, how you communicate with
 - The README is the spec.
 - The tests are the definition of done.
 - The lint rules are the standards.
+- The branch names are the intent.
 - The commit messages are the history.
+- The pull requests are the decisions.
 - The prompts folder is the playbook.
+
+This used to be overhead. You named branches because they needed names. You wrote commit messages because convention said to. You filled in the PR description because someone would skim it before merging.
+
+AI doesn't skim. It reads all of it and uses it to build a model of what you're trying to do.
+
+"fix auth" is noise. "fix OAuth token refresh race on concurrent requests" is a precise signal - and precision affects every inference AI makes about code that touches auth. A well-named branch tells AI what work is in flight. A complete PR description tells it what was decided and what was explicitly left out of scope. Every layer compounds.
+
+The gap between "good enough for your team" and "good enough for AI" is precision. Humans fill gaps with social context: who worked on this, what the hallway conversation was, what was obvious at the time. AI fills gaps with probability. Probability is not your intent.
+
+There used to be a recovery channel. If a commit message was vague, you could ask. Slack, standups, the person next to you. AI has what's in the repo. That's it. The context that lived in your head or in a meeting now has to live in the artifacts.
 
 Write them for someone brilliant who started today and only knows what's in the repo.
 
