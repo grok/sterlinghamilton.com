@@ -2,6 +2,8 @@
   max-width: 100%;
   overflow-x: auto;
   margin: 1.25rem 0;
+  display: flex;
+  justify-content: center;
 }
 
 .mermaid-block {
