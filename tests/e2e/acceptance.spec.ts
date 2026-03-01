@@ -128,6 +128,22 @@ test.describe('acceptance: core UX expectations', () => {
     expect(text).toContain('type SpikeResult');
   });
 
+  test('post: mermaid diagrams are horizontally centered', async ({ page }) => {
+    await page.goto('/debug/post/');
+
+    // Wait for at least one diagram to finish rendering.
+    await expect(page.locator('.mermaid svg').first()).toBeVisible();
+
+    const isCentered = await page.evaluate(() => {
+      const el = document.querySelector('.mermaid');
+      if (!(el instanceof HTMLElement)) return false;
+      const styles = getComputedStyle(el);
+      return styles.display === 'flex' && styles.justifyContent === 'center';
+    });
+
+    expect(isCentered).toBeTruthy();
+  });
+
   test('post: mermaid renders; can fullscreen; can close', async ({ page }) => {
     await page.goto('/debug/post/');
 
