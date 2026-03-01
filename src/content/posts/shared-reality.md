@@ -5,15 +5,17 @@ lang: en
 translationKey: shared-reality-with-ai
 ---
 
-Most AI failures aren't model failures. They're definition failures.
+When you're having a bad time with AI, from my experience it's not a failure of the technology.<br />
+It's a failure of being on the same planet, at the same time, in the same space.
 
 The model did exactly what you said. The problem is that what you said wasn't what you meant.
 
-That gap has a name: **shared reality**. Closing it is the most leveraged thing you can do when working with AI.
+That gap has a name: **shared reality**.<br />
+Close it, and AI starts to feel like a real collaborator. Leave it open, and you'll spend most of your time cleaning up after output that technically did what you asked.
 
 ## TL;DR
 
-AI does exactly what you say, not what you mean. The fix is to build shared reality on purpose: define your words, define what done looks like, and put something in place that lets you actually verify what you got back. Your repo, your prompts, and your process are the spec. Treat them that way.
+AI does exactly what you say, not what you mean. The fix is to build shared reality on purpose: crystallize your spec before you write any code, write tests before you write the implementation, give AI clear roles to work within, and verify the result with a separate model whose only job is to find what the first one missed. Your repo, your prompts, and your process are the spec. Treat them that way.
 
 ## A Concrete Example First
 
@@ -29,6 +31,7 @@ It runs the wrong play at full speed, with confidence, and hands you the result 
 ## What Is Shared Reality?
 
 > **Reality** is the state of everything that exists, not how they might be imagined. <br />
+>
 > - <cite>Wikipedia[^1]</cite>
 
 [^1]: [Reality](https://en.wikipedia.org/wiki/Reality) on Wikipedia. The article defines reality as the state of everything that actually exists, as distinct from how things might be imagined or perceived. Useful grounding for a concept most people never bother to define.
@@ -37,7 +40,7 @@ Humans share reality without thinking about it. Same year. Same gravity. Same va
 
 AI doesn't have that. It has the context you gave it. That's it.
 
-There's a useful distinction here, between *consensus* reality and *consensual* reality.[^2]
+There's a useful distinction here, between _consensus_ reality and _consensual_ reality.[^2]
 
 [^2]: [Consensus Reality](https://en.wikipedia.org/wiki/Consensus_reality) on Wikipedia. Covers the difference between consensus (the outcome a group lands on) and consensual (the process of actually opting in and agreeing). That distinction is the whole point of this article.
 
@@ -110,49 +113,62 @@ Here's the part people skip: good isn't a vibe. Good is a definition.
 
 If you can't describe what "done" looks like without using the word "looks," you don't have a definition yet.
 
-Here's a model that works, in layers:
+Here's what that actually looks like, broken into layers:
 
 ```mermaid
 flowchart TD
-  A["Layer 1: Define done"] --> B["Layer 2: Make it executable"]
-  B --> C["Layer 3: Give AI the playbook"]
+  A["Layer 1: Crystallize the spec"] --> B["Layer 2: Write tests first"]
+  B --> C["Layer 3: Set up the roles"]
   C --> D["Layer 4: Verify adversarially"]
-  D --> E["Layer 5: Iterate the playbook"]
-  E -->|"gap found"| A
+  D --> E{Gap?}
+  E -->|"spec gap"| A
+  E -->|"test gap"| B
+  E -->|"playbook gap"| C
+  E -->|"converged"| F["Done."]
 ```
 
-**Layer 1: Define done precisely.** <br />
-Not "working." Provably done.
-What test passes? What lint rule runs? What snapshot matches? What API response is acceptable?
-Write the definition before you write the prompt.
+**Layer 1: Crystallize the spec.** <br />
+Not "done." Provably done - and written down before any code or prompts exist.
 
-**Layer 2: Make the standard executable.** <br />
-A rule in a README is a suggestion. A rule in a linter, a test, or a CI check is a constraint.
-AI can work inside constraints. It will casually ignore suggestions when they're inconvenient.
-If it matters, make it run.
+That means behavioral contracts (what does this actually do?), interface definitions (what does it take, what does it return?), and an edge case catalog (what are all the ways this can fail?). It also means deciding upfront which properties need formal verification and which just need tests. Not everything requires a proof. But you should know which things do before you start building.
 
-**Layer 3: Give AI your playbook.** <br />
-This is your AGENTS.md, your prompts folder, your style guide, your naming conventions, everything that answers "how do we do things here?"
-If you don't write it down, AI guesses. If you write it down badly, AI guesses confidently.
-Write it well and AI starts to feel like a good hire on day two.
+Write the spec before you write the prompt.
 
-**Layer 4: Verify adversarially.** <br />
-The best check on AI output is a second pass that assumes the first answer was wrong.
+**Layer 2: Write tests first. All of them failing.** <br />
+A rule in a README is a suggestion. A test is a constraint. The sequence matters.
 
-Some people formalize this. Verified Spec-Driven Development (VSDD)[^3] takes it seriously enough to run a separate AI model, literally named "Sarcasmotron," whose only job is to find gaps in specs, tests, and implementation. The idea: if your shared reality is solid, adversarial review should bounce off it. If it breaks, you found out cheaply, before shipping.
+Write tests that cover your spec, run them, watch them fail - then let AI write the minimum code to make them pass. If you write tests after the code, you're documenting what was built, not verifying what you wanted. The gap between those two is exactly what shared reality is supposed to close.
 
-[^3]: [Verified Spec-Driven Development (VSDD)](https://gist.github.com/dollspace-gay/d8d3bc3ecf4188df049d7a4726bb2a00) is a methodology that formalizes spec, test, implementation, and adversarial review as a sequential pipeline.
+Linting, CI checks, and any formal verification tools you flagged in Layer 1 go here too. If it matters, make it run. If it runs and fails, nothing ships.
 
-**Layer 5: Iterate the playbook, not just the output.** <br />
-When AI makes a mistake, don't just fix the code. Ask what rule was missing and what was undefined.
-Then add that to Layer 1 or 2. The goal isn't a perfect prompt. It's a system that gets sharper over time.
+**Layer 3: Set up the roles.** <br />
+This is your AGENTS.md, your prompts folder, your style guide, your naming conventions - everything that answers "how do we do things here?"
+
+But it also means being explicit about who does what. Three roles matter: the **Builder** (the AI doing the implementation), the **Adversary** (a separate AI whose only job is to find what the Builder missed), and the **Architect** (you - making strategic calls, not implementation calls). If you don't separate these roles, you end up asking the same model to build and verify its own work. That's not adversarial review. That's asking someone to grade their own exam.
+
+If you don't write the playbook down, AI guesses. If you write it down badly, AI guesses confidently. Write it well, set up the roles, and things start to feel like a team.
+
+**Layer 4: Verify adversarially - with a separate model.** <br />
+The best check on AI output is a second pass that assumes the first answer was wrong. And the second pass needs to come from a different model, loaded with fresh context.
+
+This is what VSDD[^3] calls the Adversary - a separate AI (literally named "Sarcasmotron" in the spec) whose only job is to find gaps in the spec, the tests, and the implementation, examined together. Not "does this look right?" but "what is wrong with each of these three things, and where do they fail to match each other?"
+
+The Builder model has been reasoning toward a solution. The Adversary comes in cold and looks for cracks. If your shared reality is solid, adversarial review should bounce off it. If it breaks, you found out before shipping.
+
+[^3]: [Verified Spec-Driven Development (VSDD)](https://gist.github.com/dollspace-gay/d8d3bc3ecf4188df049d7a4726bb2a00) combines Spec-Driven Development, Test-Driven Development, and adversarial verification into a formal pipeline: crystallize the spec → write failing tests → implement → adversarial review (Sarcasmotron) → feedback to the right phase → formal hardening → convergence. The exit condition: the adversary is forced to invent problems that don't exist.
+
+**Layer 5: Iterate the right layer - not just the output.** <br />
+When the adversary finds a gap, it came from somewhere. A spec gap goes back to Layer 1. A test gap goes back to Layer 2. A playbook or role gap goes back to Layer 3. Fixing code without updating the layer that caused the mistake means you'll hit the same gap again, shaped differently.
+
+The goal isn't a perfect prompt. It's a system that converges. VSDD's exit condition is concrete: you're done when the adversary is forced to invent problems that don't exist. That's what "good" actually looks like.
 
 When this is working well, things look like this:
 
-- AI confirms a problem actually exists before jumping to a solution.
-- Solutions get verified with tests, E2E runs, and real checks, not just a quick eyeball.
-- AI pushes back when you ask it to do something bad.
-- Mistakes are traceable, so you can fix the process and not just the output.
+- Specs exist before prompts do.
+- Tests fail before code does.
+- A different model finds what the first one missed.
+- Gaps go back to the right layer - spec, tests, or playbook.
+- You stop when the adversary runs out of real problems to find.
 
 ## Your Repo Is the Prompt
 
@@ -174,7 +190,7 @@ That means how you maintain your codebase is also, now, how you communicate with
 - The commit messages are the history.
 - The prompts folder is the playbook.
 
-Write them for a fast, smart, zero-context collaborator who can only know what you put in the repo.
+Write them for someone brilliant who started today and only knows what's in the repo.
 
 You're not writing documentation. You're writing the shared reality.
 
@@ -192,7 +208,7 @@ AI has none of that friction.
 
 This makes the loop tight. You write the playbook. You give it to AI. You can then ask AI to read it back. If what comes back doesn't match what you wrote, the gap is real and now it's visible. You can fix it before it becomes a six-week problem.
 
-Think of it less like delegating to a black box, and more like pair programming with someone who will always be honest about what they understood from the brief.
+Think of it less like delegating to a black box, and more like pair programming with someone who will always tell you exactly what they understood.
 
 ```mermaid
 flowchart LR
@@ -203,19 +219,18 @@ flowchart LR
   D -->|"no"| E["Good to go."]
 ```
 
-That bidirectional check is part of what makes this different from every other tool in your stack. Use it.
+That feedback loop is something you don't get with any other tool. Use it.
 
-## The Real Claim
+## The Thing Worth Actually Saying
 
-The model isn't your bottleneck. Your clarity is.
+The model isn't your bottleneck. Your spec is.
 
-AI is powerful enough right now that the limiting factor in most workflows is the human on the other end,
-not having a clear definition of what they want, what done looks like, or what good means.
+Not your prompt. Your spec. AI is powerful enough right now that the limiting factor in most workflows is whether you've actually defined what done means - formally enough to test it, adversarially enough to stress it, precisely enough for something to build against.
 
-That's not a technical problem. It's a communication problem.
+That's not a technical problem. It's a discipline problem.
 
-And shared reality is how you fix it. You get fewer surprises. You do less rework. You build more trust that what got built is actually what you asked for.
+Shared reality is how you fix it. A crystallized spec before you touch a prompt. Tests that fail before code exists. A Builder that builds and an Adversary that breaks it. Feedback that goes back to the layer that caused the gap. And an exit condition you can actually check.
 
-AI can help you build anything. But it can't guess your standards, fix a missing objective, or read your mind.
+AI can help you build anything. But it can't write your spec, design your tests, or find its own blind spots.
 
-So be the coach who wrote the playbook, not the one who said "you know, run the play."
+So be the Architect. Write the playbook. Let the Builder build and the Adversary break it. Stop when the Adversary runs out of real problems.
