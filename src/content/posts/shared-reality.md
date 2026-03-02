@@ -253,6 +253,18 @@ When shared reality is solid, the dynamic shifts in ways you don't expect.
 
 The pattern in all of these: nothing magic happened. The shared reality was just good enough that AI could reason correctly - and when it couldn't, it knew where to stop.
 
+## What This Doesn't Give You
+
+Shared reality ensures AI builds the right thing. It doesn't ensure you understand what was built. Those are different problems with different failure modes.
+
+AI's velocity makes the second problem easy to ignore. You can accumulate work - a codebase, a campaign, a body of decisions - that functions exactly as specified. The tests pass. The adversary finds nothing. Everything looks right. And you have no clear picture of what you actually have, or why it works, or what happens when something outside the spec occurs.
+
+There's a framing worth borrowing: code has become cheaper to produce than to perceive.[^4] The same is true for any work AI produces. Output accumulates faster than understanding can keep up. Shared reality doesn't fix that. It can mask it - because everything working as specified is a convincing signal that you know what you have. It isn't.
+
+[^4]: [Cognitive Debt: When Velocity Exceeds Comprehension](https://www.rockoder.com/beyondthecode/cognitive-debt-when-velocity-exceeds-comprehension/) - argues that AI-assisted development decouples production from comprehension, creating invisible organizational debt that only surfaces through lagging indicators like increased failure rates.
+
+Use AI to go faster. Don't use it to skip the thinking. Shared reality transfers execution. Understanding is still your job.
+
 ## The Thing Worth Actually Saying
 
 The model isn't your bottleneck. Your spec is.
