@@ -32,14 +32,29 @@ function catppuccinMermaidTheme() {
   // Use existing design tokens (Catppuccin Latte/Mocha) from global.css
   const bg = cssVar('--bg');
   const text = cssVar('--text-primary');
-  const text3 = cssVar('--text-tertiary');
   const s0 = cssVar('--surface0');
   const s1 = cssVar('--surface1');
-  const s2 = cssVar('--surface2');
   const border = cssVar('--border');
   const sans = cssVar('--sans') || 'system-ui, -apple-system, sans-serif';
 
   const dark = themeForMermaid() === 'dark';
+
+  // Catppuccin accent palette for nodes and connectors.
+  // Light (Latte): soft tint fills with standard text, vivid borders.
+  // Dark (Mocha): pastel fills with Mocha base text (high contrast), vivid borders.
+  // Three-color cycling: lavender -> teal -> peach (subgraphs and alt node classes).
+  const nodeText = dark ? '#1e1e2e' : text; // dark base on Mocha pastels
+
+  const primaryFill   = dark ? '#b4befe' : '#e0e3ff'; // Mocha lavender / Latte lavender tint
+  const primaryBorder = '#7287fd';                     // lavender (readable on both fills)
+
+  const secondaryFill   = dark ? '#94e2d5' : '#d4f0f2'; // Mocha teal / Latte teal tint
+  const secondaryBorder = '#179299';                     // teal
+
+  const tertiaryFill   = dark ? '#fab387' : '#fde8d8'; // Mocha peach / Latte peach tint
+  const tertiaryBorder = '#fe640b';                     // peach/orange
+
+  const lineCol = dark ? '#cba6f7' : '#8839ef'; // Mocha mauve / Latte mauve
 
   return {
     theme: 'base',
@@ -49,27 +64,29 @@ function catppuccinMermaidTheme() {
       // Canvas
       background: bg,
 
-      // Nodes
-      primaryColor: s0,
-      primaryTextColor: text,
-      primaryBorderColor: border,
+      // Primary nodes - lavender
+      primaryColor: primaryFill,
+      primaryTextColor: nodeText,
+      primaryBorderColor: primaryBorder,
 
-      secondaryColor: s1,
-      secondaryTextColor: text,
-      secondaryBorderColor: border,
+      // Secondary nodes - teal
+      secondaryColor: secondaryFill,
+      secondaryTextColor: nodeText,
+      secondaryBorderColor: secondaryBorder,
 
-      tertiaryColor: s2,
-      tertiaryTextColor: text,
-      tertiaryBorderColor: border,
+      // Tertiary nodes - peach
+      tertiaryColor: tertiaryFill,
+      tertiaryTextColor: nodeText,
+      tertiaryBorderColor: tertiaryBorder,
 
-      // Lines
-      lineColor: text3 || border,
+      // Connectors - mauve arrows
+      lineColor: lineCol,
 
-      // Text/labels
+      // Text/labels on canvas (edge labels, etc.)
       textColor: text,
 
-      // Slightly stronger contrast for dark mode
-      nodeBorder: border,
+      // Cluster/subgraph
+      nodeBorder: primaryBorder,
       clusterBkg: dark ? s0 : s1,
       clusterBorder: border,
       edgeLabelBackground: bg,
