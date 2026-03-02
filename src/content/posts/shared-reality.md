@@ -57,11 +57,11 @@ Shared reality is the agreement underneath the agreement:
 - What does "done" look like?
 - What counts as good?
 
-Without it, you're not collaborating. You're just taking turns making noise at each other. 😵
+Without it, you're not collaborating. You're just taking turns making noise at each other.
 
 ## What Failure Actually Looks Like
 
-Here's a failure mode you probably have a version of already.
+Here's a faceplant you probably have a version of already.
 
 You ask AI to write a follow-up after a sales call. It comes back polished and professional. You send it. The prospect goes quiet. Looking back, the email missed the specific concern they raised, didn't match the casual tone you'd built, and led with product features instead of the outcome they actually cared about. You never told AI any of that.
 
@@ -236,6 +236,22 @@ flowchart LR
 ```
 
 That feedback loop is something you don't get with any other tool. Use it.
+
+## When It Actually Works
+
+When shared reality is solid, the dynamic shifts in ways you don't expect.
+
+**AI enforces your own rules back at you.** You ask for something that conflicts with a constraint you set six months ago and forgot about. AI flags the conflict instead of executing. The rule was there. You weren't. The system was.
+
+**AI knows exactly where the gap is.** Instead of producing something plausible-but-wrong, it stops and asks one specific question - the one thing that's actually unresolved. That only happens when shared reality is strong enough that AI knows where the ambiguity is, not just that ambiguity exists somewhere.
+
+**Constraints produce surprises.** AI generates something you wouldn't have thought of. You check it against your positioning, your brand guide, your examples of what right looks like. It's inside every boundary you set - and it's better than what you would have written. Precise constraints don't narrow the output. They define the space that good output lives in.
+
+**Expertise stops living only in people's heads.** You bring on a new team member and give them AI with a well-built playbook. By day two, their output looks like your best person's. Not because they're already experienced. Because the experience is in the system now, not trapped in one person's institutional memory.
+
+**Problems surface before they compound.** You update a requirement. AI flags three things downstream that now conflict with it - before any of them ships. Not because it's doing something sophisticated. Because the dependencies were explicit enough to be findable.
+
+The pattern in all of these: nothing magic happened. The shared reality was just good enough that AI could reason correctly - and when it couldn't, it knew where to stop.
 
 ## The Thing Worth Actually Saying
 
