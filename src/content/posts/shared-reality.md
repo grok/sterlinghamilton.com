@@ -10,12 +10,13 @@ It's a failure of being on the same planet, at the same time, in the same space.
 
 The model did exactly what you said. The problem is that what you said wasn't what you meant.
 
-You knew what you wanted. You said something close to it. The model had no way to tell the difference. That has a name: **shared reality**.<br />
+You knew what you wanted. You said something close to it. The model had no way to tell the difference. That has a name: **shared reality**.
+
 Get it right and AI starts to feel like a real collaborator. Get it wrong and you spend your time correcting output that executed flawlessly on the wrong brief.
 
 ## TL;DR
 
-AI does exactly what you say, not what you mean. The fix is to build shared reality on purpose: crystallize your spec before you write any code, write tests before you write the implementation, give AI clear roles to work within, and verify the result with a separate model whose only job is to find what the first one missed. Your repo, your prompts, and your process are the spec. Treat them that way.
+AI does exactly what you say, not what you mean. The fix is to build shared reality on purpose: define what done looks like before you touch a prompt, give AI the full context it needs to reason correctly, set up clear roles for who does what, and verify the result with something that wasn't the thing that made it. Your context, your prompts, and your process are the spec. Treat them that way.
 
 ## A Concrete Example First
 
@@ -62,24 +63,23 @@ Without it, you're not collaborating. You're just taking turns making noise at e
 
 Here's a failure mode you probably have a version of already.
 
-You write a prompt. AI returns code. It looks right. Your tests pass. You ship it.
-Six weeks later, a user hits an edge case. You dig in and realize the AI solved a slightly different problem than the one you actually had.
-It threaded the needle perfectly, on the wrong problem.
+You ask AI to write a follow-up after a sales call. It comes back polished and professional. You send it. The prospect goes quiet. Looking back, the email missed the specific concern they raised, didn't match the casual tone you'd built, and led with product features instead of the outcome they actually cared about. You never told AI any of that.
 
-You can't even trace where it broke, because there were no checkpoints. No explicit definition of "done." No verification that the output matched the intent.
-Just "this looks right" and a commit.
+Or you write a prompt, AI returns code, the tests pass, you ship it. Six weeks later, a user hits an edge case. The AI solved a slightly different problem than the one you had. It threaded the needle perfectly - on the wrong problem.
 
-The worst version of this isn't a bug. It's an entire architecture built around a misunderstanding.
+The output wasn't wrong. It was answering a slightly different question than the one you actually had. In both cases: no checkpoints. No explicit definition of done. No verification that the output matched the intent. Just "this looks right" and a send.
 
-Here are a few smaller versions that happen every day:
+The worst version of this isn't a wrong email or a bug. It's an entire direction built around a misunderstanding.
 
-- You can have agent code that passes tests but isn't working as intended.
-- The AI says "mission complete" and it is very much not.
-- Commands run with the wrong environment, or inside the wrong sandbox.
-- Artifacts pile up in your workspace and never get used.
-- You think you're building layered prompt instructions, but every conversation is actually a blank slate.
+Smaller versions happen every day:
 
-If you don't have shared reality, you won't know what a good solution looks like until you've already built the bad one.
+- A drafted email is technically correct but misses the relationship context that was never written down.
+- A campaign brief is thorough but omits the positioning decision made in last month's meeting.
+- An AI agent says "done" and it is very much not.
+- You think AI remembers the context from your last conversation. It doesn't. Every session starts fresh.
+- You think you're being clear. AI is executing on a slightly different interpretation of your words.
+
+If you don't have shared reality, you won't know what a good result looks like until you've already produced the bad one.
 
 ## Why AI Makes This More Urgent
 
@@ -97,10 +97,10 @@ Smart interns who will confidently do the wrong thing if you're vague.
 
 You'd never rely on vibes with an onboarding wave that big. You'd lay groundwork:
 
-- **Definitions:** What does "ship" mean here, exactly?
-- **Standards:** What are the naming conventions, commit formats, and definition of done?
-- **Guardrails:** What linting, tests, and CI checks are non-negotiable?
-- **Verification:** How do you prove the work is good, and not just that it looks good?
+- **Definitions:** What does "done" mean for this task, exactly?
+- **Standards:** What's the tone, format, level of detail, and style that makes this right?
+- **Constraints:** What are the non-negotiables - policy, brand, legal, technical?
+- **Verification:** How do you prove the output is good, and not just that it looks good?
 
 That's not bureaucracy. That's compassion for Future You.
 
@@ -117,7 +117,7 @@ Here's what that actually looks like, broken into layers:
 
 ```mermaid
 flowchart TD
-  A["Layer 1: Crystallize the spec"] --> B["Layer 2: Write tests first"]
+  A["Layer 1: Crystallize the spec"] --> B["Layer 2: Define what good looks like"]
   B --> C["Layer 3: Set up the roles"]
   C --> D["Layer 4: Verify adversarially"]
   D --> E{Gap?}
@@ -134,12 +134,12 @@ That means behavioral contracts (what does this actually do?), interface definit
 
 Write the spec before you write the prompt.
 
-**Layer 2: Write tests first. All of them failing.** <br />
-A rule in a README is a suggestion. A test is a constraint. The sequence matters.
+**Layer 2: Define what good looks like - before you ask for it.** <br />
+A standard in your head is a suggestion. A standard written down is a constraint. The sequence matters.
 
-Write tests that cover your spec, run them, watch them fail - then let AI write the minimum code to make them pass. If you write tests after the code, you're documenting what was built, not verifying what you wanted. The gap between those two is exactly what shared reality is supposed to close.
+Before you prompt, write down what a good result looks like. What must be true? What would make you send it back? What does bad look like, specifically? If you can't answer those before asking, you're not ready to ask.
 
-Linting, CI checks, and any formal verification tools you flagged in Layer 1 go here too. If it matters, make it run. If it runs and fails, nothing ships.
+For engineers: write the tests before the implementation. Run them, watch them fail, then let AI write the minimum code to make them pass. If you write tests after the code, you're documenting what was built, not verifying what you wanted. Linting, CI checks, and any formal verification tools flagged in Layer 1 go here too. If it matters, make it run. If it runs and fails, nothing ships.
 
 **Layer 3: Set up the roles.** <br />
 This is your AGENTS.md, your prompts folder, your style guide, your naming conventions - everything that answers "how do we do things here?"
@@ -170,19 +170,23 @@ When this is working well, things look like this:
 - Gaps go back to the right layer - spec, tests, or playbook.
 - You stop when the adversary runs out of real problems to find.
 
-## Your Repo Is the Prompt
+## Your Context Is the Prompt
 
 Here's the part most people miss.
 
-AI reads your codebase like a library of hints.
-Every file name, every variable name, every half-finished comment, every test that says `// TODO: actually test this` is context. It all shapes what AI thinks you want.
+AI builds its model of what you want from everything you give it. The message in the chat window is just the top layer. Under it is everything you've attached, pasted, described, or shared. Under that is everything you didn't include, which AI fills in with probability.
 
-If your repo is inconsistent, AI learns inconsistency.
-If it's explicit and well-tested, AI gets better at helping you.
+What that context looks like depends on how you work.
 
-Not because of magic. Because you gave it better material to work with.
+For a salesperson, it's the prospect's emails, the CRM notes, the specific objection raised on the last call, the tone that's been established over months. For a marketer, it's the brand guide, the positioning statement, the audience research, and two examples of copy that felt exactly right. For someone in operations or support, it's the policy doc, the customer's history, and the cases where exceptions were made and why.
 
-That means how you maintain your codebase is also, now, how you communicate with your AI tooling.
+For an engineer, it's the codebase. Every file name, every variable name, every half-finished comment, every test that says `// TODO: actually test this` is context. It all shapes what AI thinks you want.
+
+The source changes. The principle doesn't: precise context produces precise output. Vague context leaves AI guessing.
+
+That means how you maintain your working materials is also, now, how you communicate with AI.
+
+For engineers specifically:
 
 - The README is the spec.
 - The tests are the definition of done.
@@ -196,13 +200,13 @@ This used to be overhead. You named branches because they needed names. You wrot
 
 AI doesn't skim. It reads all of it and uses it to build a model of what you're trying to do.
 
-"fix auth" is noise. "fix OAuth token refresh race on concurrent requests" is a precise signal - and precision affects every inference AI makes about code that touches auth. A well-named branch tells AI what work is in flight. A complete PR description tells it what was decided and what was explicitly left out of scope. Every layer compounds.
+The same is true everywhere else. "Write me a follow-up email" is noise. "Write a follow-up to Sarah at Acme, who raised a budget concern last call, prefers casual tone, and cares most about time-to-value" is a precise signal - and that precision affects every inference AI makes about what to write. "fix auth" is noise. "fix OAuth token refresh race on concurrent requests" is a precise signal.
 
-The gap between "good enough for your team" and "good enough for AI" is precision. Humans fill gaps with social context: who worked on this, what the hallway conversation was, what was obvious at the time. AI fills gaps with probability. Probability is not your intent.
+The gap between "good enough for a person who can ask a follow-up question" and "good enough for AI" is precision. Humans fill gaps with social context: who worked on this, what the conversation was, what was obvious at the time. AI fills gaps with probability. Probability is not your intent.
 
-There used to be a recovery channel. If a commit message was vague, you could ask. Slack, standups, the person next to you. AI has what's in the repo. That's it. The context that lived in your head or in a meeting now has to live in the artifacts.
+There used to be a recovery channel. If something was vague, you could ask. Slack, a quick call, the person next to you. AI has what you gave it. That's it. The context that lived in your head or in a meeting now has to live in what you provide.
 
-Write them for someone brilliant who started today and only knows what's in the repo.
+Write it for someone brilliant who started today and only knows what's in front of them.
 
 You're not writing documentation. You're writing the shared reality.
 
@@ -241,8 +245,8 @@ Not your prompt. Your spec. AI is powerful enough right now that the limiting fa
 
 That's not a technical problem. It's a discipline problem.
 
-Shared reality is how you fix it. A crystallized spec before you touch a prompt. Tests that fail before code exists. A Builder that builds and an Adversary that breaks it. Feedback that goes back to the layer that caused the gap. And an exit condition you can actually check.
+Shared reality is how you fix it. A clear definition of done before you touch a prompt. A second check on the output that wasn't the thing that made it. Feedback that goes back to where the misunderstanding started - not just patched at the surface. And an exit condition you can actually check.
 
-AI can help you build anything. But it can't write your spec, design your tests, or find its own blind spots.
+AI can help anyone build anything. But it can't define your outcome, surface the context you left out, or find its own blind spots.
 
 So be the Architect. Write the playbook. Let the Builder build and the Adversary break it. Stop when the Adversary runs out of real problems.
