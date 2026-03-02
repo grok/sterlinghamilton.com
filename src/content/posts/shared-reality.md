@@ -263,7 +263,9 @@ There's a framing worth borrowing: code has become cheaper to produce than to pe
 
 [^4]: [Cognitive Debt: When Velocity Exceeds Comprehension](https://www.rockoder.com/beyondthecode/cognitive-debt-when-velocity-exceeds-comprehension/) - argues that AI-assisted development decouples production from comprehension, creating invisible organizational debt that only surfaces through lagging indicators like increased failure rates.
 
-Use AI to go faster. Don't use it to skip the thinking. Shared reality transfers execution. Understanding is still your job.
+Use AI to go faster. Don't use it to skip the thinking. Shared reality transfers execution.
+
+**Understanding is still your job.**
 
 ## The Thing Worth Actually Saying
 
