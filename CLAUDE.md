@@ -20,6 +20,16 @@ a corresponding spec file. If none exists, write the spec first. No exceptions.
 When a test and a spec disagree, the spec wins. Fix the test, not the spec.
 If the spec is wrong, update the spec first and treat that as a deliberate contract change.
 
+## No dangling links or assets (hard rule)
+
+Never add an `href`, `src`, or other resource reference that points to something that does not exist yet. This includes:
+
+- Files not yet in `public/`
+- Pages not yet created
+- External URLs not yet live
+
+If the asset is not ready, do not add the link. Ship the asset first, then wire it up.
+
 ## Writing style (content work)
 
 Read `prompts/writing-style.md` before editing or drafting any public-facing copy.

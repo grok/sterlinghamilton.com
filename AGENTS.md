@@ -88,6 +88,14 @@ not a test fix.
 Done when adversarial review finds no real gaps - only hypotheticals or invented scenarios.
 The adversary writes "No real gaps found." You ship.
 
+### Scope: utilities vs. UI
+
+The VSDD pipeline above applies to `src/utils/`. For UI changes (components, pages, content), the equivalent discipline is:
+
+- No placeholder `href` values pointing to resources that do not exist yet.
+- No references to assets (`public/`, images, PDFs, external URLs) before the asset or page is live.
+- Before shipping a UI change: verify every new link resolves and every new asset loads.
+
 ### Formal verification
 
 Formal hardening (Kani, Dafny, TLA+) is skipped for this static blog.
