@@ -31,6 +31,9 @@ export type UiLabels = {
   viewFullScreen: string;
   closeDiagram: string;
   close: string;
+
+  // Contact page
+  resume: string;
 };
 
 export function normalizeLocale(input?: string): LocaleCode {
@@ -73,6 +76,8 @@ export function getUiLabels(locale: string): UiLabels {
       viewFullScreen: 'Ver pantalla completa',
       closeDiagram: 'Cerrar diagrama',
       close: 'Cerrar',
+
+      resume: 'Curriculum',
     };
   }
   return {
@@ -101,5 +106,7 @@ export function getUiLabels(locale: string): UiLabels {
     viewFullScreen: 'View full screen',
     closeDiagram: 'Close diagram',
     close: 'Close',
+
+    resume: 'Resume',
   };
 }

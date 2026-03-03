@@ -3,6 +3,7 @@ import SocialGrid from '@/components/ui/SocialGrid.astro';
 import IndexLayout from '@/layouts/IndexLayout.astro';
 import { themeConfig } from '@/config';
 import BackButton from '@/components/ui/BackButton.astro';
+import { getUiLabels } from '@/utils/i18n';
 
 export async function getStaticPaths() {
   return themeConfig.site.locales.map((l) => ({ params: { lang: l.code } }));
@@ -15,11 +16,19 @@ const htmlLang = locale?.langTag || themeConfig.site.language;
 const strings =
   lang === 'es'
     ? {
-        title: 'Cómo ponerse en contacto conmigo',
+        title: 'Contacta conmigo',
+        p1: 'Si, escríbeme. En serio, por favor.',
+        p2: 'LinkedIn es el mejor lugar para casi todo - preguntas de ingeniería, conversaciones de carrera, cosas de IA, o simplemente para saludar. Respondo de verdad.',
+        p3: 'GitHub funciona si es sobre código o algo que encontraste aquí. Instagram y Spotify son prueba de que tengo vida fuera del trabajo. Los mensajes directos por ahí son otra historia.',
       }
     : {
         title: 'How to get in touch with me',
+        p1: 'Yes, reach out. Seriously, please do.',
+        p2: 'LinkedIn is the right spot for most things - engineering questions, AI nerdery, something you read here, or just wanting to say hi. I actually reply.',
+        p3: 'GitHub works if it\'s about code or something you found here. Instagram and Spotify are just proof I have a personality outside of work. DMs there are a long shot.',
       };
+
+const labels = getUiLabels(lang);
 ---
 
 <IndexLayout
@@ -31,6 +40,11 @@ const strings =
   <main class="contact">
     <h1 class="sr-only">{strings.title}</h1>
     <BackButton />
+    <div class="contact-intro">
+      <p>{strings.p1}</p>
+      <p>{strings.p2}</p>
+      <p>{strings.p3}</p>
+    </div>
     <SocialGrid
       links={[
         {
@@ -55,7 +69,7 @@ const strings =
         },
         {
           href: '/resume.pdf',
-          label: 'Resume',
+          label: labels.resume,
           icon: 'resume',
         },
       ]}
@@ -66,5 +80,18 @@ const strings =
 <style>
   .contact {
     margin-top: 2rem;
+  }
+
+  .contact-intro {
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-intro p {
+    margin-bottom: 0.6rem;
+    line-height: 1.6;
+  }
+
+  .contact-intro p:last-child {
+    margin-bottom: 0;
   }
 </style>
