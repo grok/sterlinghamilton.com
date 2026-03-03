@@ -25,14 +25,20 @@ const langCandidate =
   (lang || themeConfig.site.defaultLocale).split('-')[0] ||
   themeConfig.site.defaultLocale;
 const contactHref = `/${langCandidate}/contact/`;
+const homeHref = `/${langCandidate}/`;
 const ui = getUiLabels(langCandidate);
 const wordmarkTitle = title || ui.homeTitle;
 const isOnContactPage = /\/contact\/?$/.test(Astro.url.pathname);
+const isOnHomePage = /^\/[a-z]{2}\/?$/.test(Astro.url.pathname) || Astro.url.pathname === '/';
 ---
 
 <header data-show-title={showTitle}>
   <nav>
-    {showTitle && <span class="site-title wordmark-title">{wordmarkTitle}</span>}
+    {showTitle && (
+      isOnHomePage
+        ? <span class="site-title wordmark-title">{wordmarkTitle}</span>
+        : <a href={homeHref} class="site-title wordmark-title wordmark">{wordmarkTitle}</a>
+    )}
     <div class="controls icon-controls">
       <ContactIconLink
         href={contactHref}
