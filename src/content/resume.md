@@ -2,106 +2,68 @@
 
 sterling.hamilton@gmail.com - [linkedin.com/in/sterlinghamilton](https://www.linkedin.com/in/sterlinghamilton) - [github.com/grok](https://github.com/grok) - Portland, Oregon
 
+## Skills
+
+**Stack:** TypeScript, JavaScript, React, Next.js, Node.js, Ruby on Rails, PostgreSQL, MySQL, Tailwind, SCSS
+
+**Tooling:** Micro-frontends, Module Federation, Design Systems, REST APIs, CI/CD, GitHub Actions, Webpack, ESLint, Storybook, Jest, Playwright, Cypress, Datadog, Optimizely, Bun
+
+**AI:** Claude, Claude Code, Cursor, ChatGPT, Glean
+
 ## Experience
 
 ### Senior Staff Software Engineer - Ridgeline
+
 #### Aug 2024 - Present | Portland, Oregon (Remote)
 
-Senior Staff engineer on the UI Platform organization, spanning UI Experience (design-system components and implementation) and UI Framework (services, APIs, orchestration, tooling, and workflows that power front-end delivery across the company).
+Part of the UI Platform team at a fintech company, split across two groups - UI Experience (design system, components, form architecture) and UI Framework (MFE orchestration, CI/CD, platform services) - supporting 50+ engineers across 8 product teams.
 
-- Lead architecture and engineering design for systems with organization-wide impact, guiding long-term technical direction across UI and platform teams.
-- Own the health, quality, and evolution of shared front-end platforms, services, and developer tooling used by multiple product teams.
-- Drive cross-team alignment on standards, workflows, and architectural decisions through Ridgeline's Architecture Advice Process.
-- Identify and remove technical bottlenecks that limit delivery speed, reliability, or developer productivity.
-- Serve as the technical representative for platform systems that span multiple teams and business domains.
-- Deliver and evolve large initiatives end-to-end, including planning, rollout, contracts, and long-term maintenance.
-- Mentor and sponsor engineers, helping grow future technical leaders while raising the bar for engineering excellence.
-- Contribute to hiring, interviewing, and community-building, strengthening Ridgeline's engineering culture and talent pipeline.
+- Engineered the frontend integration for a site-critical Key/Value Store that every table, feature, and page on the platform depends on - fixed cold-start issues, improved response speeds by 90%, and enabled 10x traffic capacity through containerization; eliminated downtime with graceful degradation that keeps the app live even when the service fails.
+- Drove early AI adoption on the platform team - building integration patterns, prompt abstractions, and Claude/Cursor workflows; currently shipping an AI-powered code review step into CI/CD.
+- Own documentation across both platform teams - wrote 200+ articles for internal developers, MFE teams, and the AI tools that now depend on them to surface platform knowledge.
+- Own CI/CD pipelines, CDN, build infrastructure, and security standards across both teams; built a dependency isolation system for MFEs so teams can ship independently without cross-team version conflicts.
+- Sponsor and architect major platform systems including the layout engine; write Architectural Decision Records shared company-wide; consult with engineers across teams to turn real problems into platform solutions.
+- Help engineers grow and find their footing; work side by side with the Principal Engineer every day with shared ownership across both platform teams.
 
 ### Lead Software Engineer - Landing
-#### Sep 2022 - Nov 2023 | Portland, Oregon (Remote)
 
-- Led the Supply and Demand engineering group for a marketplace business, owning lead acquisition, conversion, and growth systems.
-- Managed and grew a team of ~12 engineers, including promotions, hiring, and performance management.
-- Partnered with executive leadership on roadmap planning, delivery risks, and business outcomes.
-- Drove major performance and conversion improvements through experimentation, analytics, and platform modernization.
-- Evaluated and negotiated with external technology vendors.
+#### Apr 2021 - Nov 2023 | Remote / Portland, Oregon
 
-### Senior Software Engineer - Landing
-#### Apr 2021 - Sep 2022 | Remote
+Subscription-based furnished housing platform where members could move between homes in the network with 30 days notice - serving B2C and B2B customers including military, remote workers, and nomadic professionals. Owned the full customer funnel from acquisition through membership enrollment.
 
-- Led a growth engineering team of 6 across multiple codebases.
-- Owned A/B testing infrastructure and experimentation strategy.
-- Built multi-channel automation pipelines for revenue and lifecycle marketing.
+- Promoted from Senior to Lead within 18 months; grew from leading a team of 6 to managing 12 engineers across the Supply and Demand group, including hiring, promotions, and performance management.
+- Built a pricing engine that drove a 30% increase in conversion and revenue across a Next.js, Rails, and Postgres stack.
+- Worked directly with Optimizely's engineering team to implement A/B testing across the full stack - frontend, backend, and Cloudflare edge lambdas; ran experiments until we had clear winners, then used the data to make real product and pricing calls.
+- Kept the team shipping consistently without crunch; worked closely with exec leadership on roadmap planning, vendor decisions, and business outcomes.
 
 ### Senior Software Engineer - Blackbird
+
 #### May 2019 - Apr 2021 | Reno, Nevada (Hybrid)
 
-Growth and marketing platform engineer for a vertical SaaS product covering POS, inventory, and delivery.
+Growth and marketing platform engineer at a vertical SaaS startup covering POS, inventory, and cannabis delivery - working through the early legalization wave when the industry was moving fast and the rules were still being written.
 
-- Drove lead conversion strategy and growth experimentation.
-- Owned automated testing infrastructure and partnered closely with QA to raise release quality.
+- Mentored engineers through meaningful career transitions, including a team member who moved from the shipping department into software development and another moving from R into Ruby.
+- Brought e-commerce and marketing experience into product conversations with leadership - helped shape features and strategy in a market that was changing week to week.
+- Worked across lead conversion, growth experiments, and bug triage as the product moved fast.
+- Owned automated testing infrastructure and worked closely with QA to raise release quality.
 
 ### Technical Director - Noble Studios
+
 #### Jul 2012 - May 2019 | Reno, Nevada
 
-Digital marketing agency focused on travel and tourism. Ran the engineering department.
+Grew from Senior Developer to Technical Director over 7 years at a digital marketing agency focused on travel and tourism, eventually running a team of 15 across multiple client projects at a time.
 
-- Led an engineering team of 15 across multiple concurrent client projects.
-- Worked directly on major brands including Airbnb, Autodesk, Google, Tahiti Tourisme, Yosemite National Park, and University of California.
-- Actively participated in sales and bidding, contributing directly to revenue generation.
-- Streamlined development practices, accelerating time to production.
-- Led high-risk projects to successful completion, including engagements with SLA contracts.
+- Worked directly with major brands including Airbnb, Autodesk, Google, Tahiti Tourisme, Yosemite National Park, and University of California.
+- Built a reusable component and template system that let the team move faster across projects and keep costs down - important when you are an agency living on margin.
+- Identified that we were not a hosting company and drove the decision to move clients to specialized providers - improved uptime, resilience, and client satisfaction while freeing the team to focus on what they were actually good at.
+- Helped close new business through sales and bidding; led high-stakes projects to delivery, including work with SLA contracts on the line.
 
-### Web Developer - Lab Analytix
-#### Mar 2012 - Jul 2012 | Reno, Nevada
+## Earlier Experience
 
-Built custom web-based laboratory information management software (LIMS) with CRM, workflow tracking, data collection, and client portal integration.
-
-### Web Developer - DealerTrend, Inc.
-#### Apr 2010 - Mar 2012 | Reno, Nevada
-
-Full stack development for automotive dealership inventory marketing platforms, with a focus on SEO, scalability, and CMS ownership.
-
-### Lead Web Developer - Vitamin Research Products
-#### Sep 2009 - Apr 2010 | Carson City, Nevada
-
-- Immediate initiatives upon hiring resulted in a 75% increase in online performance.
-- Established stringent specifications for online marketing, including appearance, data validation, and compliance standards.
-- Led a complete rebuild and rebrand of the company's digital presence.
-- Implemented DVCS and DevOps practices to support a growing development team.
-
-### Web Developer - Exyst Inc.
-#### May 2008 - Jul 2009 | Reno, Nevada
-
-Full stack development at a web development startup, with a focus on ExpressionEngine, client relationships, and server administration.
-
-### Software Engineer - Mark Systems
-#### Dec 2006 - May 2008 | Reno, Nevada
-
-Built ERP software for the agriculture and construction industry, including inventory management, CRM, reporting, and accounting.
-
-- Owned and developed the CRM module end-to-end.
-- Built an automated screen scraper to gather and convert leads.
-
-### Web Developer - Great Basin Internet Services
-#### May 2005 - Dec 2006 | Reno, Nevada
-
-PHP-based CMS and e-commerce development at an ISP and web shop. Responsibilities included server management, systems administration, and direct client work.
-
-## Recognition
-
-- NCET Rising Star Developer of the Year (2013)
-- Most Inspiring Leaders: Industry Expert (2013)
-- WordCamp Reno-Tahoe speaker (2011-2013)
-
-## Certifications
-
-- Google Tag Manager Certified
-- Google Analytics Individual Certification
-- Optimizely Platform Certification
-- Showpad Certified Expert
+- **Lead Web Developer** - Vitamin Research Products (Sep 2009 - Apr 2010): drove a 75% increase in online performance; rebuilt and rebranded the company's digital presence.
+- **Software Engineer** - Mark Systems (Dec 2006 - May 2008): built ERP software for agriculture and construction; owned the CRM module end-to-end.
+- **Web Developer** - Lab Analytix, DealerTrend, Exyst, and Great Basin Internet Services (2005 - 2012)
 
 ## Education
 
-University of Nevada, Reno
+University of Nevada, Reno - Computer Science, Mathematics, and Electrical Engineering (2005-2007)
