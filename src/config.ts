@@ -7,7 +7,7 @@ export const themeConfig: ThemeConfig = {
     name: 'Sterling Hamilton', // Stable site name (metadata, <title>, RSS, etc.)
     headerTitle: "Hello, I'm Sterling!", // Header wordmark text
     author: 'Sterling Hamilton', // Author name
-    description: 'Software engineer writing about engineering, AI, and how to think clearly about both.', // Site description
+    description: "Code, tech, and the occasional opinion nobody asked for. No cookies. No tracking. Just writing.", // Site description
     language: 'en-US', // Default language tag (BCP-47)
     defaultLocale: 'en', // Default URL locale
     locales: [
