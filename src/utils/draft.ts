@@ -5,6 +5,7 @@ import { type CollectionEntry, getCollection } from 'astro:content';
  */
 export async function getFilteredPosts() {
   const posts = await getCollection('posts');
+  if (import.meta.env.DEV) return posts;
   return posts.filter(
     (post: CollectionEntry<'posts'>) => !post.id.startsWith('_'),
   );
