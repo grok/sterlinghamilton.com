@@ -1,11 +1,24 @@
 ---
 import { themeConfig } from '@/config';
+const ogImageUrl = new URL('/open-graph/site.png', Astro.site);
 ---
 <!-- Locale redirect: keep a stable root URL but send users to the default locale -->
 <html lang={themeConfig.site.language}>
   <head>
     <link rel="canonical" href={`/${themeConfig.site.defaultLocale}/`} />
     <meta name="robots" content="noindex" />
+    <title>{themeConfig.site.name}</title>
+    <meta name="description" content={themeConfig.site.description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={themeConfig.site.website} />
+    <meta property="og:title" content={themeConfig.site.name} />
+    <meta property="og:description" content={themeConfig.site.description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={themeConfig.site.website} />
+    <meta property="twitter:title" content={themeConfig.site.name} />
+    <meta property="twitter:description" content={themeConfig.site.description} />
+    <meta property="twitter:image" content={ogImageUrl} />
   </head>
   <body>
     <script

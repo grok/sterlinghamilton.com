@@ -6,41 +6,48 @@ export const prerender = true;
 
 const collectionEntries = await getCollection('posts');
 
-// Map the array of content collection entries to create an object.
-// Converts [{ id: 'post.md', data: { title: 'Example', pubDate: Date } }]
-// to { 'post.md': { title: 'Example', pubDate: Date } }
-const pages = Object.fromEntries(
-  collectionEntries.map((entry: CollectionEntry<'posts'>) => [
-    entry.id.replace(/\.(md|mdx)$/, ''),
-    entry.data,
-  ]),
-);
+type OGPage = {
+  title: string;
+  description: string;
+};
+
+const pages: Record<string, OGPage> = {
+  site: {
+    title: themeConfig.site.name,
+    description: themeConfig.site.description,
+  },
+  ...Object.fromEntries(
+    collectionEntries.map((entry: CollectionEntry<'posts'>) => [
+      entry.id.replace(/\.(md|mdx)$/, ''),
+      {
+        title: entry.data.title,
+        description: themeConfig.site.name,
+      },
+    ]),
+  ),
+};
 
 export const { getStaticPaths, GET } = await OGImageRoute({
   param: 'route',
   pages,
-  getImageOptions: (_path: string, page: CollectionEntry<'posts'>['data']) => ({
+  getImageOptions: (_path: string, page: OGPage) => ({
     title: page.title,
-    description: themeConfig.site.name,
+    description: page.description,
     logo: {
-      path: 'public/og/og-logo.png',
-      size: [80, 80],
+      path: 'public/og/og-logo-white.png',
+      size: [56, 56],
     },
-    bgGradient: [[255, 255, 255]],
-    bgImage: {
-      path: 'public/og/og-bg.png',
-      fit: 'fill',
-    },
+    bgGradient: [[136, 57, 239]], // Catppuccin Latte mauve
     padding: 64,
     font: {
       title: {
-        color: [28, 28, 28],
+        color: [255, 255, 255],
         size: 68,
         weight: 'SemiBold',
         families: ['PingFang SC'],
       },
       description: {
-        color: [180, 180, 180],
+        color: [239, 241, 245],
         size: 40,
         weight: 'Medium',
         families: ['PingFang SC'],
