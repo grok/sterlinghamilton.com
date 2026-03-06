@@ -41,15 +41,11 @@ Here's what emergence looks like in practice.
 
 From 2020 on, people across every industry were discovering that if you give AI a little background before asking it to do something, the output gets dramatically better. A salesperson pasting in CRM notes before writing a follow-up email. A marketer including their brand guide before asking for copy. An engineer describing the codebase before asking for code.
 
-These aren't stories from any single paper - they're the kind of thing that spreads through Slack messages and blog posts and "wait, have you tried..." conversations at lunch. But the formal research on _why_ it works arrived around the same time: in 2020, a landmark study showed that large language models could follow task instructions just from examples in the prompt, with no retraining required.[^2] Practitioners and researchers were arriving at the same insight from different directions.
-
-[^2]: Tom Brown et al., [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165), NeurIPS 2020. Introduced the term "in-context learning" and showed that sufficiently large language models can perform new tasks from context alone, without any fine-tuning.
+These aren't stories from any single paper - they're the kind of thing that spreads through Slack messages and blog posts and "wait, have you tried..." conversations at lunch. Practitioners and researchers were arriving at the same insight from different directions.
 
 **The pattern spread because it worked.** It got named - "context" - and got built into the tools. System prompts. Memory features. The little box that says "tell us about yourself." What started as a workaround is now just... _how the software works._
 
-Or: people found that assigning AI a specific role - "act as a senior copywriter" or "you are a financial analyst reviewing this for risk" - improved output quality noticeably. Research has since confirmed the effect.[^3] The informal discovery spread through blogs and word of mouth long before it got a name. Now it's custom GPTs, AI personas, built-in role settings in every major tool.
-
-[^3]: Jiaqi Kong et al., [Better Zero-Shot Reasoning with Role-Play Prompting](https://arxiv.org/abs/2308.07702), NAACL 2024. Showed that assigning an expert role in the system prompt measurably improves reasoning performance across multiple benchmarks.
+Or: people found that assigning AI a specific role - "act as a senior copywriter" or "you are a financial analyst reviewing this for risk" - improved output quality noticeably. The informal discovery spread through blogs and word of mouth long before it got a name. Now it's custom GPTs, AI personas, built-in role settings in every major tool.
 
 Or: people learned that asking AI to check its own work helps. Then they learned that asking a _different_ AI to check the work helps more. That pattern is showing up in products too - built-in review steps, critique modes, second-pass features.
 
