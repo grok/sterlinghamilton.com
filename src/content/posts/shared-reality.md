@@ -130,7 +130,9 @@ flowchart TD
 **Layer 1: Crystallize the spec.** <br />
 Not "done." Provably done - and written down before any code or prompts exist.
 
-That means behavioral contracts (what does this actually do?), interface definitions (what does it take, what does it return?), and an edge case catalog (what are all the ways this can fail?). It also means deciding upfront which properties need formal verification and which just need tests. Not everything requires a proof. But you should know which things do before you start building.
+Start with the why. Before behavioral contracts or interface definitions, write one or two sentences: why does this exist, and what would make it a failure at a level above the tests passing? A filter function that's technically correct but too slow for the dashboard it serves failed. A follow-up email that's well-written but misses the prospect's actual concern failed. The why defines what tradeoffs are acceptable and shapes every decision downstream. AI can't infer it from the spec - you have to say it.
+
+Then: behavioral contracts (what does this actually do?), interface definitions (what does it take, what does it return?), and an edge case catalog (what are all the ways this can fail?). It also means deciding upfront which properties need formal verification and which just need tests. Not everything requires a proof. But you should know which things do before you start building.
 
 Write the spec before you write the prompt.
 
@@ -142,7 +144,7 @@ Before you prompt, write down what a good result looks like. What must be true? 
 For engineers: write the tests before the implementation. Run them, watch them fail, then let AI write the minimum code to make them pass. If you write tests after the code, you're documenting what was built, not verifying what you wanted. Linting, CI checks, and any formal verification tools flagged in Layer 1 go here too. If it matters, make it run. If it runs and fails, nothing ships.
 
 **Layer 3: Set up the roles.** <br />
-This is your AGENTS.md, your prompts folder, your style guide, your naming conventions - everything that answers "how do we do things here?"
+This is your `AGENTS.md`, your prompts folder, your style guide, your naming conventions - everything that answers "how do we do things here?"
 
 But it also means being explicit about who does what. Three roles matter: the **Builder** (the AI doing the implementation), the **Adversary** (a separate AI whose only job is to find what the Builder missed), and the **Architect** (you - making strategic calls, not implementation calls). If you don't separate these roles, you end up asking the same model to build and verify its own work. That's not adversarial review. That's asking someone to grade their own exam.
 
