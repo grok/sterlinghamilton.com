@@ -75,7 +75,7 @@ Smaller versions happen every day:
 
 - A drafted email is technically correct but misses the relationship context that was never written down.
 - A campaign brief is thorough but omits the positioning decision made in last month's meeting.
-- An AI agent says "done" and it is very much not.
+- An AI agent says "done" and it sure as hell isn't.
 - You think AI remembers the context from your last conversation. It doesn't. Every session starts fresh.
 - You think you're being clear. AI is executing on a slightly different interpretation of your words.
 
@@ -89,7 +89,7 @@ We say "done by Friday" and mean "I'll start Thursday night." We hand-wave. We c
 
 AI doesn't fill gaps with assumptions. It fills gaps with whatever the training data suggests is most likely. Those are not the same thing.
 
-Worse: AI doesn't slow down when confused. It just produces wrong output faster.
+Worse: AI doesn't slow down when confused. It just produces bullshit faster.
 
 Imagine hiring 500 smart interns who can move at machine speed.
 Not senior engineers. Not people who already know how you do things.
@@ -192,7 +192,7 @@ That means how you maintain your working materials is also, now, how you communi
 
 For engineers specifically:
 
-- The README is the spec.
+- The `README` is the spec.
 - The tests are the definition of done.
 - The lint rules are the standards.
 - The branch names are the intent.
