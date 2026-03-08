@@ -330,6 +330,7 @@ async function renderMermaid() {
   });
 
   try {
+    await document.fonts.ready;
     await mermaid.run({ querySelector: '.mermaid' });
 
     // Enable fullscreen buttons now that SVG exists
