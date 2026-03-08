@@ -141,7 +141,9 @@ Then: behavioral contracts (what does this actually do?), interface definitions 
 
 Before you prompt, write down what a good result looks like. What must be true? What would make you send it back? What does bad look like, specifically? If you can't answer those before asking, you're not ready to ask.
 
-For engineers: write the tests before the implementation. Run them, watch them fail, then let AI write the minimum code to make them pass. _If you write tests after the code, you're documenting what was built, not verifying what you wanted._ Linting, CI checks, and any formal verification tools flagged in Layer 1 go here too. **If it matters, make it run. If it runs and fails, nothing ships.**
+For engineers, this is Test-Driven Development: write the tests before the implementation, run them and watch them fail, then let AI write the minimum code to make them pass. _If you write tests after the code, you're documenting what was built, not verifying what you wanted._ Linting, CI checks, and any formal verification tools flagged in Layer 1 go here too. **If it matters, make it run. If it runs and fails, nothing ships.**
+
+The non-engineer version is the same idea with different tools. Before you ask AI to write the follow-up email, write down what it must accomplish - the tone, the specific objection it needs to address, the one thing that should make the prospect want to reply. Before you ask for the campaign copy, write what success looks like: not "sounds good" but "leads with this benefit, uses this tone, doesn't mention price." **That list is your test suite.** Write it before you see the output. _If you write it after, you're rationalizing, not verifying._
 
 **Layer 3: Set up the roles.** <br />
 This is your `AGENTS.md`, your prompts folder, your style guide, your naming conventions - everything that answers "how do we do things here?"
