@@ -130,37 +130,37 @@ flowchart TD
 **Layer 1: Crystallize the spec.** <br />
 Not "done." Provably done - and written down before any code or prompts exist.
 
-Start with the why. Before behavioral contracts or interface definitions, write one or two sentences: why does this exist, and what would make it a failure at a level above the tests passing? A filter function that's technically correct but too slow for the dashboard it serves failed. A follow-up email that's well-written but misses the prospect's actual concern failed. The why defines what tradeoffs are acceptable and shapes every decision downstream. AI can't infer it from the spec - you have to say it.
+Start with the why. Before behavioral contracts or interface definitions, write one or two sentences: why does this exist, and what would make it a failure at a level above the tests passing? A filter function that's technically correct but too slow for the dashboard it serves failed. A follow-up email that's well-written but misses the prospect's actual concern failed. **The why defines what tradeoffs are acceptable and shapes every decision downstream.** _AI can't infer it from the spec - you have to say it._
 
 Then: behavioral contracts (what does this actually do?), interface definitions (what does it take, what does it return?), and an edge case catalog (what are all the ways this can fail?). It also means deciding upfront which properties need formal verification and which just need tests. Not everything requires a proof. But you should know which things do before you start building.
 
-Write the spec before you write the prompt.
+**Write the spec before you write the prompt.**
 
 **Layer 2: Define what good looks like - before you ask for it.** <br />
-A standard in your head is a suggestion. A standard written down is a constraint. The sequence matters.
+**A standard in your head is a suggestion. A standard written down is a constraint.** The sequence matters.
 
 Before you prompt, write down what a good result looks like. What must be true? What would make you send it back? What does bad look like, specifically? If you can't answer those before asking, you're not ready to ask.
 
-For engineers: write the tests before the implementation. Run them, watch them fail, then let AI write the minimum code to make them pass. If you write tests after the code, you're documenting what was built, not verifying what you wanted. Linting, CI checks, and any formal verification tools flagged in Layer 1 go here too. If it matters, make it run. If it runs and fails, nothing ships.
+For engineers: write the tests before the implementation. Run them, watch them fail, then let AI write the minimum code to make them pass. _If you write tests after the code, you're documenting what was built, not verifying what you wanted._ Linting, CI checks, and any formal verification tools flagged in Layer 1 go here too. **If it matters, make it run. If it runs and fails, nothing ships.**
 
 **Layer 3: Set up the roles.** <br />
 This is your `AGENTS.md`, your prompts folder, your style guide, your naming conventions - everything that answers "how do we do things here?"
 
-But it also means being explicit about who does what. Three roles matter: the **Builder** (the AI doing the implementation), the **Adversary** (a separate AI whose only job is to find what the Builder missed), and the **Architect** (you - making strategic calls, not implementation calls). If you don't separate these roles, you end up asking the same model to build and verify its own work. That's not adversarial review. That's asking someone to grade their own exam.
+But it also means being explicit about who does what. Three roles matter: the **Builder** (the AI doing the implementation), the **Adversary** (a separate AI whose only job is to find what the Builder missed), and the **Architect** (you - making strategic calls, not implementation calls). If you don't separate these roles, you end up asking the same model to build and verify its own work. _That's not adversarial review. That's asking someone to grade their own exam._
 
-If you don't write the playbook down, AI guesses. If you write it down badly, AI guesses confidently. Write it well, set up the roles, and things start to feel like a team.
+**If you don't write the playbook down, AI guesses. If you write it down badly, AI guesses confidently.** Write it well, set up the roles, and things start to feel like a team.
 
 **Layer 4: Verify adversarially - with a separate model.** <br />
-The best check on AI output is a second pass that assumes the first answer was wrong. And the second pass needs to come from a different model, loaded with fresh context.
+_The best check on AI output is a second pass that assumes the first answer was wrong._ And the second pass needs to come from a different model, loaded with fresh context.
 
 This is what VSDD[^3] calls the Adversary - a separate AI (literally named "Sarcasmotron" in the spec) whose only job is to find gaps in the spec, the tests, and the implementation, examined together. Not "does this look right?" but "what is wrong with each of these three things, and where do they fail to match each other?"
 
-The Builder model has been reasoning toward a solution. The Adversary comes in cold and looks for cracks. If your shared reality is solid, adversarial review should bounce off it. If it breaks, you found out before shipping.
+The Builder model has been reasoning toward a solution. _The Adversary comes in cold and looks for cracks._ **If your shared reality is solid, adversarial review should bounce off it. If it breaks, you found out before shipping.**
 
 [^3]: [Verified Spec-Driven Development (VSDD)](https://gist.github.com/dollspace-gay/d8d3bc3ecf4188df049d7a4726bb2a00) combines Spec-Driven Development, Test-Driven Development, and adversarial verification into a formal pipeline: crystallize the spec → write failing tests → implement → adversarial review (Sarcasmotron) → feedback to the right phase → formal hardening → convergence. The exit condition: the adversary is forced to invent problems that don't exist.
 
 **Layer 5: Iterate the right layer - not just the output.** <br />
-When the adversary finds a gap, it came from somewhere. A spec gap goes back to Layer 1. A test gap goes back to Layer 2. A playbook or role gap goes back to Layer 3. Fixing code without updating the layer that caused the mistake means you'll hit the same gap again, shaped differently.
+When the adversary finds a gap, it came from somewhere. A spec gap goes back to Layer 1. A test gap goes back to Layer 2. A playbook or role gap goes back to Layer 3. _Fixing code without updating the layer that caused the mistake means you'll hit the same gap again, shaped differently._
 
 The goal isn't a perfect prompt. It's a system that converges. VSDD's exit condition is concrete: you're done when the adversary is forced to invent problems that don't exist. That's what "good" actually looks like.
 
