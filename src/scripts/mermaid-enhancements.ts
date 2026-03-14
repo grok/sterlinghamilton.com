@@ -89,7 +89,8 @@ function catppuccinMermaidTheme() {
       nodeBorder: primaryBorder,
       clusterBkg: dark ? s0 : s1,
       clusterBorder: border,
-      edgeLabelBackground: bg,
+      titleColor: text,
+      edgeLabelBackground: dark ? s1 : bg,
     },
   };
 }

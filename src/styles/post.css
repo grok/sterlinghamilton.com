@@ -278,7 +278,7 @@
   }
 }
 
-.prose figure {
+.prose figure:not(.frame) {
   margin-bottom: 2em;
   text-align: center;
 }
@@ -637,6 +637,49 @@
   /* Keep code blocks within the normal content width */
   width: 100%;
   margin: 2em 0;
+  text-align: left;
+}
+
+/* EC's aggressive all:revert reset can knock out its own layout rules.
+   Re-assert grid on ec-line and padding on line numbers. */
+.prose .expressive-code .ec-line {
+  display: grid;
+  grid-template-areas: 'gutter code';
+  grid-template-columns: auto 1fr;
+}
+
+.prose .expressive-code .ec-line .gutter {
+  grid-area: gutter;
+}
+
+.prose .expressive-code .ec-line .code {
+  grid-area: code;
+}
+
+.prose .expressive-code .gutter .ln {
+  display: inline-flex;
+  justify-content: flex-end;
+  box-sizing: content-box;
+  min-width: 2ch;
+  padding-inline: 2ch;
+}
+
+/* EC's all:revert reset beats its own :where() color rules (zero specificity).
+   Re-assert token colors using the same --0/--1 variables EC sets as inline styles. */
+html:not(.dark) .prose .expressive-code .ec-line .code span[style^='--'] {
+  color: var(--0, inherit);
+  background-color: var(--0bg, transparent);
+  font-style: var(--0fs, inherit);
+  font-weight: var(--0fw, inherit);
+  text-decoration: var(--0td, inherit);
+}
+
+html.dark .prose .expressive-code .ec-line .code span[style^='--'] {
+  color: var(--1, inherit);
+  background-color: var(--1bg, transparent);
+  font-style: var(--1fs, inherit);
+  font-weight: var(--1fw, inherit);
+  text-decoration: var(--1td, inherit);
 }
 
 /* Light mode: make code blocks feel like a distinct surface */
