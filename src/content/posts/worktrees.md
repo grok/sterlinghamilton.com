@@ -50,9 +50,10 @@ That's a **branch**. Anyone who has used git, knows and loves branches, but what
 A branch is a timeline. **A worktree is being in two timelines at the same time.**
 
 Normally when you switch branches, you clear your desk.<br />
-You stash your current work, check out the other branch, do the thing, come back, unstash. _One desk. One thing at a time._
+You stash your current work, check out the other branch, do the thing, come back, unstash.<br />
+_One desk. One thing at a time._
 
-A worktree gives you **two desks in two rooms**.<br />
+A worktree gives you **two desks in two rooms**. Or... as many desks as you want really.<br />
 Whatever is on desk A stays there while you work on desk B.<br />
 You don't pack anything away.<br />
 You just walk into the other room.
