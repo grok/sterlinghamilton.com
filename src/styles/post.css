@@ -722,6 +722,29 @@ html.dark .prose .expressive-code :where(pre, code) {
   background: transparent !important;
 }
 
+/* Hide the empty terminal header on bash/shell blocks that have no title.
+   EC always renders a .header for is-terminal frames (for the three-dot decoration),
+   even when there is no title - which produces a large empty bar above a single line of code.
+   Suppress it and restore the top border-radius on the pre so the block still looks correct. */
+.prose .expressive-code .frame.is-terminal:not(.has-title) .header {
+  display: none;
+}
+
+.prose .expressive-code .frame.is-terminal:not(.has-title) pre {
+  border-top-left-radius: var(--header-border-radius);
+  border-top-right-radius: var(--header-border-radius);
+}
+
+/* Reset button-spacing (was sized to clear the now-hidden header) and vertically center the copy button */
+.prose .expressive-code .frame.is-terminal:not(.has-title) {
+  --button-spacing: 0.4rem;
+}
+
+.prose .expressive-code .frame.is-terminal:not(.has-title) .copy {
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+}
+
 .prose pre:not([data-language]) {
   background-color: var(--astro-code-background);
   border-radius: 8px;
