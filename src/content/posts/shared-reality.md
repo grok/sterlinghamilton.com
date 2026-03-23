@@ -136,6 +136,10 @@ Then: behavioral contracts (what does this actually do?), interface definitions 
 
 **Write the spec before you write the prompt.**
 
+A practical tool for doing this: let the model surface the spec by interrogating you about it. Matt Pocock's grill-me skill[^5] is three sentences long. It tells the model to interview you relentlessly until you have reached a shared understanding, walk down each branch of the design tree, and resolve dependencies between decisions one by one. He invokes it before writing anything - before any PRD, prompt, or code. The model asks. You answer. By the end, you both know what you're building.
+
+[^5]: [grill-me](https://youtu.be/EJyuu6zlQCg?t=78) from "5 Claude Code skills I use every single day" by Matt Pocock (March 2026). Pocock describes invoking it "when I want to reach a shared understanding with the LLM" - the whole point of this article, as a three-sentence Claude Code skill.
+
 **Layer 2: Define what good looks like - before you ask for it.** <br />
 **A standard in your head is a suggestion. A standard written down is a constraint.** The sequence matters.
 
