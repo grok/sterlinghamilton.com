@@ -15,7 +15,8 @@
       "!**/.bun-cache",
       "!**/.tmp",
       "!**/.vscode",
-      "!**/public"
+      "!**/public",
+      "!**/*.mdx"
     ]
   },
   "formatter": {

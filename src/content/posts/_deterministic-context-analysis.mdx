@@ -1,0 +1,319 @@
+---
+title: The Question Is the Artifact
+pubDate: "2026-03-09"
+lang: en
+translationKey: deterministic-context-analysis
+---
+
+You have a TOTALLY NORMAL .. everyday question.
+
+Something like: _why does nobody seem to know what's going on?_ ... or _where's my car dude?_
+
+Depending on your usecase or your role at a company those questions could look like...
+
+- If you're in sales:
+  > _Which enterprise accounts have open support tickets and active renewal conversations right now?_
+- An engineer might ponder:
+  > _Which teams are still using the deprecated version of the shared component?_
+- If you're a normal human being (congrats):
+  > _Can you just tell me where we are at with this thing? What's done and not done?_
+
+The question changes. The problem doesn't.
+
+You pull the **data** together. You find the _answer_. You share it.
+
+Three weeks later, someone asks again.
+
+_You do it again._
+
+This isn't a data problem. It's not a tooling problem. It's not a "we need better dashboards" problem.<br />
+**It's a what-you-decided-to-keep problem.**
+
+You kept the answer. You should have kept the method.
+
+## TL;DR
+
+When you ask a question whose answer lives in more than one place, **a repeatable way of answering it is more valuable than the answer itself.**
+
+Describe the question in plain English to an AI, let it build the method, push back until it's right.
+
+Treat the output as disposable - it's just what things looked like today.
+
+**Save the method. Throw away the answer. Run it again whenever you need a fresh one.**
+
+<svg viewBox="0 0 660 164" xmlns="http://www.w3.org/2000/svg" role="img"
+  aria-label="The method is permanent and kept; the output is disposable and regenerated each run"
+  style="width:100%;max-width:660px;display:block;margin:2em auto;font-family:var(--sans);">
+  <g text-anchor="middle">
+    <rect x="16" y="16" width="276" height="132" rx="10" style="fill:var(--surface0);stroke:#7287fd;stroke-width:2;" />
+    <text x="154" y="52" style="font-size:14px;font-weight:600;fill:var(--text-primary);">The Method</text>
+    <g style="font-size:12px;fill:var(--text-secondary);">
+      <text x="154" y="74">Owned by Team</text>
+      <text x="154" y="93">Context Aware</text>
+      <text x="154" y="112">Improve Over Time</text>
+    </g>
+    <text x="154" y="136" style="font-size:10px;font-weight:700;letter-spacing:.1em;fill:#7287fd;">SAVE</text>
+    <line x1="300" y1="82" x2="348" y2="82" style="stroke:var(--surface2);stroke-width:1.5;" />
+    <polygon points="342,77 354,82 342,87" style="fill:var(--surface2);" />
+    <text x="326" y="74" style="font-size:11px;fill:var(--text-tertiary);">run</text>
+    <rect x="368" y="16" width="276" height="132" rx="10" style="fill:var(--bg);stroke:var(--surface2);stroke-width:1.5;" />
+    <text x="506" y="52" style="font-size:14px;font-weight:600;fill:var(--text-tertiary);">The Output</text>
+    <g style="font-size:12px;fill:var(--text-tertiary);">
+      <text x="506" y="74">Moving Target</text>
+      <text x="506" y="93">Accurate Today; Stale Tomorrow</text>
+      <text x="506" y="112">Run On Demand</text>
+    </g>
+    <text x="506" y="136" style="font-size:10px;font-weight:700;letter-spacing:.1em;fill:var(--overlay0);">DISCARD</text>
+  </g>
+</svg>
+
+## You'll Answer This Again
+
+Here's what usually happens.
+
+Someone asks which enterprise accounts have open support tickets _and_ active renewal conversations at the same time.<br />
+You pull a Salesforce export, cross-reference the support queue, build a list.<br />
+You find six. You send the slide. You move on.
+
+Three weeks later, someone asks again.
+
+It happens in engineering too. Someone asks whether any downstream app is using a deprecated export from the shared framework.<br />
+You pull down a handful of repos, run some searches, build up a picture in your head.<br />
+You find three places. You report back. You move on.
+
+What you produced - in both cases - is a **point-in-time snapshot that lives nowhere.**<br />
+The data moved on the moment you stopped looking.<br />
+There's no record of what you checked, how you combined it, or what state things were in when you did.
+
+_The answer is ephemeral. The question isn't._
+
+That mismatch is the problem. Some questions are genuinely recurring - about who depends on what, about which accounts are at risk, about whether two systems are in sync. **Those questions deserve a more durable answer than a one-off search.**
+
+And this isn't just an engineering thing. If you work in sales, RevOps, finance, or marketing, you have versions of this question too. The accounts, the campaigns, the contracts, the pipelines - the data is scattered and the question comes back every quarter like a bad penny. The answer evaporates. The work starts over.
+
+## The Pattern
+
+The fix has three parts. They're simple. Don't let the simplicity fool you.
+
+**Contexts** are any external sources you want to analyze - a GitHub repo, a Salesforce export, a local directory, a remote API spec. You declare them in a manifest file. When you need to answer a question, you sync the relevant ones locally with a single command. The synced copies are ephemeral - temporary local copies, nothing you'd track. **But the declarations aren't. The manifest is tracked.**
+
+**Scripts** are the files that walk the synced contexts and produce an answer. You can write them yourself - or, and _this is where AI earns its keep_, describe the question in plain English, ask it to propose an approach, push back until it's right, and let it write the code. Either way, **scripts are committed.**
+
+**Artifacts** are the output - a table, a list, a report. They're gitignored. They're disposable. Running the script again at any point produces a fresh one.
+
+_The scripts are committed. The artifacts are not. That distinction is the whole idea._
+
+<svg viewBox="0 0 660 156" xmlns="http://www.w3.org/2000/svg" role="img"
+  aria-label="Three parts: data sources feed into the method, which produces disposable output"
+  style="width:100%;max-width:660px;display:block;margin:2em auto;font-family:var(--sans);">
+  <g text-anchor="middle">
+    <rect x="10" y="28" width="174" height="100" rx="8" style="fill:var(--surface0);stroke:var(--surface2);stroke-width:1.5;" />
+    <text x="97" y="60" style="font-size:13px;font-weight:600;fill:var(--text-primary);">Data Sources</text>
+    <g style="font-size:11px;fill:var(--text-secondary);">
+      <text x="97" y="79">repos, exports, APIs</text>
+      <text x="97" y="96">synced fresh each run</text>
+    </g>
+    <text x="97" y="119" style="font-size:9px;font-weight:700;letter-spacing:.08em;fill:var(--overlay0);">EPHEMERAL</text>
+    <line x1="190" y1="78" x2="232" y2="78" style="stroke:var(--surface2);stroke-width:1.5;" />
+    <polygon points="226,73 238,78 226,83" style="fill:var(--surface2);" />
+    <rect x="244" y="16" width="172" height="124" rx="8" style="fill:var(--surface0);stroke:#7287fd;stroke-width:2;" />
+    <text x="330" y="50" style="font-size:14px;font-weight:700;fill:var(--text-primary);">The Method</text>
+    <g style="font-size:11px;fill:var(--text-secondary);">
+      <text x="330" y="70">AI builds, you validate</text>
+      <text x="330" y="87">owned by the team</text>
+      <text x="330" y="104">improves over time</text>
+    </g>
+    <text x="330" y="128" style="font-size:9px;font-weight:700;letter-spacing:.08em;fill:#7287fd;">COMMITTED</text>
+    <line x1="422" y1="78" x2="464" y2="78" style="stroke:var(--surface2);stroke-width:1.5;" />
+    <polygon points="458,73 470,78 458,83" style="fill:var(--surface2);" />
+    <rect x="476" y="28" width="174" height="100" rx="8" style="fill:var(--bg);stroke:var(--surface2);stroke-width:1.5;" />
+    <text x="563" y="60" style="font-size:13px;font-weight:600;fill:var(--text-tertiary);">The Output</text>
+    <g style="font-size:11px;fill:var(--text-tertiary);">
+      <text x="563" y="79">today's answer</text>
+      <text x="563" y="96">run again any time</text>
+    </g>
+    <text x="563" y="119" style="font-size:9px;font-weight:700;letter-spacing:.08em;fill:var(--overlay0);">DISPOSABLE</text>
+  </g>
+</svg>
+
+Three things are tracked. Two things are not:
+
+| Path            |                                   |
+| --------------- | --------------------------------- |
+| `contexts.json` | tracked - the manifest            |
+| `Makefile`      | tracked - sync commands           |
+| `scripts/`      | tracked - the committed questions |
+| `artifacts/`    | gitignored - disposable output    |
+| `contexts/`     | gitignored - synced local copies  |
+
+The manifest is a plain JSON array of repos:
+
+```json
+[
+  "https://github.com/your-org/design-system",
+  "https://github.com/your-org/mfe-checkout",
+  "https://github.com/your-org/mfe-account",
+  "https://github.com/your-org/mfe-catalog"
+]
+```
+
+The Makefile gives you three commands:
+
+```makefile
+sync:
+	@mkdir -p contexts
+	@jq -r '.[]' contexts.json | while IFS= read -r repo; do \
+		name=$$(basename $$repo .git); \
+		printf "  %-30s" "$$name..."; \
+		if [ -d "contexts/$$name" ]; then \
+			git -C "contexts/$$name" pull --quiet; echo "updated"; \
+		else \
+			git clone --quiet --depth=1 "$$repo" "contexts/$$name" 2>/dev/null; echo "cloned"; \
+		fi; \
+	done
+
+clean:
+	@rm -rf contexts/
+	@echo "contexts removed"
+```
+
+Add both to `.gitignore`: `contexts/` and `artifacts/`.
+
+`make sync` before each run to make sure you're working against current code. `make clean` when you're done. **That's the entire sync layer. It's not clever. That's the point.**
+
+### Generating a Script
+
+With contexts synced, open your AI and ask a plain English question. The key: **ask it to show its approach _before_ writing the script.**
+
+> Given the repos synced into contexts/, I need to know which micro-frontends are still importing LegacyButton from the design system, how many files in each, and where the first occurrence is.
+>
+> Show your approach first, then write the script.
+
+The AI proposes its approach - what it'll search for, how it'll handle edge cases, what the output will look like. You push back, iterate, refine. _This is the creative phase. The AI is designing the instrument._ Once you're happy with the approach, it writes the script.
+
+### Running It
+
+The generated script looks something like this:
+
+```bash
+#!/usr/bin/env bash
+# scripts/legacy-button-audit.sh
+# question: which MFEs still import LegacyButton, and where?
+
+CONTEXTS="contexts"
+
+printf "\n%-20s %-8s %s\n" "MFE" "Files" "First occurrence"
+printf "%-20s %-8s %s\n" "---" "-----" "----------------"
+
+for dir in "$CONTEXTS"/mfe-*/; do
+    name=$(basename "$dir")
+    files=$(grep -rl "LegacyButton" "$dir/src" \
+        --include="*.tsx" --include="*.ts" 2>/dev/null)
+    count=$(echo "$files" | grep -c . 2>/dev/null || echo 0)
+    first=$(grep -r "LegacyButton" "$dir/src" \
+        --include="*.tsx" -m 1 2>/dev/null | head -1)
+
+    [ "$count" -gt 0 ] && \
+        printf "%-20s %-8s %s\n" "$name" "$count" "$first"
+done
+```
+
+You run it. The output is a table - not prose, not a summary, not an AI opinion.<br />
+Actual file paths and counts pulled from actual code.
+
+| MFE            | Files | First occurrence                    |
+| -------------- | ----- | ----------------------------------- |
+| `mfe-checkout` | 3     | `src/components/Form.tsx:14`        |
+| `mfe-account`  | 1     | `src/pages/Profile.tsx:8`           |
+| `mfe-catalog`  | 7     | `src/components/ProductCard.tsx:23` |
+
+Now you know. Not approximately. _You know._
+
+## What This Looks Like in Practice
+
+A question worth asking once is probably worth asking twice.
+
+Take the accounts question. "Which enterprise accounts have open support tickets and active renewal conversations?" comes up before every board meeting, every QBR, every time someone asks about churn risk.<br />
+Once you've built the method to cross-reference those two data sources, **the answer is always one run away - and always current.**
+
+The same in engineering. "Which repos are consuming packages from our shared component library?" comes up during every dependency upgrade, every breaking change conversation, every planning cycle.<br />
+Once you've built the method, it's one command. Always fresh, because you sync before you run.
+
+A follow-up question - "who has taken something from that library and customized or forked it?" - is harder. Shadow implementations, internal layers built on top of shared primitives, style overrides. _The method for that took twenty minutes to build with AI. Now it runs in seconds and covers every consumer simultaneously._ **Without it, answering that manually would take most of a day and leave you uncertain you'd caught everything.**
+
+The methods don't have to be sophisticated. Most of them are just: pull this data, look for this pattern, show what you find. **The power isn't in the analysis. It's in the repeatability.**
+
+Questions worth turning into methods:
+
+- _Which accounts have open support tickets and active renewal conversations?_
+- _Which repos are still on the legacy version vs the new version?_
+- _Which features have high usage but no documentation or test coverage?_
+- _Which contracts have SLA commitments the system isn't currently meeting?_
+- _Which consumers have customized or forked a shared component?_
+- _Which surfaces are not yet using the new auth flow?_
+
+Each becomes a method. Each one runs clean. Each one tells you something you genuinely couldn't know without pulling every source by hand.
+
+## Keep Your Hand on the Wheel
+
+The first version of a method might not be right. **Run it. Look at the output. Ask: does this match what I'd expect?**
+
+The AI doesn't know that one team's repo follows a different convention.<br />
+It doesn't know about the exception made three years ago that was never documented.<br />
+It doesn't know what your stakeholders actually mean when they ask the question, as opposed to what the words literally say.<br />
+_That tribal knowledge lives with you - not in any data source you've synced._
+
+Review the output before sharing it. Take it to someone who knows the domain. If something seems off, **go back to the method and fix it there - not in the output.** Every fix gets baked in permanently, for everyone who runs it next.
+
+What you're protecting against is **toxic data** - output that looks authoritative because it came from a structured process, but is wrong in ways nobody caught. A confident table full of gaps gets shared, cited, acted on. _That's worse than no answer at all._
+
+The discipline isn't just "save the method." It's **"own the method."** Understand what it does. Validate what it produces. Make sure it's answering the right question before you treat the output as truth.
+
+## The Trap
+
+Here's where this breaks down.
+
+You answer a question, share the output, and don't commit the script because _"it was just a quick one-off."_<br />
+Maybe it was. But now you have an artifact without provenance - a text file that says something was true on a given day, with no way to regenerate it or verify it against the current state of the world.
+
+**The output looks like a record. It isn't. It's a snapshot without the camera.**
+
+The test for whether a script is worth committing is simple: _is this a question I'd want answered again?_<br />
+If yes, commit the script.<br />
+If no, delete the whole thing - script and artifact both.<br />
+What you don't want is a graveyard of outputs from undocumented one-off searches that future you will mistake for authoritative records.
+
+_The scripts are the thing of value. The output is just what they said today._
+
+## Why This Works With AI
+
+When you're working with an AI in a setup like this - where you've already declared all your contexts and have existing methods that demonstrate the pattern - something useful happens.
+
+You ask a question. The AI reads the context manifest, sees what's available, looks at a few existing scripts to understand the structure, and writes a new one.<br />
+You run it. You get an answer. If the question was worth asking, you commit the script.
+
+The institutional knowledge isn't locked in anyone's head.<br />
+It's not in a Slack thread from eight months ago.<br />
+**It's in `scripts/`, documented by what the file does, discoverable by anyone who looks.**
+
+> "Which apps are still on the old data grid version?" is a Slack question.
+>
+> `bash scripts/datagrid-version-audit.sh` is an answer.
+
+The difference isn't just speed. It's that the second one is still accurate tomorrow.
+
+## The Bigger Thing
+
+Organizations accumulate questions faster than they accumulate answers.
+
+Most cross-cutting knowledge - who depends on what, where the patterns diverge, what's consistent and what isn't - **lives in the heads of the people who've been around long enough to know.**<br />
+When they leave, it goes with them.
+
+Repeatable methods don't have that problem. They're readable, runnable, and not attached to any particular person. **The question, once committed, belongs to the team.**
+
+This isn't a framework. It's barely a pattern - it's more like a discipline.<br />
+Keep the method.<br />
+Throw away the output.<br />
+Ask the question again whenever you need a fresh answer.
+
+_The answer is what it said today. The question is yours to keep._
