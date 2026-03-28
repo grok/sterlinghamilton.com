@@ -1,15 +1,15 @@
 ---
-title: The Question Is the Artifact
-pubDate: "2026-03-23"
+title: Durable Questions
+pubDate: "2026-03-28"
 lang: en
-translationKey: deterministic-context-analysis
+translationKey: durable-questions
 ---
 
-You have a TOTALLY NORMAL ... everyday question.
+You have a totally normal everyday question.
 
-Something like: _why does nobody seem to know what's going on?_ ... or _dude, where's my car?_
+Something like: _why does nobody seem to know what's going on?_ Or _dude, where's my car?_
 
-Depending on your usecase or your role at a company those questions could look like...
+Depending on what you do, they might look like...
 
 - If you're in sales:
   > _Which enterprise accounts have open support tickets and active renewal conversations right now?_
@@ -20,7 +20,7 @@ Depending on your usecase or your role at a company those questions could look l
 
 The question changes. The problem doesn't.
 
-You pull the **data** together. You find the _answer_. You share it.
+You pull the data together. You find the answer. You share it.
 
 Three weeks later, someone asks again.
 
@@ -34,7 +34,7 @@ You kept the answer. You should have kept the method.
 
 ## TL;DR
 
-When you ask a question whose answer lives in more than one place, **a repeatable way of answering it is more valuable than the answer itself.**
+When the answer lives in more than one place, **the method is worth more than the answer.**
 
 Describe the question in plain English to an AI, let it build the method, push back until it's right.
 
@@ -85,32 +85,35 @@ Someone asks whether any downstream app is using a deprecated export from the sh
 You pull down a handful of repos, run some searches, build up a picture in your head.<br />
 You find three places. You report back. You move on.
 
-What you produced - in both cases - is a **point-in-time snapshot that lives nowhere.**<br />
+What you built is a **point-in-time snapshot that lives nowhere.**<br />
 The data moved on the moment you stopped looking.<br />
-There's no record of what you checked, how you combined it, or what state things were in when you did.
+There's no record of what you checked, how you combined it, or what things looked like when you did.
 
 _The answer is ephemeral. The question isn't._
 
-That mismatch is the problem.<br />
-Some questions are genuinely recurring - about who depends on what,<br />
-about which accounts are at risk, about whether two systems are in sync.<br />
-**Those questions deserve a more durable answer than a one-off search.**
+Some questions are genuinely recurring - who depends on what, which accounts are at risk, whether two systems are in sync. They come back. **The answer evaporates every time. The work starts over.**
 
-And this isn't just an engineering thing.<br />
-If you work in sales, RevOps, finance, or marketing, you have versions of this too.<br />
-The accounts, the campaigns, the contracts, the pipelines -<br />
-the data is scattered and the question comes back every quarter like a bad penny.<br />
-The answer evaporates. The work starts over.
+This isn't just an engineering problem. Sales, RevOps, finance, marketing - same deal. The data is scattered across tools, the question comes back every quarter, and the answer from last time is already stale.
 
-## The Pattern
+## How It Works
 
-The fix has three parts. They're simple. Don't let the simplicity fool you.
+Three parts. Simple ones. Don't let that fool you.
 
-**Contexts** are any external sources you want to analyze - a GitHub repo, a Salesforce export, a local directory, a remote API spec. You declare them in a manifest file. When you need to answer a question, you sync the relevant ones locally with a single command. The synced copies are ephemeral - temporary local copies, nothing you'd track. **But the declarations aren't. The manifest is tracked.**
+**Contexts** are your data sources - a GitHub repo, a Salesforce export, a local directory, an API spec. Declare them in a manifest. Run one command to sync them locally before each run. The synced copies are throwaway. **The manifest isn't.**
 
-**Scripts** are the files that walk the synced contexts and produce an answer. You can write them yourself - or, and _this is where AI earns its keep_, describe the question in plain English, ask it to propose an approach, push back until it's right, and let it write the code. Either way, **scripts are committed.**
+```json title="contexts.json"
+{
+  "contexts": [
+    { "name": "mfe-checkout", "type": "git", "url": "git@github.com:org/mfe-checkout.git" },
+    { "name": "mfe-account",  "type": "git", "url": "git@github.com:org/mfe-account.git" },
+    { "name": "mfe-catalog",  "type": "git", "url": "git@github.com:org/mfe-catalog.git" }
+  ]
+}
+```
 
-**Artifacts** are the output - a table, a list, a report. They're gitignored. They're disposable. Running the script again at any point produces a fresh one.
+**Scripts** are the files that walk your contexts and produce an answer. Write them yourself, or describe the question in plain English to an AI, push back until the approach is right, and let it write the code. Either way, **they're committed.**
+
+**Artifacts** are the output - a table, a list, a report. Gitignored. Disposable. Run the script again any time and you get a fresh one.
 
 _The scripts are committed. The artifacts are not. That distinction is the whole idea._
 
@@ -147,17 +150,20 @@ _The scripts are committed. The artifacts are not. That distinction is the whole
   </g>
 </svg>
 
-Three things are tracked. Two things are not:
+Here's what that looks like on disk:
 
-| Path            |                                   |
-| --------------- | --------------------------------- |
-| `contexts.json` | tracked - the manifest            |
-| `Makefile`      | tracked - sync commands           |
-| `scripts/`      | tracked - the committed questions |
-| `artifacts/`    | gitignored - disposable output    |
-| `contexts/`     | gitignored - synced local copies  |
+```
+your-project/
+├── contexts.json    # tracked - the manifest
+├── Makefile         # tracked - sync commands
+├── scripts/         # tracked - committed questions
+│   └── legacybutton-audit.sh
+├── artifacts/       # gitignored - disposable output
+└── contexts/        # gitignored - synced local copies
+    └── mfe-checkout/
+```
 
-You run `make sync` before each run to pull current state. Then `make clean` when you're done.<br />
+You run `make sync` before each run to pull current state. Then `make clean` when you're done.
 **That's the entire sync layer. It's not clever. That's the point.**
 
 With contexts synced, open your AI and describe the question in plain English. The key: **ask it to show its approach _before_ writing the script.**
@@ -168,26 +174,39 @@ With contexts synced, open your AI and describe the question in plain English. T
 
 The AI proposes its approach - what it'll search for, how it'll handle edge cases, what the output will look like. You push back, iterate, refine. _This is the creative phase. The AI is designing the instrument._ Once you're happy with the approach, it writes the script.
 
-You run it. The output is actual file paths and counts pulled from actual code.<br />
-Not prose. Not a summary. Not an AI opinion.
+```bash title="scripts/legacybutton-audit.sh"
+#!/usr/bin/env bash
+# Which MFEs are still importing LegacyButton from the design system?
+
+echo "| MFE | Files | First occurrence |"
+echo "| --- | ----- | ---------------- |"
+
+for dir in contexts/*/; do
+  name=$(basename "$dir")
+  count=$(grep -rl "LegacyButton" "$dir/src" 2>/dev/null | wc -l | tr -d ' ')
+
+  if [ "$count" -gt 0 ]; then
+    first=$(grep -rn "LegacyButton" "$dir/src" 2>/dev/null | head -1 | sed "s|$dir||")
+    printf "| \`%s\` | %s | \`%s\` |\n" "$name" "$count" "$first"
+  fi
+done
+```
+
+You run it. The output is actual file paths and counts pulled from actual code. Not prose. Not a summary. Not an AI opinion.
+
+| MFE            | Files | First occurrence                    |
+| -------------- | ----- | ----------------------------------- |
+| `mfe-checkout` | 3     | `src/components/Form.tsx:14`        |
+| `mfe-account`  | 1     | `src/pages/Profile.tsx:8`           |
+| `mfe-catalog`  | 7     | `src/components/ProductCard.tsx:23` |
 
 Now you know. Not approximately. _You know._
 
 ## It Compounds
 
-Take the accounts question.<br />
-> "Which enterprise accounts have open support tickets and active renewal conversations?"
+Take the accounts question: "Which enterprise accounts have open support tickets and active renewal conversations?" It comes up before every board meeting, every QBR, every time someone asks about churn risk. Once you've built the method to cross-reference those two data sources, **the answer is always one run away - and always current.**
 
-comes up before every board meeting, every QBR, every time someone asks about churn risk.<br />
-Once you've built the method to cross-reference those two data sources, **the answer is always one run away - and always current.**
-
-The same in engineering.<br />
-> "Which repos are consuming packages from our shared component library?"
-
-comes up during every dependency upgrade, every breaking change conversation,<br />
-every planning cycle.
-
-Once you've built the method, it's one command. Always fresh, because you sync before you run.
+The same in engineering. "Which repos are consuming packages from our shared component library?" comes up during every dependency upgrade, every breaking change conversation, every planning cycle. Once you've built the method, it's one command. Always fresh, because you sync before you run.
 
 A follow-up question:
 
@@ -197,7 +216,7 @@ This is harder. Shadow implementations, internal layers built on top of shared p
 _The method for that took twenty minutes to build with AI. Now it runs in seconds and covers every consumer simultaneously._<br />
 **Without it, answering that manually would take most of a day and leave you uncertain you'd caught everything.**
 
-The methods don't have to be sophisticated. Most of them are just: pull this data, look for this pattern, show what you find. **The power isn't in the analysis. It's in the repeatability.**
+Most methods aren't sophisticated. They're just: pull this, look for this, show what you find. **The power isn't in the analysis. It's in the repeatability.**
 
 Questions worth turning into methods:
 
@@ -208,22 +227,17 @@ Questions worth turning into methods:
 - _Which consumers have customized or forked a shared component?_
 - _Which surfaces are not yet using the new auth flow?_
 
-Each becomes a method. Each one runs clean. Each one tells you something you genuinely couldn't know without pulling every source by hand.
+Each becomes a method. Each one runs clean. Each one answers something you couldn't know without pulling every source by hand.
 
-## Keep Your Hand on the Wheel
+## Own the Method
 
-The first version of a method might not be right.<br />
-**Run it. Look at the output. Ask: does this match what I'd expect?**
+The first version might not be right. **Run it. Look at the output. Ask: does this match what I'd expect?**
 
-The AI doesn't know that one team's repo follows a different convention.<br />
-It doesn't know about the exception made three years ago that was never documented.<br />
-It doesn't know what your stakeholders actually mean when they ask the question,<br />
-as opposed to what the words literally say.<br />
-_That tribal knowledge lives with you - not in any data source you've synced._
+The AI doesn't know that one team's repo follows a different convention. It doesn't know about the exception made three years ago that was never documented. It doesn't know what your stakeholders actually mean when they ask the question, as opposed to what the words literally say. _That tribal knowledge lives with you - not in any data source you've synced._
 
 Review the output before sharing it. Take it to someone who knows the domain. If something seems off, **go back to the method and fix it there - not in the output.** Every fix gets baked in permanently, for everyone who runs it next.
 
-What you're protecting against is **toxic data** - output that looks authoritative because it came from a structured process, but is wrong in ways nobody caught. A confident table full of gaps gets shared, cited, acted on. _That's worse than no answer at all._
+What you're protecting against is **toxic data** - output that looks authoritative, is structured, and is wrong. A confident table full of gaps gets shared, cited, acted on. _That's worse than no answer at all._
 
 The discipline isn't just "save the method." It's **"own the method."** Understand what it does. Validate what it produces. Make sure it's answering the right question before you treat the output as truth.
 
@@ -249,10 +263,7 @@ _The scripts are the thing of value. The output is just what they said today._
 
 The setup does something useful for AI that most setups don't: it gives the model actual context.
 
-You ask a question.<br />
-The AI reads the context manifest, sees what's available,<br />
-looks at a few existing scripts to understand the structure, and writes a new one.<br />
-You run it. You get an answer. If the question was worth asking, you commit the script.
+You ask a question. The AI reads the context manifest, sees what's available, looks at a few existing scripts to understand the structure, and writes a new one. You run it. You get an answer. If the question was worth asking, you commit the script.
 
 The institutional knowledge isn't locked in anyone's head.<br />
 It's not in a Slack thread from eight months ago.<br />
@@ -293,11 +304,11 @@ you can pipe that output directly into other AI workflows.<br />
 Run a context script, then hand it to a PR review skill or a renewal prep workflow.<br />
 _The methods give AI what it's usually missing: accurate, current, specific context._
 
-## The Bigger Thing
+## What You're Actually Building
 
 Organizations accumulate questions faster than they accumulate answers.
 
-Most cross-cutting knowledge - who depends on what, where the patterns diverge, what's consistent and what isn't - **lives in the heads of the people who've been around long enough to know.**<br />
+Most cross-cutting knowledge - who depends on what, where the patterns diverge, what's consistent and what isn't - **lives in the heads of the people who've been around long enough to know.**
 
 When they leave, it goes with them.
 

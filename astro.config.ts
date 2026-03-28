@@ -17,6 +17,10 @@ import { imageConfig } from './src/utils/image-config';
 
 export default defineConfig({
   site: themeConfig.site.website,
+  redirects: {
+    '/en/deterministic-context-analysis': '/en/durable-questions',
+    '/deterministic-context-analysis': '/en/durable-questions',
+  },
   image: {
     service: {
       entrypoint: 'astro/assets/services/sharp',
